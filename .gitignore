@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Live quiz: local secrets, database, and exports
+week1/livequiz/.env
+week1/livequiz/data/
+week1/livequiz/exports/
+/exports/
+nickname_map.csv
+*.sqlite3
+*.db
+
+# Local generated outputs
+week1/mini_capstone/outputs/

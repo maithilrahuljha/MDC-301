@@ -1,0 +1,6 @@
+# Replace quiz.example.edu with the DNS name pointed at this server's public IP.
+# Caddy obtains and renews the HTTPS certificate automatically.
+quiz.example.edu {
+    encode zstd gzip
+    reverse_proxy quiz:8000
+}

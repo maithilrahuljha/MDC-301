@@ -1,0 +1,303 @@
+MDC-301 · Module 1 · Week 1 setup and classroom instructions
+============================================================
+
+Read this file from top to bottom. It assumes the course GitHub repository is already on the computer in the folder named MDC-301. It is written for a nontechnical instructor. Every command is meant to be pasted as shown; use the commands for your computer's operating system.
+
+IMPORTANT COURSE ASSUMPTIONS
+----------------------------
+* The full official course title and actual timetable were not supplied. The framework uses the course code MDC-301 and a sample timetable only; confirm both before publishing.
+* The user-provided `ML-reference.pdf` (*Machine Learning: A Beginner-Friendly Guide with Code and Math*) is the course-content source for Chapters 1–12; the worksheets now contain the source objectives and align their recaps/math to those chapters. Keep the original PDF available to the instructor; it is not copied into this repository. Its Appendix E derivation index has several chapter labels offset by one chapter after Chapter 7 (for example, simple OLS is in Chapter 8 although the index points to Chapter 9); use the chapter headings/table of contents for this plan and correct that index before the next PDF release. The separate Module 1 breakdown PDF is still missing.
+* Day 1's constant-mean derivation is clearly marked as an instructor bridge because the source's Chapters 1–2 are conceptual. Day 3/5 use small deterministic examples; the Day 5 fixture is synthetic rather than the book's breast-cancer example. Treat the source objectives as canonical, but check all adapted examples/outputs against the instructor's copy before distributing.
+* The Géron link `https://github.com/maithilrahuljha/handson-ml2` is a secondary code reference for the second edition; its README says the third-edition notebooks are more up to date. Do not use Géron's chapter numbering as the course chapter map or replace the supplied guide's notation. The guide's `mean_squared_error(..., squared=False)` example is incompatible with scikit-learn 1.9.1; use `np.sqrt(mean_squared_error(y_true, y_pred))` if following that pattern.
+* Week 1 covers ML introduction/lifecycle, supervised vs unsupervised learning, Python/scikit-learn tools, simple/multiple/polynomial regression, and logistic classification. Do not teach the supplied guide's Chapters 3 or 4 (career topics), the Week 4 rainfall project, the Module 3 Week 7 Falcon 9 capstone, or Module 4 Week 8 career/interview content. Mention future work only as a brief preview. Note: Géron's Ch 3–4 are different chapters and are implementation references only.
+* GitHub Classroom was decommissioned on 28 August 2026. Use Classroom 50 for new distribution/autograding. The old file .github/classroom/autograding.json is retained only as a historical compatibility example; Classroom 50 does not read it.
+
+WHO MAY NEED TO HELP
+--------------------
+* Ask a GitHub Organization Owner or your institution's IT administrator to approve the course GitHub organization, GitHub Education, GitHub Actions, Classroom 50 permissions, domain/DNS, and network firewall steps. Do not ask students to share passwords or tokens.
+* Local Python setup and a laptop-only quiz may be handled by the instructor. A public VPS requires a server administrator, a domain/subdomain, inbound TCP ports 80 and 443, and a backup/retention plan.
+* Classroom 50 software has no licence fee, but it requires a GitHub organization on the Team or Enterprise plan. Verified teachers may be eligible for a free Team-tier organization through GitHub Education. If the institution must pay for a plan, its price depends on the current institutional contract; ask the organization owner before proceeding. If the institution cannot provide an eligible organization, stop and agree on another approved course workflow rather than creating a public roster.
+
+1. CHECK THAT YOU ARE IN THE RIGHT FOLDER
+-----------------------------------------
+Open a terminal/command window in the MDC-301 folder. If you do not know how, open the folder in File Explorer/Finder, then use the operating system's “Open in Terminal” option. Ask a colleague if that option is not available.
+
+Windows PowerShell:
+
+    Get-Location
+    git --version
+    py -3 --version
+
+Expected: the folder path ends in MDC-301; Git prints a version; Python prints 3.11 or newer. If `git` or `py` is not recognized, ask IT to install Git for Windows and Python 3.11+ from their official project sites. Do not download installers from an advertisement or a mirror.
+
+macOS or Linux terminal:
+
+    pwd
+    git --version
+    python3 --version
+
+Expected: the folder path ends in MDC-301; Git prints a version; Python prints 3.11 or newer. If `python3` is missing, ask IT to install Python 3.11+.
+
+2. CREATE A PRIVATE PYTHON WORK AREA AND INSTALL THE PACKAGES
+-------------------------------------------------------------
+A virtual environment is a project-specific place for Python packages. It avoids changing the computer's other Python projects. It is safe to repeat these steps.
+
+Windows PowerShell (run from MDC-301):
+
+    py -3 -m venv .venv
+    .\.venv\Scripts\python.exe -m pip install --upgrade pip
+    .\.venv\Scripts\python.exe -m pip install --disable-pip-version-check -r requirements.txt
+    .\.venv\Scripts\python.exe -m pip install --disable-pip-version-check -r week1/livequiz/requirements.txt
+
+macOS or Linux (run from MDC-301):
+
+    python3 -m venv .venv
+    .venv/bin/python -m pip install --upgrade pip
+    .venv/bin/python -m pip install --disable-pip-version-check -r requirements.txt
+    .venv/bin/python -m pip install --disable-pip-version-check -r week1/livequiz/requirements.txt
+
+Expected: each install ends with “Successfully installed …” and no red ERROR lines. The first install needs internet access to the approved Python package index. If the classroom is offline, IT must pre-install these requirements or supply an approved local package cache before class.
+
+3. CHECK THE QUESTION BANK AND THE SERVER'S AUTOMATED CHECKS
+------------------------------------------------------------
+Run the command for your operating system.
+
+Windows PowerShell:
+
+    .\.venv\Scripts\python.exe week1/livequiz/scripts/check_question_bank.py
+    .\.venv\Scripts\python.exe -m pytest -q tests/test_livequiz.py tests/test_result_join.py
+
+macOS or Linux:
+
+    .venv/bin/python week1/livequiz/scripts/check_question_bank.py
+    .venv/bin/python -m pytest -q tests/test_livequiz.py tests/test_result_join.py
+
+Expected first output: `questions=25 days=[1, 2, 3, 4, 5] per_day=[5, 5, 5, 5, 5]`.
+Expected second output: `7 passed` (the time may differ).
+
+The Day 3 and Day 5 student modules intentionally contain TODOs. Before those TODOs are implemented, their checks are expected to fail with `NotImplementedError`:
+
+    .venv/bin/python -m pytest -q tests/test_day3_regression.py tests/test_day5_logistic.py
+
+On Windows, use `.\.venv\Scripts\python.exe -m pytest -q tests/test_day3_regression.py tests/test_day5_logistic.py`. Expected after the student functions are completed: `8 passed`. Do not copy the visible test files into a student's repository and treat them as secure scoring tests; students could edit their own copies. Classroom 50 must run the separate teacher-side tests from `week1/classroom50-autograder/`.
+
+4. SET UP CLASSROOM 50 (TEACHER OR ORGANIZATION OWNER)
+------------------------------------------------------
+Classroom 50 is an open-source GitHub assignment system. It stores assignments, student repositories, and scores in GitHub, not in a separate Classroom 50 database. Check your institution's data/roster policy before uploading student information.
+
+Use the web setup at https://classroom50.org/:
+
+1. Sign in with your GitHub account. If you are not an owner of the institution's course organization, ask its owner to perform setup.
+2. The organization must be on GitHub Team or Enterprise. Verified educators may apply through GitHub Education for a free Team-tier organization. If GitHub asks the organization owner to approve an app or permissions, stop and ask that owner; do not work around the policy.
+3. Choose **Set up new organization**, run the one-time setup, create the Classroom 50 service token as prompted, and test it. The token must stay in the GitHub/Browser prompt or the organization's secret store; never paste it into this repository, a worksheet, or a chat.
+4. Create a classroom with a short, confirmed course/class name. Add a staff/TA account if needed. Add the 200 students from the approved roster, send their GitHub organization invitations, and share the classroom link. Do not assume the course title or due date in this kit is official.
+5. Create an instructor-owned assignment template repository inside the course organization and enable **Template repository** in GitHub repository settings. Keep student-facing files only in that template. Do not include `week1/livequiz/.env`, the response database, CSV exports, the `classroom50-autograder` test directory, or credentials.
+6. In Classroom 50, create an **Individual** assignment with **Private repository** visibility and the course template. Set the name and due date only after confirming them. Import the bare JSON array in `week1/classroom50-tests.json` into **Autograding tests**. Set the runtime to Python 3.12 if the runtime control is available. Allow up to 300 seconds for dependency setup.
+7. Put `week1/classroom50-autograder/test_day3_regression.py` and `test_day5_logistic.py` in the course organization's Classroom 50 repository under `CLASSROOM/autograders/week1-implementation/`. Replace `CLASSROOM` with the classroom's actual slug. The test command calls pytest on `$CLASSROOM50_BUNDLE_DIR`, so the executed tests stay out of the student template. Classroom 50 publishes runner bundles through GitHub Pages; do not treat test code as confidential and never put credentials or private student data in it.
+8. Wait for the Classroom 50 **Publish Pages** action to finish. Ask one colleague/test account to accept the assignment and submit an implementation. Confirm the score is out of 16 and has eight test cases before sending the class invite.
+9. Send the assignment link. Students accept it while signed in to their own GitHub account. Use the Day 0 browser walkthrough at `week1/day0_onboarding.md`; do not ask students to install a command-line tool just to accept the assignment.
+10. During the week, check the assignment's submissions page. After the deadline/collection window, click **Collect now** (or **Collect all**) to refresh scores, download the CSV, review failed tests and code, and give feedback through the repository/feedback pull request. Keep a copy according to institutional retention rules, then archive the Week 1 assignment when the course policy says to.
+
+Student repository shape (Classroom 50 generates its own control files):
+
+    mdc301-week1-<github-username>/
+    ├── README.md
+    ├── .gitignore
+    ├── requirements.txt
+    └── week1/
+        ├── day0_onboarding.md
+        ├── day1_worksheet.md ... day5_worksheet.md
+        ├── day3_regression.py
+        ├── day5_logistic.py
+        └── mini_capstone/
+            ├── README.md
+            ├── starter.ipynb
+            ├── DATASET.md
+            └── data/seoul_weather_noon_365.csv
+
+Classroom 50 adds `.classroom50.yaml` and `.github/workflows/autograde.yaml` to the accepted student repository. Never add its autograde workflow to the template. GitHub Classroom's retired `.github/classroom/autograding.json` is not used.
+
+5. PREPARE THE LIVE QUIZ FOR A CLASSROOM NETWORK
+------------------------------------------------
+This is the simplest no-monthly-cost live-quiz route. A laptop hosts the app, and student devices connect to it on the same trusted course Wi-Fi. A network administrator may need to allow it. This local recipe uses unencrypted HTTP, so the shared host key is not safe on an open/public Wi-Fi network; use the HTTPS VPS recipe if the network is not trusted. Test with two devices before inviting 200 students.
+
+A. Make a private settings file.
+
+Windows PowerShell:
+
+    Copy-Item week1/livequiz/.env.example week1/livequiz/.env
+    .\.venv\Scripts\python.exe -c "import secrets; print(secrets.token_urlsafe(32))"
+    notepad week1/livequiz/.env
+
+macOS or Linux:
+
+    cp week1/livequiz/.env.example week1/livequiz/.env
+    .venv/bin/python -c 'import secrets; print(secrets.token_urlsafe(32))'
+    nano week1/livequiz/.env
+
+The random-secret command prints a long value. Run it twice, then replace the two `replace-with-...` values in `.env` with two different outputs. Keep the file open only on the instructor computer. For a Day 3 lesson, set `QUIZ_DAY=3`. For another lesson use `1`, `2`, `4`, or `5`. Set `COOKIE_SECURE=false`, `TRUST_PROXY=false`, `PORT=8000`, and `SESSION_CODE=MDC301W1` for this local, non-HTTPS network recipe. Save the file and close the editor.
+
+B. Start the server.
+
+From the MDC-301 repository root:
+
+    .venv/bin/python week1/livequiz/app.py
+
+On Windows PowerShell, use:
+
+    .\.venv\Scripts\python.exe week1/livequiz/app.py
+
+Expected: a line says the server is running on port 8000; keep this window open. Do not close it until all students have finished and the CSV is downloaded.
+
+C. Check the server from the same laptop in a second terminal window.
+
+Windows PowerShell:
+
+    .\.venv\Scripts\python.exe -c "import urllib.request; print(urllib.request.urlopen('http://127.0.0.1:8000/healthz').read().decode())"
+
+macOS or Linux:
+
+    .venv/bin/python -c 'import urllib.request; print(urllib.request.urlopen("http://127.0.0.1:8000/healthz").read().decode())'
+
+Expected: `{"session_code":"MDC301W1","status":"ok"}` (the JSON fields may appear in the opposite order).
+
+D. Find the laptop's private Wi-Fi address. On Windows, run `ipconfig` and look for the Wi-Fi **IPv4 Address** (often begins with `192.168.`, `10.`, or `172.16`–`172.31`). On macOS, open **System Settings → Wi-Fi → Details → TCP/IP**. On Linux, open **Settings → Network/Wi-Fi**. Do not use `127.0.0.1` or the public address. Ask campus IT if you cannot identify the private Wi-Fi address.
+
+E. From the instructor browser, open `http://127.0.0.1:8000/host` and enter `ADMIN_TOKEN` from the private `.env` file. Project the host page and session code. Students open `http://<laptop-private-IP>:8000/` on the same approved Wi-Fi; replace the angle-bracket text with the actual address. A student should see a join form and question. If the page does not open, stop and ask IT to check TCP port 8000, wireless client isolation, and laptop firewall rules. Do not ask 200 students to join one phone hotspot.
+
+F. Run a synthetic 200-client rehearsal from a separate staff/test computer on the same test network. That computer needs a copy of this repository and the live-quiz requirements installed; ask IT to prepare it using Step 2. Replace the example IP below with the instructor laptop's private Wi-Fi address.
+
+Windows PowerShell (from the second computer's MDC-301 folder):
+
+    .\.venv\Scripts\python.exe week1/livequiz/scripts/load_test_socketio.py --url http://192.168.1.20:8000 --session-code MDC301W1 --clients 200
+
+macOS or Linux (from the second computer's MDC-301 folder):
+
+    .venv/bin/python week1/livequiz/scripts/load_test_socketio.py --url http://192.168.1.20:8000 --session-code MDC301W1 --clients 200
+
+Expected if the test succeeds: `Connections and answer acknowledgements: 200/200` and `Failures: 0`. This is only a synthetic rehearsal, not a guarantee; real phones and the campus access point can behave differently. If it fails, ask IT or divide the session/use the paper fallback.
+
+G. After the class, select **Download CSV** on `/host`, save it in an approved private folder outside this repository, and stop the server with Ctrl+C. Do not commit the CSV or database. Keep/delete the data under your institution's policy.
+
+6. OPTIONAL VPS DEPLOYMENT (ASK A SYSTEM ADMINISTRATOR)
+-------------------------------------------------------
+Use a university-managed server if available. Otherwise, one current example is a DigitalOcean 2-GiB, 1-vCPU Basic Droplet listed at US$12/month before tax/add-ons (price checked 23 October 2026; verify before purchasing). Hosting is optional; the laptop recipe above has no server rental charge. A VPS adds recurring cost, DNS, updates, backups, and privacy responsibilities.
+
+You need: a Linux VPS with Docker Engine and Compose plugin, a DNS name such as `quiz.course.example.edu` pointed to its public IP, and inbound TCP 80/443 allowed by the firewall. A server administrator should perform these steps if the instructor is not already authorized. Without DNS and an open firewall, Caddy cannot obtain HTTPS and the recipe will not work.
+
+1. In DNS, create an A record for the quiz hostname pointing to the VPS. Wait until the administrator confirms the record resolves.
+2. Copy the approved Week 1 repository to the VPS using the institution-approved file transfer, preserving the `week1/livequiz/` folder structure. Use a clean source copy before creating `.env`; never transfer `.env`, response CSVs, or the SQLite database into a public repository. The app files must be under `~/MDC-301/week1/livequiz/` for the commands below.
+3. On the VPS, enter the app folder, copy the settings example, generate two secrets, and edit the settings:
+
+       cd ~/MDC-301/week1/livequiz
+       cp .env.example .env
+       python3 -c 'import secrets; print(secrets.token_urlsafe(32))'
+       nano .env
+
+   Replace the two placeholder secrets with different random outputs. Set `QUIZ_DAY=3` (or the day number), `COOKIE_SECURE=true`, `TRUST_PROXY=true`, `PORT=8000`, and `SESSION_CODE=MDC301W1`.
+4. Edit `Caddyfile` and replace `quiz.example.edu` with the real DNS name. Keep the `reverse_proxy quiz:8000` line. Caddy will handle HTTPS automatically when the DNS record and firewall are correct.
+5. Check Docker is installed:
+
+       docker --version
+       docker compose version
+
+   Expected: both commands print version numbers. If either command is missing, ask the administrator to install Docker Engine and its Compose plugin; do not run an unreviewed install script as root.
+6. Build and start the two services:
+
+       docker compose build
+       docker compose up -d
+       docker compose ps
+
+   Expected: `quiz` reports `healthy`, `caddy` reports `running`/`Up`. If not, inspect logs:
+
+       docker compose logs --tail=50 quiz
+       docker compose logs --tail=50 caddy
+
+7. From a computer outside the VPS, check the public HTTPS health page (replace the hostname):
+
+       curl -fsS https://quiz.course.example.edu/healthz
+
+   Expected: `{"session_code":"MDC301W1","status":"ok"}`. Open `https://quiz.course.example.edu/host` on the instructor computer and give students only `https://quiz.course.example.edu/` plus the session code. Do not share the host key.
+8. After class, download the CSV from the host page. To stop services without deleting their saved database:
+
+       docker compose down
+
+   Do not add `-v`: that option deletes the named volumes and the saved response database. Arrange operating-system security updates and a data-retention/deletion date with the system administrator.
+
+7. EXPORT, RECONCILE NICKNAMES, AND JOIN SCORES
+------------------------------------------------
+The live quiz is formative. Its MCQ correctness summary is not an exam mark and must not be used to penalize attendance, device access, speed, or a missed connection. The join tool only combines data to help an instructor review; an instructor must confirm any identity match.
+
+1. Create a private export folder **outside the MDC-301 repository** so student data cannot accidentally be committed. Use one terminal window and keep it open for the next steps.
+
+   Windows PowerShell:
+
+       $exportDir = Join-Path $HOME "Documents\MDC301-private\exports"
+       New-Item -ItemType Directory -Force $exportDir | Out-Null
+
+   macOS or Linux:
+
+       export_dir="$HOME/MDC301-private/exports"
+       mkdir -p "$export_dir"
+
+   Expected: the folder exists under your private Documents/home folder. Download the host file as `quiz.csv` and the Classroom 50 score export as `classroom50-grades.csv` into that folder. The Classroom 50 web export has `usernames`, `score`, and `max_score`; `gh teacher download` uses `username` and score columns and may include several submission rows, newest first. For that CLI format, the join script keeps the first/latest score per student. The script recognizes both formats for this individual assignment. If your headers differ, check the script's `--help` output and pass the exact names.
+2. If participants used aliases instead of GitHub usernames, copy the example map into the private folder, open it, and add only instructor-verified rows under the exact headers `display_name,github_username`. If two students chose the same alias, do not guess; leave it ambiguous for manual review.
+
+   Windows PowerShell:
+
+       Copy-Item week1/livequiz/nickname_map.example.csv (Join-Path $exportDir "nickname_map.csv")
+       notepad (Join-Path $exportDir "nickname_map.csv")
+
+   macOS or Linux:
+
+       cp week1/livequiz/nickname_map.example.csv "$export_dir/nickname_map.csv"
+       nano "$export_dir/nickname_map.csv"
+
+   If nobody used an alias, skip this step and omit the `--nickname-map` option in the next command.
+3. Run from the repository root in the same terminal window.
+
+   Windows PowerShell:
+
+       $quizCsv = Join-Path $exportDir "quiz.csv"
+       $gradesCsv = Join-Path $exportDir "classroom50-grades.csv"
+       $aliasCsv = Join-Path $exportDir "nickname_map.csv"
+       $outCsv = Join-Path $exportDir "week1-joined.csv"
+       .\.venv\Scripts\python.exe week1/livequiz/scripts/join_week1_results.py --quiz "$quizCsv" --grades "$gradesCsv" --nickname-map "$aliasCsv" --out "$outCsv"
+
+   macOS or Linux:
+
+       .venv/bin/python week1/livequiz/scripts/join_week1_results.py --quiz "$export_dir/quiz.csv" --grades "$export_dir/classroom50-grades.csv" --nickname-map "$export_dir/nickname_map.csv" --out "$export_dir/week1-joined.csv"
+
+   If you skipped the alias map, remove the whole `--nickname-map ...` part. Expected: `Saved ... rows to .../week1-joined.csv`, followed by counts for grade handles, quiz handles, and unmatched identities. The output keeps unmatched entries clearly labeled; it never matches on display name alone.
+
+4. Open the output in a spreadsheet only after checking the output location is private. Keep the live-quiz accuracy column labeled formative. Delete source and joined exports according to the institution's student-data retention policy.
+
+8. MINI-CAPSTONE AND OFFLINE FALLBACK
+--------------------------------------
+The one-lab capstone is in `week1/mini_capstone/README.md`. It uses the included 365-row, CC BY 4.0 Seoul Bike subset and does not require a dataset download. Install its notebook packages and start from the repository root:
+
+Windows PowerShell:
+
+    .\.venv\Scripts\python.exe -m pip install --disable-pip-version-check -r week1/mini_capstone/requirements.txt
+    .\.venv\Scripts\python.exe -m jupyter notebook week1/mini_capstone/starter.ipynb
+
+macOS or Linux:
+
+    .venv/bin/python -m pip install --disable-pip-version-check -r week1/mini_capstone/requirements.txt
+    .venv/bin/python -m jupyter notebook week1/mini_capstone/starter.ipynb
+
+Expected first data cell: `rows=365 columns=14`, followed by the first five noon rows and the missing-value counts. Expected split/label output: `train=292 test=73`, `high_demand_threshold=659.0`, and `high_demand: train=146 test=54`. The notebook supports starting either from the repository root or its own mini_capstone folder.
+
+If internet is unavailable during class:
+* The question bank, vendor JavaScript client, and capstone CSV are local files. A laptop quiz can run without a WAN connection only if the campus LAN allows student-to-laptop traffic; test it first.
+* Print worksheets and the five-day question bank as a paper fallback. Students can calculate/predict on paper and complete code later. No one loses marks for a dead phone or slow Wi-Fi.
+* GitHub commits and Classroom 50 scoring need GitHub connectivity. Students should save their work on the approved lab computer and submit it after access returns; use the institution's approved offline submission process if needed. Do not put student data on a personal USB drive without permission.
+
+9. BEFORE YOU INVITE 200 STUDENTS
+----------------------------------
+* Confirm that the course name, actual timetable, due dates, and booklet objective inserts have been reviewed.
+* Confirm the Classroom 50 org has Team/Enterprise or approved GitHub Education, the autograder test has been rehearsed, and repositories are private.
+* Start the quiz server with the correct `QUIZ_DAY`, use the real campus Wi-Fi and test 200 synthetic connections from a second computer, then test at least one phone and one laptop.
+* Have a teaching assistant, printed worksheets, an offline capstone copy, and the paper-quiz fallback ready.
+* Confirm the response/grade CSV storage location and deletion date with the institution.
+* Use `docs/week1-framework.md` for the five-session plan, comparison of open-source quiz choices, 90-minute runbook, slide-deck delta, scale/failure plan, and notation bridge. Use `docs/week1-acceptance-checklist.md` for the one-line check for every delivered file.

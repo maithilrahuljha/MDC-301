@@ -1,0 +1,13 @@
+[
+  {
+    "name": "Week 1 · Day 3 regression and Day 5 logistic pytest suite",
+    "type": "python",
+    "setup": "python3 -m pip install --disable-pip-version-check -r requirements.txt",
+    "run": "python3 -m pytest -q \"$CLASSROOM50_BUNDLE_DIR\"",
+    "timeout": 300,
+    "points": 16,
+    "failure-details": "full",
+    "show-output": true,
+    "show-command": true
+  }
+]
