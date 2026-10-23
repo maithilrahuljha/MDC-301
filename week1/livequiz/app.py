@@ -33,6 +33,11 @@ from flask import (
 from flask_socketio import SocketIO, emit, join_room
 from werkzeug.middleware.proxy_fix import ProxyFix
 
+try:  # Package import in tests; script import when launched as app.py.
+    from .topic_bank import TOPIC_MANIFEST, load_topic_quiz, to_live_questions
+except ImportError:  # pragma: no cover - exercised by the documented script launch
+    from topic_bank import TOPIC_MANIFEST, load_topic_quiz, to_live_questions
+
 ROOT = Path(__file__).resolve().parent
 load_dotenv(ROOT / ".env")
 
@@ -54,6 +59,8 @@ def create_app(test_config: dict[str, Any] | None = None) -> Flask:
         SESSION_CODE=os.getenv("SESSION_CODE", "MDC301W1").strip().upper(),
         DATABASE_PATH=str(database_path),
         QUESTION_BANK=os.getenv("QUESTION_BANK", str(ROOT / "questions.json")),
+        TOPIC_BANK_DIR=os.getenv("TOPIC_BANK_DIR", str(ROOT / "topic_banks")),
+        QUIZ_TOPIC=os.getenv("QUIZ_TOPIC", "all").strip().lower(),
         QUIZ_DAY=os.getenv("QUIZ_DAY", "all").strip().lower(),
         COOKIE_SECURE=_truthy("COOKIE_SECURE", "false"),
         TRUST_PROXY=_truthy("TRUST_PROXY", "false"),
@@ -145,14 +152,46 @@ def init_db(app: Flask) -> None:
 
 
 def load_questions(app: Flask | None = None) -> list[dict[str, Any]]:
-    """Read, validate, and optionally select one day's question bank."""
+    """Read the daily bank or one standalone topic quiz, then validate it."""
     target_app = app or current_app
-    bank_path = Path(target_app.config["QUESTION_BANK"])
-    with bank_path.open(encoding="utf-8") as stream:
-        payload = json.load(stream)
-    questions = payload.get("questions") if isinstance(payload, dict) else None
-    if not isinstance(questions, list) or not questions:
-        raise ValueError("Question bank must contain a non-empty 'questions' list")
+    topic_slug = str(target_app.config.get("QUIZ_TOPIC", "all")).strip().lower()
+    topic_mode = topic_slug not in {"", "all", "0"}
+
+    if topic_mode:
+        if topic_slug not in TOPIC_MANIFEST:
+            choices = ", ".join(TOPIC_MANIFEST)
+            raise ValueError(f"Unknown QUIZ_TOPIC {topic_slug!r}; choose one of: {choices}, or 'all'")
+        topic_dir = Path(target_app.config["TOPIC_BANK_DIR"])
+        if not topic_dir.is_absolute():
+            topic_dir = ROOT / topic_dir
+        topic_path = topic_dir / f"{topic_slug}.json"
+        quiz = load_topic_quiz(topic_path, expected_slug=topic_slug)
+        questions = to_live_questions(quiz)
+        metadata = {
+            "id": quiz["id"],
+            "name": quiz["name"],
+            "topic_slug": quiz["topic_slug"],
+            "topic_name": quiz["topic_name"],
+            "source_chapters": quiz["source_chapters"],
+            "question_count": quiz["question_count"],
+        }
+        selected = questions
+    else:
+        bank_path = Path(target_app.config["QUESTION_BANK"])
+        with bank_path.open(encoding="utf-8") as stream:
+            payload = json.load(stream)
+        questions = payload.get("questions") if isinstance(payload, dict) else None
+        if not isinstance(questions, list) or not questions:
+            raise ValueError("Question bank must contain a non-empty 'questions' list")
+        metadata = {
+            "id": "mdc301-w1-daily-bank",
+            "name": str(payload.get("title", "MDC-301 Week 1 daily question bank")),
+            "topic_slug": "daily_bank",
+            "topic_name": "Week 1 daily bank",
+            "source_chapters": [],
+        }
+        selected = questions
+
     seen: set[str] = set()
     for q in questions:
         if not isinstance(q, dict):
@@ -161,7 +200,7 @@ def load_questions(app: Flask | None = None) -> list[dict[str, Any]]:
         if not re.fullmatch(r"[a-z0-9_]{4,80}", qid) or qid in seen:
             raise ValueError(f"Question id is invalid or duplicated: {qid!r}")
         seen.add(qid)
-        if not isinstance(q.get("day"), int) or q["day"] not in range(1, 6):
+        if type(q.get("day")) is not int or q["day"] not in range(1, 6):
             raise ValueError(f"Question {qid} must have an integer day from 1 to 5")
         if not str(q.get("chapter", "")).strip() or not str(q.get("task", "")).strip():
             raise ValueError(f"Question {qid} needs a chapter and worksheet task")
@@ -192,17 +231,21 @@ def load_questions(app: Flask | None = None) -> list[dict[str, Any]]:
             if not 1 <= max_length <= 35 or max_words != 1:
                 raise ValueError(f"Word cloud {qid} must accept exactly one word, up to 35 characters")
 
-    day_filter = str(target_app.config.get("QUIZ_DAY", "all")).strip().lower()
-    if day_filter in {"", "all", "0"}:
-        selected = questions
-    elif day_filter in {"1", "2", "3", "4", "5"}:
-        selected = [question for question in questions if question["day"] == int(day_filter)]
-        if not selected:
-            raise ValueError(f"Question bank has no questions for day {day_filter}")
-    else:
-        raise ValueError("QUIZ_DAY must be 'all' or a day number from 1 to 5")
+    if not topic_mode:
+        day_filter = str(target_app.config.get("QUIZ_DAY", "all")).strip().lower()
+        if day_filter in {"", "all", "0"}:
+            selected = questions
+        elif day_filter in {"1", "2", "3", "4", "5"}:
+            selected = [question for question in questions if question["day"] == int(day_filter)]
+            if not selected:
+                raise ValueError(f"Question bank has no questions for day {day_filter}")
+        else:
+            raise ValueError("QUIZ_DAY must be 'all' or a day number from 1 to 5")
+
+    metadata["question_count"] = len(selected)
     if app is not None:
         app.extensions["week1_questions"] = selected
+        app.extensions["week1_quiz_metadata"] = metadata
     return selected
 
 
@@ -229,6 +272,8 @@ def _question_payload(index: int, *, host: bool = False) -> dict[str, Any] | Non
         "day": q["day"],
         "chapter": q["chapter"],
         "task": q["task"],
+        "topic_slug": q.get("topic_slug", ""),
+        "topic_name": q.get("topic_name", ""),
         "type": q["type"],
         "prompt": q["prompt"],
         "index": index + 1,
@@ -295,9 +340,21 @@ def _csv_safe(value: Any) -> Any:
 
 
 def _register_routes(app: Flask) -> None:
+    def quiz_template_context() -> dict[str, Any]:
+        metadata = current_app.extensions.get("week1_quiz_metadata", {})
+        return {
+            "quiz_name": metadata.get("name", "MDC-301 Week 1 live check"),
+            "quiz_topic_name": metadata.get("topic_name", "Week 1 daily bank"),
+            "quiz_question_count": metadata.get("question_count", len(_questions())),
+        }
+
     @app.get("/")
     def student_page() -> str:
-        return render_template("student.html", session_code=current_app.config["SESSION_CODE"])
+        return render_template(
+            "student.html",
+            session_code=current_app.config["SESSION_CODE"],
+            **quiz_template_context(),
+        )
 
     @app.route("/host", methods=["GET", "POST"])
     def host_page() -> str | Response:
@@ -307,14 +364,20 @@ def _register_routes(app: Flask) -> None:
             if secrets.compare_digest(supplied, expected) and expected != "change-me-before-sharing":
                 session["host_authenticated"] = True
                 return redirect(url_for("host_page"))
-            return render_template("host.html", authenticated=False, error="The host key did not match."), 401
+            return render_template(
+                "host.html", authenticated=False, error="The host key did not match.",
+                **quiz_template_context(),
+            ), 401
         if not session.get("host_authenticated"):
-            return render_template("host.html", authenticated=False, error="")
+            return render_template(
+                "host.html", authenticated=False, error="", **quiz_template_context()
+            )
         return render_template(
             "host.html",
             authenticated=True,
             session_code=current_app.config["SESSION_CODE"],
             join_url=request.url_root.rstrip("/"),
+            **quiz_template_context(),
         )
 
     @app.get("/healthz")

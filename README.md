@@ -8,13 +8,14 @@ A Week 1-only worksheet framework, formative live quiz, and single-lab mini-caps
 - **Géron code reference:** [`maithilrahuljha/handson-ml2`](https://github.com/maithilrahuljha/handson-ml2) is a secondary implementation reference only. Its README identifies it as the second-edition notebooks and points to newer third-edition material. Do not use its chapter numbering to replace the supplied course guide, and test old API calls against the installed scikit-learn version.
 - **Placeholder facts:** the full course title, actual timetable, and due dates were not provided. The framework labels its sample schedule as an assumption; confirm all course-specific details before publication.
 - **Platform change:** GitHub Classroom was decommissioned on 28 August 2026. The current setup documentation uses Classroom 50; the legacy `.github/classroom/autograding.json` file is kept only as an archival compatibility artifact. Classroom 50 uses `week1/classroom50-tests.json` and teacher-side tests in `week1/classroom50-autograder/`.
+- **Topic-wise tests:** `week1/livequiz/topic_banks/` contains eight standalone 10-question quizzes; choose a `QUIZ_TOPIC` slug to run one. See its README for the source-chapter map, including why the supervised/unsupervised topic is Chapter 1 material, not source Chapter 3.
 - **Privacy and scale:** do not commit `week1/livequiz/.env`, response databases, CSV exports, or a populated `nickname_map.csv`. Rehearse the quiz on the real network; the 200-client target is not a capacity guarantee. Have a printed/offline fallback.
 
 ## Start here
 
 1. Read [`instructions.txt`](instructions.txt) in order; it includes commands and expected outputs for installation, Classroom 50, the live quiz, and the capstone.
 2. Review [`week1/day0_onboarding.md`](week1/day0_onboarding.md), then check the five worksheets in `week1/`.
-3. Run `python week1/livequiz/scripts/check_question_bank.py`; expected: 25 questions, five per day.
-4. Install the root `requirements.txt` plus `week1/livequiz/requirements.txt`, then run `python -m pytest -q tests/test_livequiz.py tests/test_result_join.py`.
+3. Run `python week1/livequiz/scripts/check_question_bank.py`; expected: the 25-question daily bank plus eight topic banks with 10 questions each.
+4. Install the root `requirements.txt` plus `week1/livequiz/requirements.txt`, then run `python -m pytest -q tests/test_livequiz.py tests/test_result_join.py tests/test_topic_banks.py`; expected: 11 passed.
 5. Complete the Day 3/5 starter TODOs in a test copy before expecting their eight pytest checks to pass; untouched student TODOs are supposed to fail.
 6. Use `week1/mini_capstone/README.md` for the one-lab project, UCI data credit, notebook, and rubric.

@@ -1,0 +1,106 @@
+{
+  "quiz": {
+    "id": "mdc301-w1-tools-sklearn",
+    "name": "MDC-301 W1 — Tools and the Scikit-learn Ecosystem",
+    "course": "MDC-301",
+    "week": 1,
+    "day": 2,
+    "chapter": "ch05-ch06",
+    "topic_slug": "ch05_tools_and_sklearn",
+    "topic_name": "Tools and the Scikit-learn Ecosystem",
+    "source_chapters": ["ch05", "ch06"],
+    "question_count": 10,
+    "questions": [
+      {
+        "id": "tools_q01",
+        "type": "multiple_choice",
+        "question": "Which Python library is commonly used for classical machine-learning estimators?",
+        "options": ["PyTorch", "TensorFlow", "Scikit-learn", "Flask"],
+        "correct": 2,
+        "time_limit": 15,
+        "explanation": "Scikit-learn provides a common estimator interface and many classical ML algorithms and preprocessing tools."
+      },
+      {
+        "id": "tools_q02",
+        "type": "multiple_choice",
+        "question": "Beyond fit, which method does a transformer such as StandardScaler use to apply a learned transformation?",
+        "options": ["predict", "transform", "compile", "deploy"],
+        "correct": 1,
+        "time_limit": 20,
+        "explanation": "A transformer learns settings with fit and applies them to data with transform."
+      },
+      {
+        "id": "tools_q03",
+        "type": "multiple_choice",
+        "question": "Beyond fit, which method does a predictor commonly use to return estimates for new inputs?",
+        "options": ["transform", "predict", "compile", "join"],
+        "correct": 1,
+        "time_limit": 20,
+        "explanation": "A predictor uses predict to return estimates for supplied rows."
+      },
+      {
+        "id": "tools_q04",
+        "type": "multiple_choice",
+        "question": "In scikit-learn, a learned attribute such as coef_ usually ends with:",
+        "options": ["A dollar sign ($)", "An underscore (_)", "A capital letter", "A hyphen (-)"],
+        "correct": 1,
+        "time_limit": 15,
+        "explanation": "A trailing underscore conventionally marks many attributes learned during fit."
+      },
+      {
+        "id": "tools_q05",
+        "type": "multiple_choice",
+        "question": "What is a main benefit of a scikit-learn Pipeline?",
+        "options": ["It stores all data in a database", "It chains preprocessing and a predictor so steps are fitted consistently", "It guarantees a perfect score", "It automatically collects labels"],
+        "correct": 1,
+        "time_limit": 25,
+        "explanation": "A pipeline applies the same ordered steps and helps keep learned preprocessing inside each training fold."
+      },
+      {
+        "id": "tools_q06",
+        "type": "multiple_choice",
+        "question": "Which practice leaks held-out information into model development?",
+        "options": ["Split rows first, then fit a scaler on training rows", "Fit a scaler on every row before splitting into train and test", "Fit a pipeline on training rows", "Evaluate once on a kept-aside test set"],
+        "correct": 1,
+        "time_limit": 25,
+        "explanation": "A scaler fitted before the split learns information from test rows. Split first or put the scaler in a pipeline."
+      },
+      {
+        "id": "tools_q07",
+        "type": "multiple_choice",
+        "question": "What is the purpose of cross-validation during model development?",
+        "options": ["To rotate validation folds and estimate performance across different splits", "To replace every test set with training data", "To guarantee that a model will generalise", "To make a dataset contain more labels"],
+        "correct": 0,
+        "time_limit": 25,
+        "explanation": "Cross-validation evaluates a model over several training/validation partitions; a final test set should still remain separate."
+      },
+      {
+        "id": "tools_q08",
+        "type": "multiple_choice",
+        "question": "In GridSearchCV, how is parameter C for a pipeline step named logisticregression usually written?",
+        "options": ["C", "logisticregression.C", "logisticregression__C", "C__logisticregression"],
+        "correct": 2,
+        "time_limit": 25,
+        "explanation": "Pipeline parameters use the step name, two underscores, and the estimator parameter name."
+      },
+      {
+        "id": "tools_q09",
+        "type": "multiple_choice",
+        "question": "Why is scikit-learn's cross-validation scoring name neg_mean_squared_error negative?",
+        "options": ["Mean squared error is naturally negative", "The model-selection API maximises scores, so error measures are negated", "It is a bug in every estimator", "The value is a probability"],
+        "correct": 1,
+        "time_limit": 25,
+        "explanation": "Scikit-learn's scoring convention treats higher scores as better, so losses such as MSE are negated."
+      },
+      {
+        "id": "tools_q10",
+        "type": "multiple_choice",
+        "question": "When should the final held-out test set normally be used?",
+        "options": ["At every GridSearchCV iteration", "To fit the scaler", "For a final evaluation after model choices are complete", "To choose which features to add"],
+        "correct": 2,
+        "time_limit": 25,
+        "explanation": "Keep the test set separate from fitting and model selection, then use it for a final performance check."
+      }
+    ]
+  }
+}

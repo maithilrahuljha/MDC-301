@@ -28,24 +28,35 @@ Use this after edits and before sharing. Each row is a one-line pass condition f
 | `tests/test_day5_logistic.py` | The local visible classifier tests pass against a completed student implementation and intentionally fail on untouched TODOs. |
 | `tests/test_livequiz.py` | Test clients can join, submit only one saved answer, reveal, view a one-word cloud, export a formula-safe CSV, and verify app-relative database paths without real student data. |
 | `tests/test_result_join.py` | The join script normalizes handles, requires verified alias mappings, reports ambiguous aliases, and avoids guessing identities. |
-| `week1/livequiz/README.md` | Local, VPS, import, privacy, day-filter, synthetic-load, and license notes match the implemented server. |
+| `tests/test_topic_banks.py` | All eight standalone topic quizzes validate at 10 questions each, zero-based keys convert correctly, and topic mode overrides the legacy day filter. |
+| `week1/livequiz/README.md` | Local, VPS, topic/day selection, question schema, privacy, synthetic-load, and license notes match the implemented server. |
 | `week1/livequiz/LICENSE` | The live-quiz scaffold source has a clear MIT license, while vendored client/data notices remain separate. |
-| `week1/livequiz/app.py` | The same-origin Flask-SocketIO app validates the question bank, protects host controls, persists answers, and starts only with non-placeholder secrets. |
-| `week1/livequiz/questions.json` | JSON validation reports 25 unique questions, exactly five per day, with a Day 3 residual-plot item and one word-cloud prompt each day. |
+| `week1/livequiz/app.py` | The same-origin Flask-SocketIO app validates daily or selected topic banks, protects host controls, persists answers, and starts only with non-placeholder secrets. |
+| `week1/livequiz/questions.json` | JSON validation reports 25 unique daily-bank questions, exactly five per day, with a Day 3 residual-plot item and one word-cloud prompt each day. |
+| `week1/livequiz/topic_bank.py` | It validates standalone 10-question quiz objects and adapts zero-based answer indexes to the live app without editing source JSON. |
+| `week1/livequiz/topic_banks/README.md` | It lists all eight slugs/source-chapter mappings, explains the Ch 1 topic-sequence exception, and documents topic selection. |
+| `week1/livequiz/topic_banks/ch01_intro_to_ml.json` | It is a self-contained Ch 1 quiz with 10 valid questions and zero-based answer indexes. |
+| `week1/livequiz/topic_banks/ch02_ml_lifecycle.json` | It is a self-contained Ch 2 quiz with 10 valid questions and one response-cloud item. |
+| `week1/livequiz/topic_banks/topic03_supervised_vs_unsupervised.json` | It is a 10-question topic quiz correctly mapped to supplied-guide Ch 1, not the career-focused Ch 3. |
+| `week1/livequiz/topic_banks/ch05_tools_and_sklearn.json` | It is a self-contained Ch 5–6 quiz with 10 validated questions. |
+| `week1/livequiz/topic_banks/ch08_simple_linear_regression.json` | It is a self-contained Ch 8 quiz with 10 validated questions and accurate R²/residual interpretations. |
+| `week1/livequiz/topic_banks/ch09_multiple_linear_regression.json` | It is a self-contained Ch 9 quiz with 10 validated matrix-regression questions. |
+| `week1/livequiz/topic_banks/ch10_polynomial_and_regularisation.json` | It is a self-contained Ch 10 quiz with 10 validated polynomial/regularisation questions. |
+| `week1/livequiz/topic_banks/ch12_logistic_regression.json` | It is a self-contained Ch 11–12 quiz with 10 validated classification questions. |
 | `week1/livequiz/requirements.txt` | A clean environment installs the Flask/gevent server and asyncio client needed for the synthetic load test. |
-| `week1/livequiz/.env.example` | It documents configuration keys and contains placeholders only, never reusable credentials. |
+| `week1/livequiz/.env.example` | It documents configuration keys, topic/day selection, and placeholders only—never reusable credentials. |
 | `week1/livequiz/.dockerignore` | Docker builds exclude local secrets, databases, exports, and Python caches. |
-| `week1/livequiz/Dockerfile` | It creates a non-root Python container, includes local static assets, and listens on port 8000. |
+| `week1/livequiz/Dockerfile` | It creates a non-root Python container, includes both daily and topic banks plus local assets, and listens on port 8000. |
 | `week1/livequiz/compose.yaml` | It runs one quiz worker plus Caddy, retains SQLite in a named volume, and does not publish the database port. |
 | `week1/livequiz/Caddyfile` | It clearly marks the example hostname and reverse-proxies HTTP/WebSocket traffic to the quiz service. |
-| `week1/livequiz/templates/student.html` | The mobile join and answer page requests no password/phone and loads the locally vendored Socket.IO client. |
-| `week1/livequiz/templates/host.html` | The host key gates controls/export and the page shows the session code, live totals, and reviewable word cloud. |
-| `week1/livequiz/static/student.js` | Students can reconnect, join, submit one answer per question, and cannot see the answer key before reveal. |
-| `week1/livequiz/static/host.js` | Host controls reveal/advance safely and render user responses as text rather than executable HTML. |
+| `week1/livequiz/templates/student.html` | The mobile join and answer page requests no password/phone, displays the selected test, and loads the local Socket.IO client. |
+| `week1/livequiz/templates/host.html` | The host key gates controls/export and the page shows the selected test, session code, live totals, and word cloud. |
+| `week1/livequiz/static/student.js` | Students can reconnect, join, submit one answer per question, see the topic label, and cannot see the answer key before reveal. |
+| `week1/livequiz/static/host.js` | Host controls reveal/advance safely, show topic labels, and render responses as text rather than executable HTML. |
 | `week1/livequiz/static/vendor/socket.io.min.js` | The checked-in client works without a third-party CDN and matches the documented Socket.IO version. |
 | `week1/livequiz/static/vendor/SOCKET.IO-LICENSE.txt` | The vendored client’s MIT notice is retained. |
 | `week1/livequiz/static/vendor/README.txt` | The bundled dependency, exact version, source, and update-smoke-test requirement are recorded. |
-| `week1/livequiz/scripts/check_question_bank.py` | One command prints the expected five-day/25-question summary and exits nonzero for a wrong day count. |
+| `week1/livequiz/scripts/check_question_bank.py` | One command validates the 25-question daily bank and eight 10-question topic files, prints counts, lists slugs, and rejects invalid indexes. |
 | `week1/livequiz/scripts/load_test_socketio.py` | Synthetic clients use generated IDs, join and answer without real roster data, and report failures with a nonzero exit status. |
 | `week1/livequiz/scripts/join_week1_results.py` | The CSV join matches normalized handles or instructor-verified aliases, flags unmatched/ambiguous identities, and labels results formative. |
 | `week1/livequiz/nickname_map.example.csv` | It supplies only the required alias-map headers and contains no real student names. |
@@ -59,7 +70,7 @@ Use this after edits and before sharing. Each row is a one-line pass condition f
 
 - [ ] Proofread all source objectives/notation and adapted examples against the instructor's `ML-reference.pdf`; resolve Appendix E's chapter-index offset and confirm course title/timetable before distribution.
 - [ ] Confirm Classroom 50 organization access, due dates, and repository visibility with the instructor/organization owner.
-- [ ] Run `python week1/livequiz/scripts/check_question_bank.py` and `python -m pytest -q tests/test_livequiz.py tests/test_result_join.py` from the repository root.
+- [ ] Run `python week1/livequiz/scripts/check_question_bank.py` and `python -m pytest -q tests/test_livequiz.py tests/test_result_join.py tests/test_topic_banks.py` from the repository root.
 - [ ] Complete the Day 3/5 starter TODOs in a test copy and confirm all eight tests pass; confirm untouched starters fail as expected.
 - [ ] Test one Classroom 50 acceptance/submission and the server on two real devices; conduct a synthetic 200-client rehearsal on the actual network before class.
 - [ ] Confirm privacy/retention for roster, quiz CSV, grade CSV, aliases, and SQLite data; prepare the paper/offline fallback.

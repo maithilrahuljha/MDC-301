@@ -65,15 +65,15 @@ Run the command for your operating system.
 Windows PowerShell:
 
     .\.venv\Scripts\python.exe week1/livequiz/scripts/check_question_bank.py
-    .\.venv\Scripts\python.exe -m pytest -q tests/test_livequiz.py tests/test_result_join.py
+    .\.venv\Scripts\python.exe -m pytest -q tests/test_livequiz.py tests/test_result_join.py tests/test_topic_banks.py
 
 macOS or Linux:
 
     .venv/bin/python week1/livequiz/scripts/check_question_bank.py
-    .venv/bin/python -m pytest -q tests/test_livequiz.py tests/test_result_join.py
+    .venv/bin/python -m pytest -q tests/test_livequiz.py tests/test_result_join.py tests/test_topic_banks.py
 
-Expected first output: `questions=25 days=[1, 2, 3, 4, 5] per_day=[5, 5, 5, 5, 5]`.
-Expected second output: `7 passed` (the time may differ).
+Expected first output: `daily_questions=25 days=[1, 2, 3, 4, 5] per_day=[5, 5, 5, 5, 5] topic_banks=8 topic_questions=80 per_topic=[10, 10, 10, 10, 10, 10, 10, 10]`.
+Expected second output: `11 passed` (the time may differ).
 
 The Day 3 and Day 5 student modules intentionally contain TODOs. Before those TODOs are implemented, their checks are expected to fail with `NotImplementedError`:
 
@@ -135,7 +135,19 @@ macOS or Linux:
     .venv/bin/python -c 'import secrets; print(secrets.token_urlsafe(32))'
     nano week1/livequiz/.env
 
-The random-secret command prints a long value. Run it twice, then replace the two `replace-with-...` values in `.env` with two different outputs. Keep the file open only on the instructor computer. For a Day 3 lesson, set `QUIZ_DAY=3`. For another lesson use `1`, `2`, `4`, or `5`. Set `COOKIE_SECURE=false`, `TRUST_PROXY=false`, `PORT=8000`, and `SESSION_CODE=MDC301W1` for this local, non-HTTPS network recipe. Save the file and close the editor.
+The random-secret command prints a long value. Run it twice, then replace the two `replace-with-...` values in `.env` with two different outputs. Keep the file open only on the instructor computer. For a daily lesson, set `QUIZ_TOPIC=all` and set `QUIZ_DAY` to `1`, `2`, `3`, `4`, or `5`. For a topic-wise test, set `QUIZ_TOPIC` to one of the listed topic slugs; that selects its standalone 10-question JSON bank and overrides `QUIZ_DAY`.
+
+To see the exact topic slugs, run:
+
+Windows PowerShell:
+
+    .\.venv\Scripts\python.exe week1/livequiz/scripts/check_question_bank.py --list-topics
+
+macOS or Linux:
+
+    .venv/bin/python week1/livequiz/scripts/check_question_bank.py --list-topics
+
+Set `COOKIE_SECURE=false`, `TRUST_PROXY=false`, `PORT=8000`, and `SESSION_CODE=MDC301W1` for this local, non-HTTPS network recipe. Save the file and close the editor.
 
 B. Start the server.
 
@@ -194,7 +206,7 @@ You need: a Linux VPS with Docker Engine and Compose plugin, a DNS name such as 
        python3 -c 'import secrets; print(secrets.token_urlsafe(32))'
        nano .env
 
-   Replace the two placeholder secrets with different random outputs. Set `QUIZ_DAY=3` (or the day number), `COOKIE_SECURE=true`, `TRUST_PROXY=true`, `PORT=8000`, and `SESSION_CODE=MDC301W1`.
+   Replace the two placeholder secrets with different random outputs. For the daily bank, set `QUIZ_TOPIC=all` and `QUIZ_DAY=3` (or another day / `all`). To run one topic test, set `QUIZ_TOPIC` to a listed topic slug; a selected topic loads its 10 questions and overrides `QUIZ_DAY`. Set `COOKIE_SECURE=true`, `TRUST_PROXY=true`, `PORT=8000`, and `SESSION_CODE=MDC301W1`.
 4. Edit `Caddyfile` and replace `quiz.example.edu` with the real DNS name. Keep the `reverse_proxy quiz:8000` line. Caddy will handle HTTPS automatically when the DNS record and firewall are correct.
 5. Check Docker is installed:
 
