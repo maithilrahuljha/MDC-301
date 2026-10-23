@@ -1,0 +1,104 @@
+{
+  "quiz": {
+    "id": "mdc301-w1-supervised-unsupervised",
+    "name": "MDC-301 W1 — Supervised vs Unsupervised Learning",
+    "course": "MDC-301",
+    "week": 1,
+    "day": 1,
+    "chapter": "ch01",
+    "topic_slug": "topic03_supervised_vs_unsupervised",
+    "topic_name": "Supervised vs Unsupervised Learning",
+    "source_chapters": ["ch01"],
+    "topic_sequence": 3,
+    "question_count": 10,
+    "questions": [
+      {
+        "id": "supervised_q01",
+        "type": "multiple_choice",
+        "question": "Which is a supervised-learning task?",
+        "options": ["Grouping customers without known groups", "Predicting tomorrow's temperature from examples with measured temperatures", "Compressing features without target labels", "Finding anomalies when no labels are available"],
+        "correct": 1,
+        "time_limit": 20,
+        "explanation": "The past temperatures supply known targets, so the model can learn from labelled examples."
+      },
+      {
+        "id": "supervised_q02",
+        "type": "multiple_choice",
+        "question": "Which is an unsupervised-learning task?",
+        "options": ["Predicting loan default from labelled loans", "Classifying labelled email as spam or not spam", "Grouping customers by similarity when no group labels are supplied", "Forecasting sales from historical sales targets"],
+        "correct": 2,
+        "time_limit": 20,
+        "explanation": "Clustering searches for groups without being given the correct group label for each customer."
+      },
+      {
+        "id": "supervised_q03",
+        "type": "multiple_choice",
+        "question": "What is the defining difference between supervised and unsupervised learning?",
+        "options": ["Whether the computer uses a GPU", "Whether target labels are supplied for the learning task", "Whether the data are difficult", "Whether the target is always categorical"],
+        "correct": 1,
+        "time_limit": 20,
+        "explanation": "Supervised learning uses input examples with target labels; unsupervised learning is not given those target labels."
+      },
+      {
+        "id": "supervised_q04",
+        "type": "multiple_choice",
+        "question": "If the labelled target y is a numeric amount such as a house price, the usual task type is:",
+        "options": ["Classification", "Regression", "Clustering", "Reinforcement learning"],
+        "correct": 1,
+        "time_limit": 15,
+        "explanation": "Regression predicts a numeric quantity."
+      },
+      {
+        "id": "supervised_q05",
+        "type": "multiple_choice",
+        "question": "If the target is a category such as spam or not spam, the usual task type is:",
+        "options": ["Regression", "Classification", "Clustering", "Dimensionality reduction"],
+        "correct": 1,
+        "time_limit": 15,
+        "explanation": "Classification predicts a class or category."
+      },
+      {
+        "id": "supervised_q06",
+        "type": "true_false",
+        "question": "A classifier trained to predict cluster IDs is supervised with respect to those supplied cluster-ID labels, even though the IDs were first produced by an unsupervised method.",
+        "options": ["True", "False"],
+        "correct": 0,
+        "time_limit": 25,
+        "explanation": "The classifier's training step uses labels as targets. The origin of those labels does not make that classifier-training step unsupervised."
+      },
+      {
+        "id": "supervised_q07",
+        "type": "multiple_choice",
+        "question": "Why can evaluating an unsupervised clustering result be less direct than evaluating a classifier?",
+        "options": ["Clustering cannot be run in Python", "There may be no ground-truth labels to compare with the discovered groups", "Clustering always requires more rows", "Every cluster is guaranteed to be wrong"],
+        "correct": 1,
+        "time_limit": 20,
+        "explanation": "Without known labels, evaluation may need internal measures, domain review, or a later task rather than direct label accuracy."
+      },
+      {
+        "id": "supervised_q08",
+        "type": "multiple_choice",
+        "question": "Which setting learns by taking actions and receiving rewards or penalties over time?",
+        "options": ["Supervised learning", "Unsupervised learning", "Reinforcement learning", "Ordinary least squares"],
+        "correct": 2,
+        "time_limit": 20,
+        "explanation": "Reinforcement learning uses feedback from actions and rewards rather than a fixed target label for every example."
+      },
+      {
+        "id": "supervised_q09",
+        "type": "multiple_choice",
+        "question": "A team has measurements but no known fraud labels and wants to flag unusual cases for review. Which is the best initial description?",
+        "options": ["Unsupervised anomaly detection", "Supervised regression", "Multiclass classification with known labels", "A polynomial feature map"],
+        "correct": 0,
+        "time_limit": 25,
+        "explanation": "The task has no supplied fraud target labels, so an unsupervised anomaly-detection approach is a possible starting point."
+      },
+      {
+        "id": "supervised_q10",
+        "type": "word_cloud",
+        "question": "Name one real-world task that could use unsupervised learning; one word only.",
+        "time_limit": 45
+      }
+    ]
+  }
+}

@@ -2,7 +2,7 @@
 
 The live-quiz scaffold source in this directory is MIT-licensed; see [`LICENSE`](LICENSE). The locally vendored Socket.IO browser client and the capstone dataset retain their separate notices/licenses.
 
-A small formative, browser-based quiz for five course days. Socket.IO (a library for two-way live messages between a browser and server) carries questions and answers. The bank contains 25 questions (five per day), multiple-choice questions (MCQs) plus a one-word cloud on every day. SQLite (a small local file database) stores responses; a teacher can download a CSV (comma-separated values spreadsheet). It is not an exam platform, attendance system, or independently load-certified 200-user service.
+A small formative, browser-based quiz for five course days. Socket.IO (a library for two-way live messages between a browser and server) carries questions and answers. The existing daily bank contains 25 questions (five per day). In addition, eight standalone topic banks contain 10 questions each for topic-wise tests. SQLite (a small local file database) stores responses; a teacher can download a CSV (comma-separated values spreadsheet). It is not an exam platform, attendance system, or independently load-certified 200-user service.
 
 **Terms:** a *LAN* (local-area network) is the private Wi-Fi/network shared by the instructor laptop and student devices; a `.env` file holds private app settings and secrets; *HTTPS* is the encrypted web connection used on a public server; *DNS* maps a hostname to a server address; a *VPS* is a rented virtual private server.
 
@@ -17,7 +17,7 @@ python -m pip install --disable-pip-version-check -r week1/livequiz/requirements
 
 Expected last line: `Successfully installed ... Flask ... Flask-SocketIO ... gevent ...` (exact package versions may differ). Copy `week1/livequiz/.env.example` to `week1/livequiz/.env`, generate two different long secrets, and replace both example values. The `.env` file is ignored by Git. Never commit or send it to students.
 
-For a laptop/LAN run, set `COOKIE_SECURE=false`, `TRUST_PROXY=false`, and `QUIZ_DAY=1` in `.env`. Change `QUIZ_DAY` to `1`, `2`, `3`, `4`, or `5` before each separate daily run; `all` loads all 25 questions. Changing question day does not erase saved responses, but the active question position is in memory and starts at the first question after restart.
+For a laptop/LAN run, set `COOKIE_SECURE=false` and `TRUST_PROXY=false` in `.env`. For the daily bank, use `QUIZ_TOPIC=all` and set `QUIZ_DAY` to `1`, `2`, `3`, `4`, or `5`; `QUIZ_DAY=all` loads all 25 daily questions. For a topic-wise test, set `QUIZ_TOPIC` to one slug from `python week1/livequiz/scripts/check_question_bank.py --list-topics`; the selected file loads its 10 questions and takes precedence over `QUIZ_DAY`. Changing the selected bank does not erase saved responses, but the active question position is in memory and starts at the first question after restart.
 
 ## Local launch
 
@@ -37,15 +37,11 @@ Expected: `{"session_code":"MDC301W1","status":"ok"}` (JSON key order may vary).
 
 ## Day filtering and question schema
 
-`questions.json` is the importable source bank; a restart reloads it. Each object uses:
+`questions.json` remains the source for the five-question-per-day bank. The independent JSON files in `topic_banks/` each contain a complete `quiz` object with exactly 10 topic questions. Their interchange schema uses `multiple_choice`, `true_false`, or `word_cloud`; `correct` is a zero-based option index, and a word-cloud item omits `options` and `correct`. `topic_bank.py` validates each file and maps zero-based indexes to the live app's A–E keys without changing the source JSON. The supervised/unsupervised topic maps to course Chapter 1; the filename uses `topic03_...` only as a topic sequence label because the supplied guide's Chapter 3 is outside Week 1.
 
-- `id`: stable lowercase identifier, unique across the full bank.
-- `day`: integer 1–5; `chapter` and `task` link to the worksheet.
-- `type`: `mcq` or `word_cloud`.
-- MCQ: `prompt`, 2–5 `choices` with unique keys and text, a `correct` key, and an `explanation`.
-- Word cloud: `prompt`, `max_length` from 1–35, `max_words: 1`, and an explanation. The host screen renders content as text (not HTML); do not invite personal or sensitive information.
+Set `QUIZ_TOPIC` to a slug printed by `check_question_bank.py --list-topics` to run one 10-question topic test; the selected topic overrides `QUIZ_DAY`. Use `QUIZ_TOPIC=all` for the existing daily bank. At startup the server validates the selected quiz and filters the legacy bank by `QUIZ_DAY` only in daily mode. Keys and explanations are withheld from student browsers until the host reveals an MCQ. The bundled browser Socket.IO file is local, so the live session does not fetch a JavaScript CDN.
 
-The server validates the entire JSON bank at startup, then filters it by `QUIZ_DAY`. Keys and explanations are withheld from student browsers until the host reveals an MCQ. The bundled browser Socket.IO file is local, so the live session does not fetch a JavaScript CDN.
+The topic JSON is a clean interchange source. ClassQuiz, Mentimeter, and open.mentimeter may require their own native import template or conversion; the bundled live app loads these topic files directly.
 
 ## Host controls and result export
 

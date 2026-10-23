@@ -1,0 +1,106 @@
+{
+  "quiz": {
+    "id": "mdc301-w1-logistic-regression",
+    "name": "MDC-301 W1 — Logistic Regression",
+    "course": "MDC-301",
+    "week": 1,
+    "day": 5,
+    "chapter": "ch11-ch12",
+    "topic_slug": "ch12_logistic_regression",
+    "topic_name": "Logistic Regression",
+    "source_chapters": ["ch11", "ch12"],
+    "question_count": 10,
+    "questions": [
+      {
+        "id": "logistic_q01",
+        "type": "multiple_choice",
+        "question": "Logistic regression is primarily used for:",
+        "options": ["Predicting an unrestricted continuous target", "Classification, despite the word regression in its name", "Unsupervised clustering only", "Reducing the number of input columns"],
+        "correct": 1,
+        "time_limit": 20,
+        "explanation": "For binary classification, logistic regression estimates a class probability from a weighted feature score."
+      },
+      {
+        "id": "logistic_q02",
+        "type": "multiple_choice",
+        "question": "For any finite real score z, the sigmoid σ(z) maps to:",
+        "options": ["The interval (−∞, ∞)", "The interval (0, 1)", "Only the values 0 and 1", "The interval (1, ∞)"],
+        "correct": 1,
+        "time_limit": 20,
+        "explanation": "The sigmoid maps a real-valued score to a value strictly between zero and one."
+      },
+      {
+        "id": "logistic_q03",
+        "type": "multiple_choice",
+        "question": "Which quantity is modelled as a linear function of the features in logistic regression?",
+        "options": ["The probability p itself", "The odds p/(1−p)", "The log-odds log(p/(1−p))", "The variance of every feature"],
+        "correct": 2,
+        "time_limit": 30,
+        "explanation": "The logit transform makes the log-odds a linear function of the inputs."
+      },
+      {
+        "id": "logistic_q04",
+        "type": "multiple_choice",
+        "question": "If a logistic-regression coefficient is 2.0, its one-unit odds ratio is approximately:",
+        "options": ["2.0", "0.5", "7.39", "20.0"],
+        "correct": 2,
+        "time_limit": 30,
+        "explanation": "The odds ratio for a one-unit increase is exp(β); exp(2) is about 7.39, conditional on other features."
+      },
+      {
+        "id": "logistic_q05",
+        "type": "multiple_choice",
+        "question": "Which loss is equivalent to negative Bernoulli log-likelihood for binary labels?",
+        "options": ["Log-loss (binary cross-entropy)", "Mean absolute error", "R-squared", "The sum of feature values"],
+        "correct": 0,
+        "time_limit": 20,
+        "explanation": "Maximising the Bernoulli likelihood is equivalent to minimising its negative log-likelihood, called binary log-loss."
+      },
+      {
+        "id": "logistic_q06",
+        "type": "multiple_choice",
+        "question": "A scikit-learn ConvergenceWarning during LogisticRegression most often means:",
+        "options": ["The model is permanently broken", "The solver did not converge within its iteration limit; scale features, allow more iterations, and inspect the fit", "The dataset has no target", "The model automatically changed the positive class"],
+        "correct": 1,
+        "time_limit": 25,
+        "explanation": "A convergence warning should be investigated. Scaling within a training pipeline and increasing max_iter may help; also check data separation and collinearity rather than ignoring the warning."
+      },
+      {
+        "id": "logistic_q07",
+        "type": "multiple_choice",
+        "question": "With rows as true labels and columns as predicted labels, where is a false negative for positive class 1?",
+        "options": ["True row 1, predicted column 0", "True row 0, predicted column 1", "True row 1, predicted column 1", "True row 0, predicted column 0"],
+        "correct": 0,
+        "time_limit": 25,
+        "explanation": "A false negative is a real positive example predicted as negative."
+      },
+      {
+        "id": "logistic_q08",
+        "type": "multiple_choice",
+        "question": "A rare positive class matters, and missing a real positive is costly. Which metric is most directly about the fraction of actual positives found?",
+        "options": ["Recall", "Precision", "R-squared", "Training time"],
+        "correct": 0,
+        "time_limit": 25,
+        "explanation": "Recall = TP/(TP + FN); when missed positives are costly, recall is important, alongside the false-positive trade-off."
+      },
+      {
+        "id": "logistic_q09",
+        "type": "multiple_choice",
+        "question": "A dataset is 95% negative. A model that always predicts negative will achieve approximately:",
+        "options": ["5% accuracy and find every positive", "95% accuracy but miss every positive", "100% accuracy", "50% accuracy"],
+        "correct": 1,
+        "time_limit": 25,
+        "explanation": "This illustrates why accuracy alone can hide failure on a rare positive class."
+      },
+      {
+        "id": "logistic_q10",
+        "type": "multiple_choice",
+        "question": "If missed positives are costly, which threshold change will generally move toward higher recall, often at the cost of more false positives?",
+        "options": ["Lower the probability threshold", "Raise the probability threshold", "Remove the positive class", "Report accuracy only"],
+        "correct": 0,
+        "time_limit": 30,
+        "explanation": "Lowering the threshold generally labels more cases positive, which can raise recall and also increase false positives; choose it using validation data."
+      }
+    ]
+  }
+}

@@ -41,7 +41,8 @@
 
   function renderQuestion(question) {
     current = question;
-    tag.textContent = `${question.chapter} · Day ${question.day} · ${question.type}`;
+    const topicLabel = question.topic_name ? `${question.topic_name} · ` : "";
+    tag.textContent = `${topicLabel}${question.chapter} · Day ${question.day} · ${question.type}`;
     number.textContent = `Question ${question.index} of ${question.total}`;
     prompt.textContent = question.prompt;
     choices.replaceChildren();

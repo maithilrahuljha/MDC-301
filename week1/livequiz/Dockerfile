@@ -11,7 +11,8 @@ RUN python -m pip install --no-cache-dir --disable-pip-version-check -r requirem
     && mkdir -p /app/data \
     && chown -R quizuser:quizuser /app
 
-COPY --chown=quizuser:quizuser app.py questions.json ./
+COPY --chown=quizuser:quizuser app.py questions.json topic_bank.py ./
+COPY --chown=quizuser:quizuser topic_banks ./topic_banks
 COPY --chown=quizuser:quizuser templates ./templates
 COPY --chown=quizuser:quizuser static ./static
 

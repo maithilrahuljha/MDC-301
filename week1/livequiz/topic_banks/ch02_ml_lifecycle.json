@@ -1,0 +1,103 @@
+{
+  "quiz": {
+    "id": "mdc301-w1-ml-lifecycle",
+    "name": "MDC-301 W1 — Machine Learning Model Lifecycle",
+    "course": "MDC-301",
+    "week": 1,
+    "day": 1,
+    "chapter": "ch02",
+    "topic_slug": "ch02_ml_lifecycle",
+    "topic_name": "Machine Learning Model Lifecycle",
+    "source_chapters": ["ch02"],
+    "question_count": 10,
+    "questions": [
+      {
+        "id": "lifecycle_q01",
+        "type": "multiple_choice",
+        "question": "Which activity should come before selecting and fitting a model?",
+        "options": ["Define the problem and understand the data", "Deploy a model to users", "Tune parameters on the test set", "Delete the target column"],
+        "correct": 0,
+        "time_limit": 20,
+        "explanation": "Problem framing and data understanding guide what data to collect, how to prepare it, and how success should be evaluated."
+      },
+      {
+        "id": "lifecycle_q02",
+        "type": "true_false",
+        "question": "A responsible machine-learning lifecycle ends as soon as a model is deployed.",
+        "options": ["True", "False"],
+        "correct": 1,
+        "time_limit": 15,
+        "explanation": "After deployment, the model and its data should be monitored and maintained; findings can send the team back to earlier stages."
+      },
+      {
+        "id": "lifecycle_q03",
+        "type": "multiple_choice",
+        "question": "The distribution of input features changes, while the input-to-outcome relationship is assumed to stay stable. This is usually called:",
+        "options": ["Concept drift", "Data drift", "Underfitting", "A train/test split"],
+        "correct": 1,
+        "time_limit": 25,
+        "explanation": "Data drift refers to a change in the distribution of inputs or features."
+      },
+      {
+        "id": "lifecycle_q04",
+        "type": "multiple_choice",
+        "question": "The same kinds of inputs now relate to outcomes differently than before. This is:",
+        "options": ["Data drift only", "Concept drift", "A larger training set", "A change in file format"],
+        "correct": 1,
+        "time_limit": 25,
+        "explanation": "Concept drift means the relationship that maps inputs to outcomes has changed."
+      },
+      {
+        "id": "lifecycle_q05",
+        "type": "multiple_choice",
+        "question": "The proportion of positive labels changes over time. Which term most directly describes that observation?",
+        "options": ["Label drift", "Polynomial regression", "Feature scaling", "Underfitting"],
+        "correct": 0,
+        "time_limit": 20,
+        "explanation": "Label drift is a change in the target or outcome distribution. It may occur with or without changes in the feature-to-target relationship."
+      },
+      {
+        "id": "lifecycle_q06",
+        "type": "multiple_choice",
+        "question": "Which phase comes first in CRISP-DM?",
+        "options": ["Data preparation", "Business understanding", "Modelling", "Evaluation"],
+        "correct": 1,
+        "time_limit": 20,
+        "explanation": "CRISP-DM begins by understanding the business problem and what success means."
+      },
+      {
+        "id": "lifecycle_q07",
+        "type": "multiple_choice",
+        "question": "Why should a team choose evaluation measures before deployment?",
+        "options": ["To align model checks with the real cost of errors", "To guarantee that no errors occur", "To avoid collecting data", "To ensure accuracy is always the only metric"],
+        "correct": 0,
+        "time_limit": 25,
+        "explanation": "A useful evaluation reflects the task and the consequences of different mistakes."
+      },
+      {
+        "id": "lifecycle_q08",
+        "type": "multiple_choice",
+        "question": "A model's performance drops after months in use, even though its code did not change. What is a sensible next step?",
+        "options": ["Assume the model is still valid because the code is unchanged", "Inspect current data and performance for drift, then revisit the lifecycle as needed", "Delete the monitoring records", "Tune the model on the final test set"],
+        "correct": 1,
+        "time_limit": 25,
+        "explanation": "Real-world data or the relationship between inputs and outcomes can change; monitoring should trigger investigation."
+      },
+      {
+        "id": "lifecycle_q09",
+        "type": "multiple_choice",
+        "question": "Which description best captures the lifecycle after monitoring finds a problem?",
+        "options": ["It is a one-way checklist that cannot be revisited", "The team may return to problem framing, data work, training, or evaluation", "The only response is to increase the learning rate", "Deployment removes the need for evaluation"],
+        "correct": 1,
+        "time_limit": 25,
+        "explanation": "Monitoring creates feedback; the team may need to repeat or revise earlier lifecycle stages."
+      },
+      {
+        "id": "lifecycle_q10",
+        "type": "word_cloud",
+        "question": "Name one signal you would monitor after deployment; enter one word only.",
+        "time_limit": 45
+      }
+    ]
+  }
+}

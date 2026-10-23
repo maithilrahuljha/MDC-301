@@ -1,0 +1,106 @@
+{
+  "quiz": {
+    "id": "mdc301-w1-polynomial-regularisation",
+    "name": "MDC-301 W1 — Polynomial and Regularised Regression",
+    "course": "MDC-301",
+    "week": 1,
+    "day": 4,
+    "chapter": "ch10",
+    "topic_slug": "ch10_polynomial_and_regularisation",
+    "topic_name": "Polynomial and Regularised Regression",
+    "source_chapters": ["ch10"],
+    "question_count": 10,
+    "questions": [
+      {
+        "id": "poly_reg_q01",
+        "type": "multiple_choice",
+        "question": "Why is polynomial regression called linear in its parameters even when its curve bends?",
+        "options": ["The fitted curve is always a straight line", "The transformed features are combined as a linear weighted sum of coefficients", "It uses no powers of x", "All residuals are zero"],
+        "correct": 1,
+        "time_limit": 25,
+        "explanation": "A basis such as [1, x, x²] can curve with x while the coefficients still enter linearly."
+      },
+      {
+        "id": "poly_reg_q02",
+        "type": "multiple_choice",
+        "question": "For unregularised OLS fitted on the same rows, what is true when a higher-degree polynomial adds nested features?",
+        "options": ["Training squared error cannot increase, though test error may worsen", "Test error must improve", "Training error must increase", "The number of coefficients decreases"],
+        "correct": 0,
+        "time_limit": 25,
+        "explanation": "The expanded model can reproduce the lower-degree model by setting new coefficients to zero; better training fit does not ensure better generalisation."
+      },
+      {
+        "id": "poly_reg_q03",
+        "type": "multiple_choice",
+        "question": "Why is training error alone a poor way to choose polynomial degree?",
+        "options": ["Training error is never measurable", "A more flexible model can fit training rows more closely but generalise worse", "Higher degree always reduces test error", "Polynomial models cannot be evaluated"],
+        "correct": 1,
+        "time_limit": 25,
+        "explanation": "Choose complexity using validation evidence and reserve the test set for the final evaluation."
+      },
+      {
+        "id": "poly_reg_q04",
+        "type": "multiple_choice",
+        "question": "Where should PolynomialFeatures normally sit during a train/validation workflow?",
+        "options": ["As part of a pipeline fitted within the training split or fold", "Outside the workflow after inspecting test labels", "Only after the regression model predicts", "It cannot be used before a linear model"],
+        "correct": 0,
+        "time_limit": 25,
+        "explanation": "A pipeline keeps feature construction and the predictor together during splitting and cross-validation. PolynomialFeatures itself is a deterministic map, but the pipeline helps ensure consistent workflow."
+      },
+      {
+        "id": "poly_reg_q05",
+        "type": "multiple_choice",
+        "question": "For one input x = 3 and degree 2, what row does PolynomialFeatures(include_bias=True) produce?",
+        "options": ["[3, 9]", "[1, 3, 9]", "[1, 3]", "[1, 9, 27]"],
+        "correct": 1,
+        "time_limit": 20,
+        "explanation": "With the bias term, the one-feature degree-2 basis is [1, x, x²]."
+      },
+      {
+        "id": "poly_reg_q06",
+        "type": "multiple_choice",
+        "question": "Which penalty does Ridge regression add to the squared-error objective?",
+        "options": ["L1: a sum of absolute coefficient values", "L2: a sum of squared coefficient values", "An L-infinity penalty only", "No coefficient penalty"],
+        "correct": 1,
+        "time_limit": 20,
+        "explanation": "Ridge uses an L2 penalty that discourages large coefficients."
+      },
+      {
+        "id": "poly_reg_q07",
+        "type": "multiple_choice",
+        "question": "What is a characteristic effect of Lasso's L1 penalty?",
+        "options": ["It can set some fitted coefficients exactly to zero", "It guarantees every coefficient is positive", "It forces every coefficient to be equal", "It removes the need for a test set"],
+        "correct": 0,
+        "time_limit": 20,
+        "explanation": "The L1 penalty can produce sparse coefficient vectors, although feature scaling and the penalty value matter."
+      },
+      {
+        "id": "poly_reg_q08",
+        "type": "multiple_choice",
+        "question": "If X contains predictors only and the intercept is handled separately, what is the Ridge coefficient solution for penalty λ > 0?",
+        "options": ["(XᵀX)⁻¹Xᵀy", "(XᵀX + λI)⁻¹Xᵀy", "(XᵀX − λI)⁻¹Xᵀy", "XᵀXy"],
+        "correct": 1,
+        "time_limit": 25,
+        "explanation": "Differentiating ||y − Xβ||² + λ||β||² gives (XᵀX + λI)β̂ = Xᵀy."
+      },
+      {
+        "id": "poly_reg_q09",
+        "type": "multiple_choice",
+        "question": "As Ridge penalty strength λ becomes very large, what generally happens to the penalised feature coefficients?",
+        "options": ["They shrink toward zero", "They grow without bound", "They become class labels", "They stay exactly unchanged"],
+        "correct": 0,
+        "time_limit": 20,
+        "explanation": "A stronger L2 penalty pulls feature coefficients toward zero; a separately handled intercept is not penalised in this formulation."
+      },
+      {
+        "id": "poly_reg_q10",
+        "type": "multiple_choice",
+        "question": "ElasticNet combines which two regularisation penalties?",
+        "options": ["L1 and L2", "MSE and MAE", "R² and accuracy", "Train and test error"],
+        "correct": 0,
+        "time_limit": 20,
+        "explanation": "ElasticNet combines L1 and L2 penalties, joining some Lasso and Ridge behaviours."
+      }
+    ]
+  }
+}
