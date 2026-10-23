@@ -110,6 +110,37 @@
   }
 
   async function loadQuiz(slug) {
+    // A question_id deep link adapts an existing Week 1 daily-bank item to this UI;
+    // it does not change the question bank. Topic mode remains the default.
+    const requestedQuestion = new URLSearchParams(window.location.search).get("question_id");
+    if (requestedQuestion) {
+      const response = await fetch("../questions.json", { cache: "no-cache" });
+      if (!response.ok) throw new Error(`Could not load the Week 1 question bank (HTTP ${response.status}).`);
+      const payload = await response.json();
+      const item = Array.isArray(payload.questions) ? payload.questions.find((question) => question.id === requestedQuestion) : null;
+      if (!item) throw new Error(`Question ${requestedQuestion} is not in the existing Week 1 bank.`);
+      const topic = TOPICS.find((candidate) => candidate.slug === slug) || TOPICS[0];
+      let question;
+      if (item.type === "word_cloud") {
+        question = { id: item.id, type: "word_cloud", question: item.prompt, max_length: item.max_length, explanation: item.explanation };
+      } else {
+        const options = Array.isArray(item.choices) ? item.choices : [];
+        question = {
+          id: item.id, type: "multiple_choice", question: item.prompt,
+          options: options.map((choice) => choice.text),
+          correct: options.findIndex((choice) => choice.key === item.correct),
+          explanation: item.explanation
+        };
+      }
+      return {
+        topic_slug: topic.slug,
+        topic_name: `${topic.name} · one linked check`,
+        chapter: item.chapter || topic.chapter,
+        source_chapters: [item.chapter || topic.source],
+        questions: [question]
+      };
+    }
+
     // Pages serves the app at /week1/livequiz/pages/ and the existing banks one folder above.
     const response = await fetch(`../topic_banks/${encodeURIComponent(slug)}.json`, { cache: "no-cache" });
     if (!response.ok) throw new Error(`Could not load this topic (HTTP ${response.status}).`);
@@ -142,7 +173,7 @@
       ui.setupPanel.hidden = true; ui.completionPanel.hidden = true; ui.quizPanel.hidden = false;
       renderQuestion(); ui.quizPanel.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (error) {
-      setupError(`${error.message} Check that the Pages site includes the topic_banks folder, then try again.`);
+      setupError(`${error.message} Check that the Pages site includes the configured Week 1 bank, then try again.`);
     } finally { ui.start.disabled = false; ui.start.innerHTML = 'Start quiz <span aria-hidden="true">→</span>'; }
   }
 
@@ -262,6 +293,8 @@
     const option = document.createElement("option"); option.value = topic.slug; option.textContent = topic.name; ui.topic.append(option);
   }
   ui.topic.value = TOPICS[0].slug;
+  const linkedTopic = new URLSearchParams(window.location.search).get("topic");
+  if (TOPICS.some((topic) => topic.slug === linkedTopic)) ui.topic.value = linkedTopic;
   ui.mode.addEventListener("change", updateSetup); ui.topic.addEventListener("change", updateSetup);
   ui.start.addEventListener("click", startQuiz); ui.submit.addEventListener("click", submitAnswer);
   ui.retry.addEventListener("click", retryUpload); ui.reveal.addEventListener("click", revealOrContinue);

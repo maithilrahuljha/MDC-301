@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Week 1 Session 2 outline: Python tools, scikit-learn estimators, and leakage-safe workflow.">
+  <title>Session 2 · Tools and the estimator workflow · MDC-301</title>
+  <link rel="stylesheet" href="../shared/css/site.css">
+  <script defer src="../shared/js/site.js"></script>
+  <script defer src="../shared/js/quiz-links.js"></script>
+  <script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, options: {skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']}};</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header"><div class="header-row"><a class="brand" href="../index.html">MDC-301 · Module 1</a><nav class="site-nav" aria-label="Main navigation"><a href="../index.html">Weeks</a><a href="index.html">Week 1</a><a aria-current="page" href="session2.html">Session 2</a></nav></div></header>
+  <main id="main">
+    <p class="breadcrumb"><a href="index.html">Week 1</a> / Session 2</p>
+    <span class="status-pill outline">Outline · selected derivation and practice path</span>
+    <h1 class="page-heading">Tools and the estimator workflow</h1>
+    <p class="lede">Promise: read a small scikit-learn workflow, explain what <code>fit</code>, <code>transform</code>, and <code>predict</code> do, and keep held-out data from influencing fitted preprocessing.</p>
+    <section class="panel" aria-labelledby="objectives">
+      <h2 class="subheading" id="objectives">Learning objectives</h2>
+      <ul class="objectives"><li>Name the roles of Python, NumPy, pandas, Matplotlib, and scikit-learn in a small modelling task.</li><li>Distinguish an estimator’s learned attributes (often ending in an underscore) from constructor parameters.</li><li>Explain why preprocessing is fitted on training data only and why a pipeline makes that rule easier to follow.</li></ul>
+    </section>
+    <section aria-labelledby="outline">
+      <h2 class="section-heading" id="outline">Session outline</h2>
+      <div class="grid two">
+        <article class="card"><h3>1 · Data tools</h3><p>Use NumPy arrays for numerical features, pandas for labelled tables, Matplotlib for inspection, and scikit-learn for estimators and model selection.</p></article>
+        <article class="card"><h3>2 · Estimator API</h3><p>Trace <code>fit(X_train, y_train)</code>, inspect <code>coef_</code> or <code>feature_names_in_</code>, then call <code>predict(X_new)</code>.</p></article>
+        <article class="card"><h3>3 · Make the split before fitting</h3><p>Keep test rows and labels out of scaler fitting, feature choice, and hyperparameter choice. Do not use a test score as a tuning signal.</p></article>
+        <article class="card"><h3>4 · Pipeline rehearsal</h3><p>Wrap preprocessing and the estimator in one pipeline so cross-validation refits each transformation only on its training fold.</p></article>
+      </div>
+    </section>
+    <section class="math-box" aria-labelledby="derivation">
+      <h2 class="subheading" id="derivation">Selected derivation · mean squared error</h2>
+      <p>For observed targets \(y_i\) and predictions \(\hat y_i\), square each residual, sum across examples, and divide by the number of examples:</p>
+      <div class="math-text"><p>\[\operatorname{MSE}(y,\hat y)=\frac{1}{n}\sum_{i=1}^{n}(y_i-\hat y_i)^2.\]</p><p>For a fixed model, this is the loss used to compare predictions on a chosen split. It is not permission to select a model repeatedly on the held-out test set.</p></div>
+      <p class="source-note">Scope: custom booklet, Chapters 6–7. The lesson is outlined here; a later course edit should include the full worked workflow.</p>
+    </section>
+    <section class="bug-challenge" aria-labelledby="bug-title">
+      <h2 class="subheading" id="bug-title">Break it / fix it · one-dimensional feature input</h2>
+      <p>The values are numeric, but scikit-learn expects a two-dimensional feature matrix:</p>
+      <pre class="code-sample"><code>X = np.array([1, 2, 3, 4])
+model.fit(X, y)  # Deliberately wrong: X has shape (n_samples,)</code></pre>
+      <details><summary>Show the fix and the lesson</summary><p>Use <code>X.reshape(-1, 1)</code> or <code>X[:, np.newaxis]</code> to get shape <code>(n_samples, 1)</code>. The 2-D shape is the scikit-learn API rule, not a bug in the estimator. Separately, split before fitting a scaler; a pipeline fitted on training rows prevents test-distribution leakage.</p></details>
+    </section>
+    <aside class="peer-moment"><strong>Peer-visible moment:</strong> pair-check one line of code: point to the first line that learns parameters from data and name which rows it sees.</aside>
+    <p><strong>After this session, you can:</strong> trace fit/transform/predict, state the shape of X, and identify which rows each fitted step can see.</p>
+    <section class="panel" aria-labelledby="self-check" data-session-badge="W01-S02">
+      <h2 class="subheading" id="self-check">Three-question self-check · existing bank</h2>
+      <p>Open these existing checks from the Week 1 bank; the lecture page stores only IDs and links.</p>
+      <ul class="quiz-list">
+        <li><code>ch05_q01_python_tools</code><a class="button-link quiz-link" data-quiz-unavailable="true" data-quiz-id="ch05_q01_python_tools" data-topic-slug="ch05_tools_and_sklearn" href="#quiz-coming-soon">Checking quiz availability…</a><span class="quiz-status" data-quiz-status aria-live="polite">Checking…</span></li>
+        <li><code>ch06_q02_estimator_api</code><a class="button-link quiz-link" data-quiz-unavailable="true" data-quiz-id="ch06_q02_estimator_api" data-topic-slug="ch05_tools_and_sklearn" href="#quiz-coming-soon">Checking quiz availability…</a><span class="quiz-status" data-quiz-status aria-live="polite">Checking…</span></li>
+        <li><code>ch06_q03_transform_train_only</code><a class="button-link quiz-link" data-quiz-unavailable="true" data-quiz-id="ch06_q03_transform_train_only" data-topic-slug="ch05_tools_and_sklearn" href="#quiz-coming-soon">Checking quiz availability…</a><span class="quiz-status" data-quiz-status aria-live="polite">Checking…</span></li>
+      </ul>
+      <p class="small">If a link says “Quiz coming soon,” use the instructor’s approved verbal/paper fallback; badge completion is an honest self-attestation, not server-verified.</p>
+      <div class="badge-box" data-badge-card>
+        <p><strong>Badge:</strong> W01-S02 · Workflow Guard</p>
+        <label><input type="checkbox" data-badge-consent> I worked through the three linked checks.</label>
+        <button type="button" data-unlock-badge="W01-S02" data-badge-label="Workflow Guard">Unlock badge</button>
+        <p class="badge-result" data-badge-result aria-live="polite"></p><code class="badge-copy-line" data-badge-copy-line hidden></code><button type="button" data-copy-badge-line hidden>Copy progress line</button>
+        <p class="small">Badge state is saved in this browser only. Add the displayed line to <code>progress.md</code> in your repository.</p>
+      </div>
+    </section>
+    <p><a href="../../exercises/week1/session2.py" data-optional-file data-missing-label="Starter file is outside this lecture-only copy">Download Session 2 starter (.py)</a> · <a href="session1.html">← Session 1</a> · <a href="session3.html">Next: Session 3 →</a></p>
+  </main>
+  <footer class="site-footer"><p><a href="index.html">Week 1 overview</a> · <a href="../index.html">All weeks</a></p></footer>
+</body>
+</html>

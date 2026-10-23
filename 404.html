@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Page not found · MDC-301</title>
+  <style>
+    body{margin:0;background:#f4f7fb;color:#12243a;font:1rem/1.6 system-ui,sans-serif}
+    main{max-width:760px;margin:10vh auto;padding:1rem}
+    .hero{padding:clamp(1.5rem,5vw,3rem);border-radius:1rem;background:linear-gradient(125deg,#12243a,#145f76);color:#fff}
+    h1{font-size:clamp(2rem,6vw,3.5rem);line-height:1.1}a{color:#064f7c} .hero a{display:inline-block;background:#fff;color:#12243a;padding:.7rem 1rem;border-radius:.6rem;font-weight:700}
+    a:focus-visible{outline:3px solid #db8121;outline-offset:3px}
+  </style>
+</head>
+<body>
+  <main>
+    <section class="hero"><p>404 · not found</p><h1>This course page is not here.</h1><p>Check the week number and lower-case path, or return to the lecture map.</p><a id="lecture-map" href="./">Open the lecture map</a></section>
+  </main>
+  <script>
+    (() => {
+      const path = window.location.pathname;
+      const lectureAt = path.indexOf("/lecture/");
+      const pieces = path.split("/").filter(Boolean);
+      let base = "/";
+      if (lectureAt >= 0) base = path.slice(0, lectureAt + 1) || "/";
+      else if (pieces.length > 1 && pieces[0] !== "404.html") base = `/${pieces[0]}/`;
+      document.getElementById("lecture-map").href = `${base}lecture/index.html`;
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Week 1 Session 3: a worked simple linear regression lesson with the OLS derivation and a runnable browser Python cell.">
+  <title>Session 3 · Simple linear regression · MDC-301</title>
+  <link rel="stylesheet" href="../shared/css/site.css">
+  <script defer src="../shared/js/site.js"></script>
+  <script defer src="../shared/js/quiz-links.js"></script>
+  <script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, options: {skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']}};</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.27.7/full/pyodide.js" defer></script>
+  <script src="../shared/js/pyodide-cell.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header"><div class="header-row"><a class="brand" href="../index.html">MDC-301 · Module 1</a><nav class="site-nav" aria-label="Main navigation"><a href="../index.html">Weeks</a><a href="index.html">Week 1</a><a aria-current="page" href="session3.html">Session 3</a></nav></div></header>
+  <main id="main">
+    <p class="breadcrumb"><a href="index.html">Week 1</a> / Session 3</p>
+    <span class="tag">Complete lesson · Chapters 8</span>
+    <h1 class="page-heading">Simple linear regression: fit, inspect, explain</h1>
+    <p class="lede">Promise: fit the line that minimizes squared residuals, interpret its coefficients within the observed range, and use a residual plot to notice when the straight-line story is not enough.</p>
+    <p class="small"><strong>Badge:</strong> W01-S03 · Line Fitter</p>
+
+    <section class="panel" aria-labelledby="recap-title">
+      <h2 class="subheading" id="recap-title">The idea in one pass</h2>
+      <p>Simple linear regression uses one input feature to estimate a numeric target. The model is \(Y=\beta_0+\beta_1X+\epsilon\): \(\beta_1\) describes the fitted change in the mean of \(Y\) for a one-unit increase in \(X\), and \(\beta_0\) is the fitted value when \(X=0\). Do not give the intercept a real-world meaning unless zero lies in the observed range. The fit is not chosen by eye: ordinary least squares (OLS) chooses the intercept and slope that minimize the sum of squared residuals. Setting the first derivatives to zero makes residuals sum to zero and makes them orthogonal to \(X\). Solving those equations gives the sample covariance of \(X,Y\) divided by the sample sum of squared deviations of \(X\) for the slope; the intercept follows from the sample means. With \(X=[1,2,3,4,5]\) and \(Y=[2.1,4.0,6.2,7.9,10.1]\), the supplied worked data yield slope \(1.99\), intercept \(0.09\), and a prediction of \(12.03\) at \(x=6\). The line summarizes observed data; it is not a promise outside its range. Check a residual-versus-fitted plot for structure: curvature points to a missed nonlinear pattern, a funnel to changing error variance, clusters to unmodelled groups, and extreme residuals to possible outliers. In scikit-learn, keep \(X\) two-dimensional, fit only on training rows, and inspect coefficients, residuals, and an evaluation metric together.</p>
+      <p class="source-note">Course recap based on the custom booklet, Chapter 8, and the existing Day 3 worksheet. The derivation below preserves the booklet’s notation.</p>
+    </section>
+
+    <section class="math-box" aria-labelledby="ols-title">
+      <h2 class="subheading" id="ols-title">OLS estimators via first-order conditions</h2>
+      <p>OLS picks the intercept and slope that minimize the sum of squared residuals:</p>
+      <div class="math-text">
+        <p>\[ (\hat\beta_0,\hat\beta_1)=\arg\min_{b_0,b_1}\sum_{i=1}^{n}(Y_i-b_0-b_1X_i)^2. \]</p>
+        <p>Define \(S(b_0,b_1)=\sum_i(Y_i-b_0-b_1X_i)^2\). Take derivatives with respect to \(b_0\) and \(b_1\):</p>
+        <p>\[\frac{\partial S}{\partial b_0}=-2\sum_i(Y_i-b_0-b_1X_i),\qquad \frac{\partial S}{\partial b_1}=-2\sum_iX_i(Y_i-b_0-b_1X_i).\]</p>
+        <p>Set both to zero and divide by \(-2\):</p>
+        <p>\[\sum_i(Y_i-b_0-b_1X_i)=0,\tag{8.1}\]</p>
+        <p>\[\sum_iX_i(Y_i-b_0-b_1X_i)=0.\tag{8.2}\]</p>
+        <p>From (8.1):</p>
+        <p>\[nb_0=\sum_iY_i-b_1\sum_iX_i\quad\Longrightarrow\quad b_0=\bar Y-b_1\bar X.\]</p>
+        <p>Plug into (8.2):</p>
+        <p>\[\sum_iX_iY_i-(\bar Y-b_1\bar X)\sum_iX_i-b_1\sum_iX_i^2=0.\]</p>
+        <p>Using \(\sum_iX_i=n\bar X\) and rearranging:</p>
+        <p>\[\sum_iX_iY_i-n\bar X\bar Y=b_1\left(\sum_iX_i^2-n\bar X^2\right).\]</p>
+        <p>The left side is \(\sum_i(X_i-\bar X)(Y_i-\bar Y)\), and the bracket on the right is \(\sum_i(X_i-\bar X)^2\). So</p>
+        <p>\[\hat\beta_1=\frac{\sum_i(X_i-\bar X)(Y_i-\bar Y)}{\sum_i(X_i-\bar X)^2},\qquad \hat\beta_0=\bar Y-\hat\beta_1\bar X.\]</p>
+        <p>The second-order conditions confirm a minimum: the Hessian of \(S\) is \(\begin{bmatrix}2n&2\sum_iX_i\\2\sum_iX_i&2\sum_iX_i^2\end{bmatrix}\), which is positive definite when \(\sum_i(X_i-\bar X)^2&gt;0\), i.e., when \(X\) is not constant.</p>
+      </div>
+      <p class="source-note">Transcribed and checked against the supplied custom booklet PDF, Chapter 8.3, printed page 26. Equation numbers and notation are retained; typography is rendered with MathJax.</p>
+    </section>
+
+    <section class="widget" aria-labelledby="predict-title">
+      <h2 class="subheading" id="predict-title">Predict, then reveal</h2>
+      <p>Before running the cell, use \(\hat y=0.09+1.99x\). What value should the model predict at \(x=6\)? Write your estimate on paper or in a private note first.</p>
+      <details><summary>Reveal the calculation and explain it</summary><p>\(0.09+1.99(6)=12.03\). This is a prediction from the fitted line; it is not guaranteed to be the next observed value. It is also a small extrapolation beyond the largest training input, \(x=5\), so treat it cautiously.</p></details>
+    </section>
+
+    <section class="code-cell" data-python-cell aria-labelledby="python-title">
+      <h2 id="python-title">Run the same fit in Python (optional)</h2>
+      <p>This cell runs entirely in your browser. Edit the starter if you like; first run downloads Pyodide and scientific packages from the pinned CDN. The expected result stays visible if the runtime or network is unavailable.</p>
+      <label for="ols-code">Editable Python starter</label>
+      <textarea id="ols-code" data-python-code spellcheck="false" aria-describedby="ols-cell-note">import base64
+import io
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+
+X = np.array([[1], [2], [3], [4], [5]], dtype=float)
+y = np.array([2.1, 4.0, 6.2, 7.9, 10.1])
+
+model = LinearRegression(fit_intercept=True).fit(X, y)
+print(f"slope={model.coef_[0]:.2f}")
+print(f"intercept={model.intercept_:.2f}")
+print(f"prediction_at_6={model.predict([[6]])[0]:.2f}")
+
+fig, ax = plt.subplots(figsize=(6, 3.5))
+ax.scatter(X[:, 0], y, label="observed data", color="#006e68")
+line_x = np.linspace(1, 6, 100).reshape(-1, 1)
+ax.plot(line_x[:, 0], model.predict(line_x), label="OLS fit", color="#145f91")
+ax.set(xlabel="x", ylabel="y", title="Simple linear regression")
+ax.legend()
+fig.tight_layout()
+buffer = io.BytesIO()
+fig.savefig(buffer, format="png", bbox_inches="tight")
+plot_base64 = base64.b64encode(buffer.getvalue()).decode("ascii")
+plt.close(fig)</textarea>
+      <div class="expected"><strong>Expected output</strong><pre>slope=1.99
+intercept=0.09
+prediction_at_6=12.03</pre></div>
+      <button type="button" data-pyodide-run>Run this Python cell</button>
+      <p class="cell-status" data-cell-status id="ols-cell-note" aria-live="polite">No code runs until you press the button. Nothing is sent to a server.</p>
+      <pre class="output" data-cell-output aria-live="polite">Printed output will appear here.</pre>
+      <img class="plot-output" data-cell-plot alt="Plot generated by the optional Python cell; observed points with the fitted straight line." hidden>
+      <p class="small">Offline route: <a href="../../exercises/week1/session3.py" data-optional-file data-missing-label="Starter file is outside this lecture-only copy">download the Session 3 .py file</a>. A Python installation is needed to execute that file; if you have no local Python, use the expected output and booklet derivation or a campus/lab computer.</p>
+    </section>
+
+    <section class="bug-challenge" aria-labelledby="bug-title">
+      <h2 class="subheading" id="bug-title">Break it / fix it · an R² misunderstanding</h2>
+      <p>Read this deliberately wrong conclusion. The code can run correctly while the interpretation is still wrong.</p>
+      <pre class="code-sample"><code>r2 = model.score(X, y)
+if r2 == 0:
+    raise RuntimeError("The regression code failed")</code></pre>
+      <details><summary>Show the fix and the lesson</summary><p>\(R^2=0\) means the fitted model is no better than always predicting the training mean on that evaluation set. It does not prove that Python or scikit-learn failed. Inspect the scatter and residual plot, check the split and baseline, and ask whether a straight-line relationship is appropriate. A negative test-set \(R^2\) can also occur when predictions are worse than the test-set mean baseline.</p></details>
+    </section>
+
+    <aside class="peer-moment"><strong>Peer-visible moment:</strong> share one sentence about whether the residuals look pattern-free; if you opt in to the gallery, share only your public site URL, not personal data.</aside>
+    <p><strong>After this session, you can:</strong> derive the OLS slope and intercept, fit them with scikit-learn, and explain what a residual pattern says about the model.</p>
+
+    <section class="panel" aria-labelledby="self-check" data-session-badge="W01-S03">
+      <h2 class="subheading" id="self-check">Three-question self-check · existing bank</h2>
+      <p>Launch the three existing Week 1 checks by ID. This page contains no copied quiz stems or answer keys.</p>
+      <ul class="quiz-list">
+        <li><code>ch08_q01_slope_intercept</code><a class="button-link quiz-link" data-quiz-unavailable="true" data-quiz-id="ch08_q01_slope_intercept" data-topic-slug="ch08_simple_linear_regression" href="#quiz-coming-soon">Checking quiz availability…</a><span class="quiz-status" data-quiz-status aria-live="polite">Checking…</span></li>
+        <li><code>ch08_q02_predict_output</code><a class="button-link quiz-link" data-quiz-unavailable="true" data-quiz-id="ch08_q02_predict_output" data-topic-slug="ch08_simple_linear_regression" href="#quiz-coming-soon">Checking quiz availability…</a><span class="quiz-status" data-quiz-status aria-live="polite">Checking…</span></li>
+        <li><code>ch08_q03_residual_plot</code><a class="button-link quiz-link" data-quiz-unavailable="true" data-quiz-id="ch08_q03_residual_plot" data-topic-slug="ch08_simple_linear_regression" href="#quiz-coming-soon">Checking quiz availability…</a><span class="quiz-status" data-quiz-status aria-live="polite">Checking…</span></li>
+      </ul>
+      <p class="small">If a link says “Quiz coming soon,” use the instructor’s approved verbal/paper fallback; badge completion is an honest self-attestation, not server-verified.</p>
+      <div class="badge-box" data-badge-card>
+        <p><strong>Badge:</strong> W01-S03 · Line Fitter</p>
+        <label><input type="checkbox" data-badge-consent> I worked through all three linked checks.</label>
+        <button type="button" data-unlock-badge="W01-S03" data-badge-label="Line Fitter">Unlock badge</button>
+        <p class="badge-result" data-badge-result aria-live="polite"></p><code class="badge-copy-line" data-badge-copy-line hidden></code><button type="button" data-copy-badge-line hidden>Copy progress line</button>
+        <p class="small">Badge state is saved in this browser only. Add the displayed line to <code>progress.md</code> in your repository.</p>
+      </div>
+    </section>
+    <nav aria-label="Session navigation"><ul class="inline-list"><li><a href="session2.html">← Session 2</a></li><li><a href="index.html">Week 1 overview</a></li><li><a href="session4.html">Next: Session 4 →</a></li></ul></nav>
+  </main>
+  <footer class="site-footer"><p><a href="../index.html">All weeks</a> · Equations are text typeset by MathJax, not images. If MathJax is blocked, read the surrounding plain-language explanation.</p></footer>
+</body>
+</html>

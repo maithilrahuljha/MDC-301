@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Week 1 Session 1 outline: machine learning, problem framing, and the ML lifecycle.">
+  <title>Session 1 · What machine learning does · MDC-301</title>
+  <link rel="stylesheet" href="../shared/css/site.css">
+  <script defer src="../shared/js/site.js"></script>
+  <script defer src="../shared/js/quiz-links.js"></script>
+  <script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, options: {skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']}};</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header"><div class="header-row"><a class="brand" href="../index.html">MDC-301 · Module 1</a><nav class="site-nav" aria-label="Main navigation"><a href="../index.html">Weeks</a><a href="index.html">Week 1</a><a aria-current="page" href="session1.html">Session 1</a></nav></div></header>
+  <main id="main">
+    <p class="breadcrumb"><a href="index.html">Week 1</a> / Session 1</p>
+    <span class="status-pill outline">Outline · selected derivation and practice path</span>
+    <h1 class="page-heading">What machine learning does</h1>
+    <p class="lede">Promise: turn a vague prediction request into a testable learning problem, and explain why success on unseen data matters more than a perfect training score.</p>
+    <section class="panel" aria-labelledby="objectives">
+      <h2 class="subheading" id="objectives">Learning objectives</h2>
+      <ul class="objectives"><li>Identify the decision, input features, and target before choosing a model.</li><li>Distinguish supervised learning (known targets) from unsupervised learning (no target labels).</li><li>Place problem framing, splitting, fitting, evaluation, deployment, and monitoring in a responsible lifecycle.</li></ul>
+    </section>
+    <section aria-labelledby="outline">
+      <h2 class="section-heading" id="outline">Session outline</h2>
+      <div class="grid two">
+        <article class="card"><h3>1 · Start with the decision</h3><p>Service-monitoring story: estimate future station demand for staffing. State what one prediction changes before discussing algorithms.</p></article>
+        <article class="card"><h3>2 · Label the table</h3><p>Features are model inputs; the target is the value to predict. Ask whether the target is a quantity or a category.</p></article>
+        <article class="card"><h3>3 · Supervised or unsupervised?</h3><p>Use labelled demand examples versus grouping stations without labels. Reinforcement learning is named only as a third setting, not taught.</p></article>
+        <article class="card"><h3>4 · The lifecycle</h3><p>Frame → inspect data → split → fit → evaluate → deploy → monitor. Keep test data out of model selection.</p></article>
+      </div>
+    </section>
+    <section class="math-box" aria-labelledby="derivation">
+      <h2 class="subheading" id="derivation">Selected derivation · empirical risk</h2>
+      <p>Start with the booklet’s “choose a function, define a loss, fit parameters” template. For examples \((x_i, y_i)\), average the per-example loss and choose parameters that minimize that average:</p>
+      <div class="math-text"><p>\[\widehat{\theta}=\arg\min_{\theta}\;\frac{1}{n}\sum_{i=1}^{n}L\bigl(f_{\theta}(x_i),y_i\bigr).\]</p><p>Contrast the training average with performance on unseen examples: the second is the generalization goal, not a quantity to optimize by repeatedly peeking at the test set.</p></div>
+      <p class="source-note">Scope: custom booklet, Chapter 1, “An Overview of Machine Learning.” This is the planned board derivation for the outline session.</p>
+    </section>
+    <section class="bug-challenge" aria-labelledby="bug-title">
+      <h2 class="subheading" id="bug-title">Break it / fix it · data leakage</h2>
+      <p>This order lets the test distribution influence preprocessing before evaluation:</p>
+      <pre class="code-sample"><code># Deliberately wrong: fit a transformation before the split.
+X_scaled = scaler.fit_transform(X_all)
+X_train, X_test, y_train, y_test = split(X_scaled, y_all)</code></pre>
+      <details><summary>Show the fix and the lesson</summary><p>Split first. Fit each transformation on training rows only, then apply that fitted transformation to validation/test rows. A pipeline makes the order explicit. Keep the test set for the final report rather than repeatedly selecting models on it.</p></details>
+    </section>
+    <aside class="peer-moment"><strong>Peer-visible moment:</strong> if you opt in, share only your public Pages URL and one sentence naming your target. No names or student IDs are needed.</aside>
+    <p><strong>After this session, you can:</strong> name features and target, distinguish supervised from unsupervised learning, and describe a leakage-safe evaluation step.</p>
+    <section class="panel" aria-labelledby="self-check" data-session-badge="W01-S01">
+      <h2 class="subheading" id="self-check">Three-question self-check · existing bank</h2>
+      <p>These are references to the existing Week 1 bank; no new quiz questions are authored here. Open each poll question, then return and mark the check complete.</p>
+      <ul class="quiz-list">
+        <li><code>ch01_q01_target_feature</code><a class="button-link quiz-link" data-quiz-unavailable="true" data-quiz-id="ch01_q01_target_feature" data-topic-slug="ch01_intro_to_ml" href="#quiz-coming-soon">Checking quiz availability…</a><span class="quiz-status" data-quiz-status aria-live="polite">Checking…</span></li>
+        <li><code>ch01_q02_supervised_unsupervised</code><a class="button-link quiz-link" data-quiz-unavailable="true" data-quiz-id="ch01_q02_supervised_unsupervised" data-topic-slug="topic03_supervised_vs_unsupervised" href="#quiz-coming-soon">Checking quiz availability…</a><span class="quiz-status" data-quiz-status aria-live="polite">Checking…</span></li>
+        <li><code>ch02_q01_lifecycle_order</code><a class="button-link quiz-link" data-quiz-unavailable="true" data-quiz-id="ch02_q01_lifecycle_order" data-topic-slug="ch02_ml_lifecycle" href="#quiz-coming-soon">Checking quiz availability…</a><span class="quiz-status" data-quiz-status aria-live="polite">Checking…</span></li>
+      </ul>
+      <p class="small">If a link says “Quiz coming soon,” use the instructor’s approved verbal/paper fallback; badge completion is an honest self-attestation, not server-verified.</p>
+      <div class="badge-box" data-badge-card>
+        <p><strong>Badge:</strong> W01-S01 · Problem Framer</p>
+        <label><input type="checkbox" data-badge-consent> I worked through the three linked checks.</label>
+        <button type="button" data-unlock-badge="W01-S01" data-badge-label="Problem Framer">Unlock badge</button>
+        <p class="badge-result" data-badge-result aria-live="polite"></p><code class="badge-copy-line" data-badge-copy-line hidden></code><button type="button" data-copy-badge-line hidden>Copy progress line</button>
+        <p class="small">Badge state is saved in this browser only. Add the displayed line to <code>progress.md</code> in your repository.</p>
+      </div>
+    </section>
+    <p><a href="../../exercises/week1/session1.py" data-optional-file data-missing-label="Starter file is outside this lecture-only copy">Download Session 1 starter (.py)</a> · <a href="session2.html">Next: Session 2 →</a></p>
+  </main>
+  <footer class="site-footer"><p><a href="index.html">Week 1 overview</a> · <a href="../index.html">All weeks</a></p></footer>
+</body>
+</html>
