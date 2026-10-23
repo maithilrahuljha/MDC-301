@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MDC-301 Week 1 live check</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; }
+    body { margin: 0; background: #f3f6fb; color: #172033; }
+    main { max-width: 44rem; margin: 0 auto; padding: 1rem; }
+    .card { background: white; border: 1px solid #d9e0ec; border-radius: 1rem; padding: 1.25rem; margin: 1rem 0; box-shadow: 0 4px 18px #12254a0b; }
+    h1 { font-size: 1.45rem; }
+    label { display: block; margin: .8rem 0 .3rem; font-weight: 650; }
+    input, button { font: inherit; border-radius: .65rem; padding: .75rem; }
+    input { width: 100%; border: 1px solid #aab6c9; box-sizing: border-box; }
+    button { cursor: pointer; border: 0; background: #174ea6; color: white; font-weight: 700; }
+    button:disabled { opacity: .55; cursor: not-allowed; }
+    .choice { display: block; width: 100%; margin: .5rem 0; text-align: left; background: #eef4ff; color: #172033; border: 1px solid #b8c9e6; }
+    .choice:hover { background: #dce9ff; }
+    button.secondary { background: #42536e; }
+    .muted { color: #58677d; font-size: .94rem; }
+    .status { min-height: 1.5rem; color: #174ea6; }
+    .error { color: #a4262c; }
+    .tag { display: inline-block; padding: .2rem .5rem; border-radius: 999px; background: #e8eef8; font-size: .8rem; }
+    #question-area[hidden], #answer-area[hidden] { display: none; }
+  </style>
+</head>
+<body>
+<main data-session-code="{{ session_code }}">
+  <h1>MDC-301 · Week 1 live check</h1>
+  <p class="muted">Join from this browser. No app, phone number, or student password is needed. Use your course GitHub handle if you want your responses matched to your assignment; otherwise enter a nickname and ask the instructor for the alias process.</p>
+  <section class="card" id="join-card">
+    <form id="join-form">
+      <label for="display-name">Display name or approved class alias</label>
+      <input id="display-name" maxlength="32" autocomplete="nickname" required>
+      <label for="github-username">GitHub username (optional; do not enter a password)</label>
+      <input id="github-username" maxlength="39" autocomplete="username" pattern="[A-Za-z0-9-]{1,39}">
+      <label for="session-code">Session code</label>
+      <input id="session-code" value="{{ session_code }}" maxlength="16" required>
+      <p><button type="submit">Join live check</button></p>
+    </form>
+    <p id="join-status" class="status" role="status" aria-live="polite"></p>
+  </section>
+
+  <section id="question-area" class="card" hidden>
+    <p><span id="question-tag" class="tag"></span> <span id="question-number" class="muted"></span></p>
+    <h2 id="question-prompt"></h2>
+    <div id="answer-area"></div>
+    <p id="answer-status" class="status" role="status" aria-live="polite"></p>
+  </section>
+  <p class="muted">If your phone loses power or signal, reopen this page on another device, enter the same handle/alias, and rejoin. Do not enter sensitive personal information in a word cloud. This browser remembers your alias and optional GitHub username to help reconnect; on a shared computer, clear them when finished.</p>
+  <button id="forget-button" class="secondary" type="button">Clear saved identity from this browser</button>
+</main>
+<script src="{{ url_for('static', filename='vendor/socket.io.min.js') }}"></script>
+<script src="{{ url_for('static', filename='student.js') }}"></script>
+</body>
+</html>

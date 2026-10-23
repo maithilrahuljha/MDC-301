@@ -1,0 +1,84 @@
+{
+  "tests": [
+    {
+      "name": "Day 3 · fitted estimator",
+      "setup": "python -m pip install --disable-pip-version-check -r requirements.txt",
+      "run": "python -m pytest -q tests/test_day3_regression.py::test_fit_returns_linear_estimator",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 2
+    },
+    {
+      "name": "Day 3 · OLS coefficients and prediction",
+      "setup": "python -m pip install --disable-pip-version-check -r requirements.txt",
+      "run": "python -m pytest -q tests/test_day3_regression.py::test_coefficients_and_scalar_prediction",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 2
+    },
+    {
+      "name": "Day 3 · residuals and RMSE",
+      "setup": "python -m pip install --disable-pip-version-check -r requirements.txt",
+      "run": "python -m pytest -q tests/test_day3_regression.py::test_residuals_and_rmse_use_observed_minus_predicted",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 2
+    },
+    {
+      "name": "Day 3 · R-squared",
+      "setup": "python -m pip install --disable-pip-version-check -r requirements.txt",
+      "run": "python -m pytest -q tests/test_day3_regression.py::test_r_squared_matches_toy_data",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 2
+    },
+    {
+      "name": "Day 5 · scaled logistic pipeline and split",
+      "setup": "python -m pip install --disable-pip-version-check -r requirements.txt",
+      "run": "python -m pytest -q tests/test_day5_logistic.py::test_fit_returns_scaled_logistic_pipeline_and_stratified_split",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 2
+    },
+    {
+      "name": "Day 5 · probability output",
+      "setup": "python -m pip install --disable-pip-version-check -r requirements.txt",
+      "run": "python -m pytest -q tests/test_day5_logistic.py::test_positive_class_probabilities_are_valid_and_aligned",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 2
+    },
+    {
+      "name": "Day 5 · confusion matrix",
+      "setup": "python -m pip install --disable-pip-version-check -r requirements.txt",
+      "run": "python -m pytest -q tests/test_day5_logistic.py::test_confusion_matrix_uses_fixed_zero_one_order",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 2
+    },
+    {
+      "name": "Day 5 · precision and recall",
+      "setup": "python -m pip install --disable-pip-version-check -r requirements.txt",
+      "run": "python -m pytest -q tests/test_day5_logistic.py::test_precision_and_recall_are_from_confusion_counts",
+      "input": "",
+      "output": "",
+      "comparison": "included",
+      "timeout": 10,
+      "points": 2
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MDC-301 Week 1 quiz host</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; }
+    body { margin: 0; background: #f3f6fb; color: #172033; }
+    main { max-width: 58rem; margin: 0 auto; padding: 1rem; }
+    .card { background: white; border: 1px solid #d9e0ec; border-radius: 1rem; padding: 1.25rem; margin: 1rem 0; box-shadow: 0 4px 18px #12254a0b; }
+    label { display: block; margin: .8rem 0 .3rem; font-weight: 650; }
+    input, button { font: inherit; border-radius: .65rem; padding: .75rem; }
+    input { width: 100%; border: 1px solid #aab6c9; box-sizing: border-box; }
+    button { cursor: pointer; border: 0; background: #174ea6; color: white; font-weight: 700; margin: .25rem .35rem .25rem 0; }
+    button.secondary { background: #42536e; }
+    button:disabled { opacity: .55; cursor: not-allowed; }
+    .muted { color: #58677d; }
+    .status { min-height: 1.5rem; color: #174ea6; }
+    .error { color: #a4262c; }
+    .tag { display: inline-block; padding: .2rem .5rem; border-radius: 999px; background: #e8eef8; font-size: .8rem; }
+    .cloud { display: flex; flex-wrap: wrap; gap: .7rem; align-items: center; min-height: 5rem; }
+    .cloud span { padding: .35rem .55rem; border-radius: .5rem; background: #e8f1ff; }
+    code { overflow-wrap: anywhere; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>MDC-301 · Week 1 live check host</h1>
+  {% if not authenticated %}
+  <section class="card">
+    <p>Enter the instructor key from the private `.env` file on the server. Do not share it with students.</p>
+    <form method="post" action="{{ url_for('host_page') }}">
+      <label for="admin-token">Instructor key</label>
+      <input id="admin-token" name="admin_token" type="password" autocomplete="current-password" required>
+      <p><button type="submit">Open host controls</button></p>
+    </form>
+    {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
+  </section>
+  {% else %}
+  <section class="card">
+    <p>Session code: <strong>{{ session_code }}</strong></p>
+    <p>Student join address: <code>{{ join_url }}/</code></p>
+    <p class="muted">Project this address and code. Students should use a course GitHub username only (never a password or phone number). This live check is formative, not an exam.</p>
+    <p>Participants joined: <strong id="participant-count">0</strong></p>
+    <p id="host-status" class="status" role="status" aria-live="polite">Connecting…</p>
+    <a href="{{ url_for('export_csv') }}">Download CSV</a>
+  </section>
+  <section class="card">
+    <p><span id="question-tag" class="tag">Waiting</span> <span id="question-number" class="muted"></span></p>
+    <h2 id="question-prompt">Start by joining from a student device, then advance to a question.</h2>
+    <div id="host-choices"></div>
+    <p id="question-explanation" class="muted"></p>
+    <p>Responses to current question: <strong id="answer-count">0</strong></p>
+    <div id="word-cloud" class="cloud" aria-label="Live one-word responses"></div>
+    <button id="reveal-button" type="button">Reveal / close question</button>
+    <button id="next-button" class="secondary" type="button">Next question</button>
+    <p id="control-status" class="status" role="status" aria-live="polite"></p>
+  </section>
+  <p class="muted">The word cloud is shown only on this host screen. Review responses before projecting them. Export the CSV after class and keep it out of the Git repository.</p>
+  <script>
+    window.WEEK1_QUIZ_HOST = { sessionCode: {{ session_code|tojson }} };
+  </script>
+  <script src="{{ url_for('static', filename='vendor/socket.io.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='host.js') }}"></script>
+  {% endif %}
+</main>
+</body>
+</html>
