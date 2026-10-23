@@ -20,4 +20,5 @@ nickname_map.csv
 *.db
 
 # Local generated outputs
+/_site/
 week1/mini_capstone/outputs/

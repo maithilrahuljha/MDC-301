@@ -4,8 +4,9 @@ Use this after edits and before sharing. Each row is a one-line pass condition f
 
 | Artifact | One-line acceptance check |
 |---|---|
-| `README.md` | It names the kit, links to setup/framework/checklist, identifies the supplied guide/Géron reference correctly, and states the remaining source/platform limits. |
-| `instructions.txt` | A nontechnical instructor can follow it in order, paste the platform-specific commands, see expected outputs, and identify sysadmin-only steps. |
+| `README.md` | It links to the no-login public Pages quiz and setup/framework/checklist, and states privacy and synchronization limits. |
+| `instructions.txt` | A nontechnical instructor can publish via GitHub Pages settings, optionally configure Supabase, test without student accounts, and follow the data-handling notes. |
+| `index.html` | The root Pages URL redirects to the quiz in `week1/livequiz/pages/`. |
 | `.gitignore` | Virtual environments, Python caches, `.env`, quiz databases/exports, and notebook outputs are not tracked. |
 | `requirements.txt` | A clean Python 3.11+ virtual environment installs the shared data-science and pytest packages. |
 | `docs/week1-framework.md` | The five sessions, platform decision, runbook, capstone, slide delta, scale plan, and notation bridge are internally consistent with the files. |
@@ -29,7 +30,14 @@ Use this after edits and before sharing. Each row is a one-line pass condition f
 | `tests/test_livequiz.py` | Test clients can join, submit only one saved answer, reveal, view a one-word cloud, export a formula-safe CSV, and verify app-relative database paths without real student data. |
 | `tests/test_result_join.py` | The join script normalizes handles, requires verified alias mappings, reports ambiguous aliases, and avoids guessing identities. |
 | `tests/test_topic_banks.py` | All eight standalone topic quizzes validate at 10 questions each, zero-based keys convert correctly, and topic mode overrides the legacy day filter. |
-| `week1/livequiz/README.md` | Local, VPS, topic/day selection, question schema, privacy, synthetic-load, and license notes match the implemented server. |
+| `tests/test_static_quiz.py` | The Pages redirect, quiz DOM, eight topic files, blank Supabase config, and insert-only policy are checked. |
+| `tests/test_static_quiz.py` | The Pages redirect, quiz DOM, eight topic files, blank Supabase config, and insert-only policy are checked. |
+| `week1/livequiz/README.md` | The public static Pages path and optional Flask/Socket.IO server are clearly separated, with matching setup/privacy notes. |
+| `week1/livequiz/pages/index.html` | Students select Lecture or repeatable Practice mode and a Week 1 topic without student accounts. |
+| `week1/livequiz/pages/app.js` | Topic JSON loads from the branch-root Pages site; lecture responses are optional; practice feedback is local and text is rendered safely. |
+| `week1/livequiz/pages/styles.css` | The quiz is responsive and keyboard-focusable without third-party font/CDN dependencies. |
+| `week1/livequiz/pages/config.js` | Optional Supabase URL/key settings are blank by default and warn against service-role secrets. |
+| `week1/livequiz/pages/supabase_setup.sql` | The response table uses bounded fields, enables RLS, and gives anonymous visitors insert access only. |
 | `week1/livequiz/LICENSE` | The live-quiz scaffold source has a clear MIT license, while vendored client/data notices remain separate. |
 | `week1/livequiz/app.py` | The same-origin Flask-SocketIO app validates daily or selected topic banks, protects host controls, persists answers, and starts only with non-placeholder secrets. |
 | `week1/livequiz/questions.json` | JSON validation reports 25 unique daily-bank questions, exactly five per day, with a Day 3 residual-plot item and one word-cloud prompt each day. |
@@ -70,7 +78,7 @@ Use this after edits and before sharing. Each row is a one-line pass condition f
 
 - [ ] Proofread all source objectives/notation and adapted examples against the instructor's `ML-reference.pdf`; resolve Appendix E's chapter-index offset and confirm course title/timetable before distribution.
 - [ ] Confirm Classroom 50 organization access, due dates, and repository visibility with the instructor/organization owner.
-- [ ] Run `python week1/livequiz/scripts/check_question_bank.py` and `python -m pytest -q tests/test_livequiz.py tests/test_result_join.py tests/test_topic_banks.py` from the repository root.
+- [ ] Run `python week1/livequiz/scripts/check_question_bank.py` and `python -m pytest -q tests/test_livequiz.py tests/test_result_join.py tests/test_topic_banks.py tests/test_static_quiz.py` from the repository root.
 - [ ] Complete the Day 3/5 starter TODOs in a test copy and confirm all eight tests pass; confirm untouched starters fail as expected.
-- [ ] Test one Classroom 50 acceptance/submission and the server on two real devices; conduct a synthetic 200-client rehearsal on the actual network before class.
-- [ ] Confirm privacy/retention for roster, quiz CSV, grade CSV, aliases, and SQLite data; prepare the paper/offline fallback.
+- [ ] Publish the Pages site; test its URL in a private browser without sign-in and on two real devices. If using Flask, rehearse on the actual network and treat the 200-client test as a target, not a capacity guarantee.
+- [ ] Confirm privacy/retention for any Classroom 50 roster/grades, Supabase rows, quiz CSV, aliases, and SQLite data; prepare the paper/offline fallback.

@@ -2,11 +2,16 @@
 
 The live-quiz scaffold source in this directory is MIT-licensed; see [`LICENSE`](LICENSE). The locally vendored Socket.IO browser client and the capstone dataset retain their separate notices/licenses.
 
-A small formative, browser-based quiz for five course days. Socket.IO (a library for two-way live messages between a browser and server) carries questions and answers. The existing daily bank contains 25 questions (five per day). In addition, eight standalone topic banks contain 10 questions each for topic-wise tests. SQLite (a small local file database) stores responses; a teacher can download a CSV (comma-separated values spreadsheet). It is not an exam platform, attendance system, or independently load-certified 200-user service.
+This folder contains two ways to use the Week 1 quizzes:
 
-**Terms:** a *LAN* (local-area network) is the private Wi-Fi/network shared by the instructor laptop and student devices; a `.env` file holds private app settings and secrets; *HTTPS* is the encrypted web connection used on a public server; *DNS* maps a hostname to a server address; a *VPS* is a rented virtual private server.
+* **Simple public path:** the static site in [`pages/`](pages/) is served through GitHub Pages. Students need no account, organization membership, server, or installation. Lecture mode follows instructor announcements but does not synchronize devices or show live totals. Practice is repeatable and never uploads answers. Supabase collection is optional and insert-only; see root [`instructions.txt`](../../instructions.txt).
+* **Optional instructor-operated server:** the Flask/Socket.IO app described below offers synchronized host-controlled progress and a local SQLite response export. It needs Python or a server, security configuration, and rehearsal; it is not required for the public Pages quiz.
 
-## Requirements and private setup
+The server supports the existing 25-question daily bank and eight standalone 10-question topic banks. Neither option is an exam or attendance system; the 200-device cohort has not been independently capacity-certified.
+
+**Terms for the server option:** a *LAN* (local-area network) is the private Wi-Fi shared by instructor and student devices; a `.env` file holds private settings/secrets; *HTTPS* is the encrypted public web connection; *DNS* maps a hostname to a server address; a *VPS* is a rented virtual server.
+
+## Optional Flask server: private setup
 
 Python 3.11+ is recommended for local use. From the repository root:
 
@@ -45,8 +50,8 @@ The topic JSON is a clean interchange source. ClassQuiz, Mentimeter, and open.me
 
 ## Host controls and result export
 
-1. Open `/host`, enter the `ADMIN_TOKEN` from the instructor-only `.env`, then open host controls.
-2. Project the session code and join address. Students provide a display alias and optional GitHub username. They never enter their GitHub password or phone number. The browser stores the alias/optional username and reconnect ID in local storage; on a shared device students can use **Clear saved identity from this browser** after the quiz.
+1. For the Flask server option only, open `/host`, enter the `ADMIN_TOKEN` from the instructor-only `.env`, then open host controls. GitHub Pages does not have a host login.
+2. Project the session code and join address. Flask-server participants provide a display alias and may enter an optional GitHub username. The public Pages quiz requires no student sign-in. The browser stores the alias/optional username and reconnect ID in local storage; on a shared device students can use **Clear saved identity from this browser** after the quiz.
 3. Reveal/close the current question, then select **Next question**. The host view shows aggregate MCQ counts and a one-word cloud. Review word responses before projecting them.
 4. Select **Download CSV** after class. The export contains only answered responses and the optional handle/alias. It is sensitive course data: store it outside Git, restrict access, and delete it according to the institution's retention policy.
 
@@ -54,9 +59,9 @@ For score reconciliation, copy `nickname_map.example.csv` to a private folder an
 
 The server stores responses in `week1/livequiz/data/responses.sqlite3` for a local run; Git ignores that directory. SQLite uses write-ahead logging (WAL), a mode that lets readers continue while short database writes are recorded. One process and one worker are required. A restart preserves saved responses but resets question position. Export before changing quiz days or restarting if you need a copy of results.
 
-## VPS deployment
+## Optional VPS deployment for the Flask server
 
-See the complete copy/paste steps and sysadmin checklist in the root `instructions.txt`. The Docker recipe uses one Flask-SocketIO/gevent worker behind Caddy for HTTPS; it does not expose SQLite to the network. Before using a public hostname, set `COOKIE_SECURE=true`, `TRUST_PROXY=true`, use unique secrets, point DNS at the server, and allow TCP 80/443. The host key and export are private. Contact a system administrator for firewall/DNS/cloud-account tasks.
+The recommended GitHub Pages path needs no VPS. If you choose the Flask server instead, `compose.yaml`, `Dockerfile`, and `Caddyfile` show a one-worker HTTPS deployment that does not expose SQLite to the network. Public hosting still requires an administrator to set secure cookies, proxy trust, unique secrets, DNS, firewall access on TCP 80/443, backups, and retention. If you are new to Docker/self-hosting, use GitHub Pages or ask IT to operate the server.
 
 ## Synthetic load check
 
