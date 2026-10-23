@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "week": 1,
+  "source": "../../week1/livequiz/questions.json",
+  "poll": "../../week1/livequiz/pages/index.html",
+  "ids": [
+    "ch01_q01_target_feature",
+    "ch01_q02_supervised_unsupervised",
+    "ch02_q01_lifecycle_order",
+    "ch05_q01_python_tools",
+    "ch06_q02_estimator_api",
+    "ch06_q03_transform_train_only",
+    "ch08_q01_slope_intercept",
+    "ch08_q02_predict_output",
+    "ch08_q03_residual_plot",
+    "ch09_q01_multiple_features",
+    "ch10_q02_polynomial_basis",
+    "ch10_q04_ridge",
+    "ch11_q01_sigmoid_range",
+    "ch11_q02_probability_label",
+    "ch12_q03_precision_recall_imbalanced"
+  ],
+  "missing_label": "Quiz coming soon"
+}

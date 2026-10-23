@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "week": 1,
+  "badge_line_format": "- [x] WNN-SNN — Badge Name",
+  "storage": "Browser localStorage key mdc301.lecture.badges.v1; opened poll IDs use mdc301.selfcheck.opened.v1; students copy unlocked lines into progress.md",
+  "badges": [
+    {"id": "W01-S01", "name": "Problem Framer", "session": 1, "evidence": "Complete the three linked Week 1 Session 1 checks."},
+    {"id": "W01-S02", "name": "Workflow Guard", "session": 2, "evidence": "Complete the three linked Week 1 Session 2 checks."},
+    {"id": "W01-S03", "name": "Line Fitter", "session": 3, "evidence": "Complete the three linked Week 1 Session 3 checks."},
+    {"id": "W01-S04", "name": "Feature Shaper", "session": 4, "evidence": "Complete the three linked Week 1 Session 4 checks."},
+    {"id": "W01-S05", "name": "Probability Auditor", "session": 5, "evidence": "Complete the three linked Week 1 Session 5 checks."}
+  ],
+  "future_extension": "Keep IDs as WNN-SNN, retain the line format, add five rows for Sessions 1–5 inside each new lecture/weekN/badges.json, and leave existing IDs unchanged. The badge name may reflect the new week topic; the parser must not depend on the name."
+}

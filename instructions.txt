@@ -1,69 +1,132 @@
-MDC-301 Week 1 public quiz — setup and classroom steps
-====================================================
+MDC-301 Module 1 — student course site and GitHub Pages deployment
+===================================================================
 
-The quiz is a static public website. Students do not need a GitHub account, organization membership, app, or installation. Supabase response collection is optional; without it, answers are not uploaded.
+Purpose
+-------
+Publish your own copy of the eight-week static lecture site. It uses plain HTML/CSS/JavaScript and has no build command or server-side code. The course lecture entry is `lecture/index.html`; the repository-root `index.html` is a welcome page that links into it. Week 1 is the only content week in this release. Weeks 2–8 are working “Coming in Week N” pages.
 
-What it does
-------------
-* Eight Week 1 topics, ten questions each.
-* **Lecture mode:** the instructor gives cues for answering, revealing feedback, and moving on. Devices do not synchronize, and there is no live class-results screen.
-* **Practice mode:** students get feedback after each answer and can retake any topic. Practice answers are never uploaded.
-* This is a public formative quiz, not a secure exam. Question files, including answer keys, are public.
+Chosen deployment path (use this one)
+-------------------------------------
+GitHub Pages → Deploy from a branch → branch `main` → folder `/(root)`.
 
-1. Publish with GitHub Pages
-----------------------------
-1. Open the public repository: https://github.com/maithilrahuljha/MDC-301 . Keep the repository public so anyone can use the quiz without signing in.
-2. Open **Settings → Pages**. Under **Build and deployment**, select **Deploy from a branch**.
-3. Select branch **main** and folder **/(root)**, then save. The root `index.html` redirects visitors to the quiz page. The app loads the existing topic JSON from its relative path, so no build workflow or extra software is needed.
-4. Wait for GitHub Pages to finish its first deployment. Open the URL shown on the Pages settings screen; it will normally be `https://maithilrahuljha.github.io/MDC-301/`.
-5. Test the URL in a private/incognito browser and on a phone. Confirm it opens without GitHub login and that a topic loads. Share this URL with students.
+The repository must be public for GitHub Free Pages. Do not switch to `/docs` or `gh-pages` for this course; those are emergency alternatives only if the instructor explicitly changes the deployment plan. GitHub Classroom is not the deployment path for this release; use your own public fork unless the instructor supplies another approved workflow.
 
-If Pages is blocked by institution policy, ask the repository administrator or IT administrator to enable it. Students never need GitHub credentials.
+A. Create your own repository copy
+----------------------------------
+1. Sign in to GitHub or create an account before class if possible. Do not share your password, recovery code, or two-factor code.
+2. Open the public course repository: https://github.com/maithilrahuljha/MDC-301 . Select **Fork**, then create the fork under your own GitHub account. Keep it **Public**. Leave the fork name as `MDC-301` unless your instructor asks for another name.
+3. Open the fork and confirm that its default branch is `main` and that `index.html`, `lecture/`, `exercises/`, `notes/`, and `progress.md` are present.
 
-2. Run the quiz in class
-------------------------
-1. Students open the public URL and choose **Lecture mode** or **Practice mode**.
-2. In Lecture mode, announce the topic and when to submit, reveal feedback, and advance. Each student advances their own screen after the cue; this static page does not synchronize devices or show live results.
-3. If Supabase is enabled, give students the same session label. An optional alias may be entered; students can leave it blank.
-4. After the lecture, students can choose Practice mode and retake the same topic or another topic at their own pace.
-5. Test the page on the classroom Wi-Fi and a few real devices before class. Keep a paper/offline fallback; this cohort has not been load-tested.
+Expected result: your own repository URL looks like `https://github.com/<your-username>/MDC-301`. You own the copy and can commit your work.
 
-3. Optional: collect lecture responses with Supabase
----------------------------------------------------
-Skip this section if responses are not needed. The quiz works with the default blank settings and uploads nothing.
+B. Enable GitHub Pages
+----------------------
+1. In your repository, open **Settings → Pages**.
+2. Under **Build and deployment**, choose **Deploy from a branch**.
+3. Choose branch **main** and folder **/(root)**. Select **Save**.
+4. Wait for the first deployment. It can take several minutes (allow up to about 10 minutes before troubleshooting).
+5. On the Pages settings screen, open the published URL. For a repository named `MDC-301`, the usual URL is `https://<your-username>.github.io/MDC-301/`.
+
+Expected result: the site opens without a GitHub sign-in. The first page links to the lecture site; open **Open the lecture site** or visit `https://<your-username>.github.io/MDC-301/lecture/` directly. The lecture map must link to Week 1 and to all seven Week 2–8 placeholders.
+
+C. Check the first deployment
+-----------------------------
+- Open `lecture/index.html` and `lecture/week1/`.
+- Open `lecture/week1/session3.html` and `lecture/week1/session5.html`; each has printed expected output even if the optional Python cell cannot load.
+- Open `lecture/week2/` through `lecture/week8/`; each should show “Coming in Week N,” not a 404.
+- Try a quiz link. When the quiz bank or linked poll app is not present, the page must say **Quiz coming soon** rather than breaking.
+- On a phone or narrow window, verify that content reflows and that you can use links, checkboxes, buttons, and disclosures with a keyboard.
+
+D. Keep your work in the named folders
+--------------------------------------
+- Put Week 1 code/solutions in `exercises/week1/` (the five starter files are `session1.py` through `session5.py`). Later work goes in `exercises/weekN/`.
+- Use `notes/` only for notes you are comfortable making public. Keep private notes outside the repository.
+- Mark completed badges and add a short reflection in the root `progress.md`. The browser badge flag is local to that browser; copy its displayed Markdown line into `progress.md` and commit it if you switch devices.
+- Do not edit files under `lecture/` unless the instructor’s weekly release instructions specifically ask you to update that week.
+- Never commit names/IDs, grades, contact details, passwords, API keys, private data, or another person’s work. The repository and every page in it are world-readable.
+
+E. Commit work from a terminal (optional)
+-----------------------------------------
+If Git is installed and you are working in a local clone, run from the repository root. Replace `<your-username>` with your account name:
+
+    git clone https://github.com/<your-username>/MDC-301.git
+    cd MDC-301
+    git status
+    git add progress.md exercises/week1/session1.py exercises/week1/session2.py exercises/week1/session3.py exercises/week1/session4.py exercises/week1/session5.py
+    git commit -m "Complete Week 1 work"
+    git push origin main
+
+Expected output: `git status` lists your intended changes; `git commit` creates a commit; `git push` reports that `main` was updated. GitHub Pages automatically publishes from `main`; you do not run a build command. You can also edit a file in GitHub’s browser UI and select **Commit changes**.
+
+F. Preview on your own computer (optional)
+------------------------------------------
+From the cloned repository root, run:
+
+    python -m http.server 8000
+
+Expected output includes `Serving HTTP on ... port 8000`. Open `http://localhost:8000/` in that same computer’s browser. Stop the server with `Ctrl+C`. Do not type `localhost` into a different computer or phone. If Python is not installed, skip this step and use the Pages URL.
+
+The Pyodide cells are optional browser code runners, not a server. First run can download tens of megabytes and take minutes; a managed network or older device may block it. Expected output stays printed. The downloadable `.py` files need Python and the listed packages to execute. If both the browser runtime and local Python are unavailable, use the printed result/derivation or ask for a lab computer or instructor demonstration.
+
+Troubleshooting
+---------------
+
+| Symptom | Check / fix |
+|---|---|
+| Pages URL is 404 after saving | Confirm the repository is public; Settings → Pages is `main` / `/(root)`; root `index.html` exists. Wait up to 10 minutes, then reload. |
+| Root opens, but the lecture link is broken | Confirm `lecture/index.html` is present with exact lowercase path. Open `/lecture/` directly. |
+| A week page is 404 | Confirm `lecture/weekN/index.html` exists for that exact week number. Do not rename `weekN`. |
+| A page is blank or missing styles | Check spelling and letter case in file names and relative paths. The repository includes `.nojekyll`; do not delete it. |
+| A session link or exercise download is missing | Use the exact lowercase file name and folder: `lecture/week1/session3.html`, `exercises/week1/session3.py`. |
+| Quiz link shows “Quiz coming soon” | This is the intended fallback when a quiz bank or poll page is unavailable. Tell the instructor; do not invent a question ID or copy quiz files. |
+| Pyodide button fails or keeps loading | Use the expected output. Try again on a permitted network; otherwise use the `.py` file on a Python-enabled lab machine. No data was uploaded. |
+| Changes do not appear | Check that the commit reached branch `main`; wait for Pages to deploy; hard-refresh (`Ctrl+Shift+R` / `Cmd+Shift+R`). |
+| GitHub asks for credentials or a code | Sign in only on `github.com`; never post or send credentials to the instructor or another student. |
+| Account creation or Pages is blocked by policy | Do not borrow an account. Use the public read-only course site and request the instructor-approved offline/lab submission route. |
+| Accidentally committed a secret or personal data | Treat it as exposed even if deleted. Tell the instructor; rotate/revoke any credential immediately and follow the institution’s incident process. |
+
+G. Receive a later week without overwriting your work
+----------------------------------------------------
+The instructor updates the canonical course repository. Students do not sync the entire repository. Add the template remote once, then fetch only the newly released lecture folder, the updated week map/hash manifest, and that week’s offline starter folder. Example for Week 2 (run inside your local student clone):
+
+    git remote add course-template https://github.com/maithilrahuljha/MDC-301.git
+    git fetch course-template
+    git checkout -b add-week-2
+    git checkout course-template/main -- lecture/week2 lecture/index.html lecture/manifest.json exercises/week2
+    git add lecture/week2 lecture/index.html lecture/manifest.json exercises/week2
+    git commit -m "Add Week 2 lecture"
+    git push -u origin add-week-2
+
+Expected result: only the Week 2 lecture, shared week-map/manifest, and Week 2 starter paths change; `lecture/week1/`, your `progress.md`, `notes/`, and other exercise folders remain untouched. After review, merge your branch into your own `main`. Pages then publishes the updated `main` branch.
+
+Quiz content is managed by a separate quiz/poll workflow. You do not need to pull quiz files weekly. Only confirmed IDs and link metadata appear in the lecture folder; absent IDs/pages keep the “Quiz coming soon” label.
+
+Existing Week 1 quiz page (separate from lecture deployment)
+------------------------------------------------------------
+The root URL is now the course landing page. The existing static Week 1 quiz remains at `/week1/livequiz/pages/` within the same Pages site and is also linked from the root page. It has practice and instructor-cued modes, but its static page does not synchronize devices or display live totals by itself. A separate instructor-operated response service, if used, needs its own privacy notice and setup. The lecture site never collects quiz answers. The quiz question files and answer keys are public; this is formative practice, not a secure exam or attendance system.
+
+Optional instructor-only: Supabase response collection for the existing quiz
+----------------------------------------------------------------------------
+Skip this section unless the instructor has approval to collect formative responses. It does not enable collection for the lecture site.
 
 1. Use an instructor-owned Supabase project approved for course data. Students do not need Supabase accounts.
-2. In the Supabase Dashboard **SQL Editor**, paste and run `week1/livequiz/pages/supabase_setup.sql`. It creates a response table with row-level security. Public visitors can insert rows but cannot read, edit, or delete them.
-3. In **Project Settings → API**, copy the project URL and the public **anon/publishable** key. Edit `week1/livequiz/pages/config.js` and fill the two values:
+2. In Supabase **SQL Editor**, run `week1/livequiz/pages/supabase_setup.sql`. It creates the insert-only response table/policy used by the existing quiz.
+3. In **Project Settings → API**, copy the project URL and the public **anon/publishable** key. Edit `week1/livequiz/pages/config.js`:
 
        window.MDC301_SUPABASE = {
          url: "https://YOUR-PROJECT.supabase.co",
          anonKey: "YOUR-ANON-OR-PUBLISHABLE-KEY"
        };
 
-   The URL and anon/publishable key are public browser settings. **Never put a `service_role` or secret key in this file.**
-4. Commit the change and merge it to `main`. GitHub Pages updates from that branch. In Lecture mode, enter the instructor's session label; the page reports whether the answer was saved. Supabase stores responses for later review but does not display live totals. Practice mode never sends answers.
-5. To review, sign in as the project owner, open the Supabase **SQL Editor**, and run:
+   These are browser-visible public settings. Never put a `service_role` or secret key in `config.js` or any public file. Leave both values blank to keep collection off.
+4. Commit and publish the quiz configuration to the canonical repository `main` branch. In Lecture mode, the existing quiz app may ask students for the instructor’s session label. Practice mode does not upload answers. Supabase storage does not provide a real-time aggregate screen.
+5. Tell students what is collected and how long it will be kept before enabling it. The quiz may store session label, topic/question IDs, answer text/index, correctness for scored questions, optional display alias, and timestamp; Supabase may process network metadata. Do not request student ID, email, password, or sensitive personal data. Do not use this optional formative collection as a high-stakes grade or attendance record.
+6. Review and export only in the instructor-owned Supabase account; keep exports private and delete them under the institution’s retention policy. Never commit a response export, database, or credential to Git.
 
-       select submitted_at, session_code, topic_slug, question_id,
-              question_type, answer_text, answer_index, is_correct, display_name
-       from public.week1_quiz_responses
-       order by submitted_at desc;
-
-   Keep any export private and delete rows/exports at the approved retention date. To clear the table after the course, if permitted, run `delete from public.week1_quiz_responses;` in the SQL Editor.
-
-Data and safety notes
+Data and class notes
 --------------------
-* The quiz sends a session label, topic/question IDs, answer, correctness for scored questions, optional alias, and submission time. It does not request a GitHub username, email, password, phone number, or student ID. Supabase may process technical/network metadata under its own policies.
-* A session label groups answers; it is not a password. Anyone who finds the public page can try to insert rows. Field checks limit formats and lengths, but anonymous access cannot verify who submitted. Leave collection off if that risk is unacceptable. Do not use responses for grades, attendance, or high-stakes decisions.
-* Tell students what is collected and how long it will be kept before enabling collection. Prefer anonymous answers or aliases; do not request sensitive personal information.
-* GitHub Pages serves from the public repository branch. Keep private data, credentials, `.env` files, and response exports out of tracked files. The topic JSON files are public, including correct-answer indexes; this is not a secure exam.
-
-Instructor maintenance
----------------------
-* Edit source questions in `week1/livequiz/topic_banks/`. Run `python week1/livequiz/scripts/check_question_bank.py` from the repository root; expected output includes `topic_banks=8 topic_questions=80`.
-* After changes are merged to `main`, GitHub Pages publishes the updated page and topic banks. If it does not update, check **Settings → Pages** and the repository's Pages deployment status.
-* Leave both values in `config.js` blank when collection is off. Never commit a Supabase secret key, Flask `.env`, response export, or other credential.
-* The separate Flask/Socket.IO app in `week1/livequiz/` remains available for an instructor-operated synchronized session; see `week1/livequiz/README.md`. It is not needed for this public quiz.
-
-Scope note: Supervised vs Unsupervised Learning is source Chapter 1 material. It is not source Chapter 3, which is outside this week's scope.
+- GitHub Free Pages requires the student repository to be public. Files are world-readable; do not put sensitive work in this repository.
+- This site does not ask for a GitHub login to view lessons and does not use a build workflow, database, or server-side code.
+- The optional badge storage is browser-local; `progress.md` is the student’s portable record.
+- The current checkout does not contain the expected `quizzes/week1/` directory. The linked IDs were checked against `week1/livequiz/questions.json`; no quiz content was changed. If a link’s source is unavailable in a lecture-only copy, “Quiz coming soon” is correct.
+- Instructor fill-ins before class: timetable `[ADD]`; approved devices/network `[ADD]`; help contact `[ADD]`; lab/offline submission route `[ADD]`.

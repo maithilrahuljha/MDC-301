@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Week 1 Session 4 outline: multiple linear regression and polynomial features.">
+  <title>Session 4 · Multiple and polynomial regression · MDC-301</title>
+  <link rel="stylesheet" href="../shared/css/site.css">
+  <script defer src="../shared/js/site.js"></script>
+  <script defer src="../shared/js/quiz-links.js"></script>
+  <script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, options: {skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']}};</script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header"><div class="header-row"><a class="brand" href="../index.html">MDC-301 · Module 1</a><nav class="site-nav" aria-label="Main navigation"><a href="../index.html">Weeks</a><a href="index.html">Week 1</a><a aria-current="page" href="session4.html">Session 4</a></nav></div></header>
+  <main id="main">
+    <p class="breadcrumb"><a href="index.html">Week 1</a> / Session 4</p>
+    <span class="status-pill outline">Outline · selected derivation and practice path</span>
+    <h1 class="page-heading">Multiple and polynomial regression</h1>
+    <p class="lede">Promise: add useful features to a linear model, derive the least-squares solution in matrix form, and spot when extra flexibility starts fitting noise.</p>
+    <section class="panel" aria-labelledby="objectives">
+      <h2 class="subheading" id="objectives">Learning objectives</h2>
+      <ul class="objectives"><li>Write multiple regression as a feature matrix multiplied by a coefficient vector.</li><li>Explain the normal equations and when the inverse formula is not safe to compute directly.</li><li>Build polynomial features and describe the overfitting risk of unnecessarily high degree.</li></ul>
+    </section>
+    <section aria-labelledby="outline">
+      <h2 class="section-heading" id="outline">Session outline</h2>
+      <div class="grid two">
+        <article class="card"><h3>1 · More than one input</h3><p>Interpret a coefficient while holding the other included features fixed; discuss scale and correlated features without overclaiming causality.</p></article>
+        <article class="card"><h3>2 · Matrix least squares</h3><p>Set the gradient of the squared-error objective to zero. Identify the feature-matrix shape and the intercept column.</p></article>
+        <article class="card"><h3>3 · Curves from features</h3><p>Map \(x\) to \((x,x^2,\ldots,x^d)\); the model stays linear in its coefficients even when its curve is not straight in the original input.</p></article>
+        <article class="card"><h3>4 · Validate, do not peek</h3><p>Compare degree choices using training/validation data. Keep the test set for one final, honest estimate.</p></article>
+      </div>
+    </section>
+    <section class="math-box" aria-labelledby="derivation">
+      <h2 class="subheading" id="derivation">Selected derivation · normal equations</h2>
+      <p>For the augmented design matrix \(\tilde X=[\mathbf 1\mid X]\), minimize squared residuals. The first-order condition is:</p>
+      <div class="math-text"><p>\[S(\beta)=(y-\tilde X\beta)^T(y-\tilde X\beta),\qquad \nabla_\beta S=-2\tilde X^T(y-\tilde X\beta).\]</p><p>Setting the gradient to zero gives \(\tilde X^T\tilde X\hat\beta=\tilde X^Ty\). If the matrix is invertible, \(\hat\beta=(\tilde X^T\tilde X)^{-1}\tilde X^Ty\); in code, prefer a stable least-squares solver rather than forming the inverse.</p></div>
+      <p class="source-note">Scope: custom booklet, Chapters 9–10. This page is an outline; the normal-equation proof and polynomial-feature demonstration are selected for the full release.</p>
+    </section>
+    <section class="bug-challenge" aria-labelledby="bug-title">
+      <h2 class="subheading" id="bug-title">Break it / fix it · unnecessary polynomial complexity</h2>
+      <p>A very high degree is not automatically a better model; it can follow noise and behave wildly between observed points:</p>
+      <pre class="code-sample"><code>poly = PolynomialFeatures(degree=20, include_bias=False)
+X_poly = poly.fit_transform(X_train)
+model.fit(X_poly, y_train)
+print("train score only:", model.score(X_poly, y_train))</code></pre>
+      <details><summary>Show the fix and the lesson</summary><p>Start with a degree justified by the data, compare candidates on validation/cross-validation, and consider regularization. A high training score is not evidence of generalization. Do not choose a degree by repeatedly checking the test score; reserve the test set for the final estimate.</p></details>
+    </section>
+    <aside class="peer-moment"><strong>Peer-visible moment:</strong> sketch the transformed columns \(x\) and \(x^2\) for one observation and explain why the coefficients remain linear parameters.</aside>
+    <p><strong>After this session, you can:</strong> write the matrix normal equations and explain how polynomial features add curve flexibility and overfitting risk.</p>
+    <section class="panel" aria-labelledby="self-check" data-session-badge="W01-S04">
+      <h2 class="subheading" id="self-check">Three-question self-check · existing bank</h2>
+      <p>These links point to the current question IDs; question wording and keys remain in the existing bank.</p>
+      <ul class="quiz-list">
+        <li><code>ch09_q01_multiple_features</code><a class="button-link quiz-link" data-quiz-unavailable="true" data-quiz-id="ch09_q01_multiple_features" data-topic-slug="ch09_multiple_linear_regression" href="#quiz-coming-soon">Checking quiz availability…</a><span class="quiz-status" data-quiz-status aria-live="polite">Checking…</span></li>
+        <li><code>ch10_q02_polynomial_basis</code><a class="button-link quiz-link" data-quiz-unavailable="true" data-quiz-id="ch10_q02_polynomial_basis" data-topic-slug="ch10_polynomial_and_regularisation" href="#quiz-coming-soon">Checking quiz availability…</a><span class="quiz-status" data-quiz-status aria-live="polite">Checking…</span></li>
+        <li><code>ch10_q04_ridge</code><a class="button-link quiz-link" data-quiz-unavailable="true" data-quiz-id="ch10_q04_ridge" data-topic-slug="ch10_polynomial_and_regularisation" href="#quiz-coming-soon">Checking quiz availability…</a><span class="quiz-status" data-quiz-status aria-live="polite">Checking…</span></li>
+      </ul>
+      <p class="small">If a link says “Quiz coming soon,” use the instructor’s approved verbal/paper fallback; badge completion is an honest self-attestation, not server-verified.</p>
+      <div class="badge-box" data-badge-card>
+        <p><strong>Badge:</strong> W01-S04 · Feature Shaper</p>
+        <label><input type="checkbox" data-badge-consent> I worked through the three linked checks.</label>
+        <button type="button" data-unlock-badge="W01-S04" data-badge-label="Feature Shaper">Unlock badge</button>
+        <p class="badge-result" data-badge-result aria-live="polite"></p><code class="badge-copy-line" data-badge-copy-line hidden></code><button type="button" data-copy-badge-line hidden>Copy progress line</button>
+        <p class="small">Badge state is saved in this browser only. Add the displayed line to <code>progress.md</code> in your repository.</p>
+      </div>
+    </section>
+    <p><a href="../../exercises/week1/session4.py" data-optional-file data-missing-label="Starter file is outside this lecture-only copy">Download Session 4 starter (.py)</a> · <a href="session3.html">← Session 3</a> · <a href="session5.html">Next: Session 5 →</a></p>
+  </main>
+  <footer class="site-footer"><p><a href="index.html">Week 1 overview</a> · <a href="../index.html">All weeks</a></p></footer>
+</body>
+</html>

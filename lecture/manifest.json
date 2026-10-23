@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "algorithm": "sha256 plus Git blob SHA-1",
+  "files": {
+    "lecture/README.md": {
+      "sha256": "a9b6ef06e047c854d41347a9480cf795d012d247d6afe69e9c8daffb3158c246",
+      "git_blob_sha1": "33e912c1706279a190a07b34c2ff9146a423e464"
+    },
+    "lecture/index.html": {
+      "sha256": "ce56978f6b83f1c8422d7001bfb8deb7240ed275cb656b400b98305b70163caf",
+      "git_blob_sha1": "03bc2ed72e379feacdc62e6173234414e67af4e5"
+    },
+    "lecture/shared/css/site.css": {
+      "sha256": "2fb2166e38b24ed19cdc900ae2e747cb2b90af7ef389e8b715a080d9cf176c79",
+      "git_blob_sha1": "ddd28a2362fb987bba96f5248a47583d0eb367ca"
+    },
+    "lecture/shared/js/pyodide-cell.js": {
+      "sha256": "dc1296ac6b7cca75cadcfd866345d1c0b9d17053b0249abbd9b5b1f79c912982",
+      "git_blob_sha1": "69f2f8f4e016188dd1211a4f9130837503a145c3"
+    },
+    "lecture/shared/js/quiz-links.js": {
+      "sha256": "0e0efdaa17a4b4fd073029cad556d37d91a70c55439145fe1066590f117e44b7",
+      "git_blob_sha1": "83cbe257b52a698d29bb9c1d60f91f3909edb741"
+    },
+    "lecture/shared/js/site.js": {
+      "sha256": "b743968684fb484f7728143a467ad92232e9c1ba530a537a6532205b85c4af80",
+      "git_blob_sha1": "934d0c1c74fe255f7022be35019a09cd777cfb84"
+    },
+    "lecture/week1/README.md": {
+      "sha256": "766bc544c065abe2f24119de1260e13ddf4849d756118a650a0a4ea8852a376a",
+      "git_blob_sha1": "37df7e0595faa207c07cee890ede5af4fad2d390"
+    },
+    "lecture/week1/badges/badges.json": {
+      "sha256": "984dfabeb2710617112d889425f0105a4108be0c3bc8fbce3a95046ec0b67990",
+      "git_blob_sha1": "56851111b95cb7fea421c65e53fb46735db27e90"
+    },
+    "lecture/week1/day0.html": {
+      "sha256": "61ea50f6b0ff790e1dc7a5c76dab53d772455432812011fa3842e89e81476aef",
+      "git_blob_sha1": "c4e985ec4d71fb65ac877244fd056ed55432e5c9"
+    },
+    "lecture/week1/deliverables.md": {
+      "sha256": "cd2b738d01a71da9355ed26afcd5079ed0c76a1ea27457a6af60f935a2a402a9",
+      "git_blob_sha1": "fdc1a6d24fdcb5c391d2debc66dfaf4807189ac6"
+    },
+    "lecture/week1/facilitator-runbook.md": {
+      "sha256": "8809d688474d6fe659871fcaa72b3103a466680d6a21db3a8ca01d73906e7878",
+      "git_blob_sha1": "1e5237439367aee3901e16fd4a239c6247f86953"
+    },
+    "lecture/week1/index.html": {
+      "sha256": "830a2ed6aae7de0375b9fc7fda19443d58f8cb1641127852c89e7a6efbd9b3e3",
+      "git_blob_sha1": "81a92f0fdd1dd236e54d4879682bd553dd908c1f"
+    },
+    "lecture/week1/quiz-links.json": {
+      "sha256": "16dc34131b07209113a7df2b60841257ad5024cfafc4c42614d8aca31bc50a1e",
+      "git_blob_sha1": "a41f97a118019f2cbdf98f9d35a1d9e33393c835"
+    },
+    "lecture/week1/session1.html": {
+      "sha256": "a02c8675dcf293618c0a13b5b096ae21a1837fb3d7632701acdcf3f64be1d5a5",
+      "git_blob_sha1": "8c3f0c7f1e8355460c4d52048101048675469684"
+    },
+    "lecture/week1/session2.html": {
+      "sha256": "68f41a9aa0667f186773aaaa5c51af539c150eb51eb44fba68a729164544b5b2",
+      "git_blob_sha1": "ac99e73ab3f9f8a14499662a2b6e3175468f79dd"
+    },
+    "lecture/week1/session3.html": {
+      "sha256": "e563a1f05aa4bc6f6fb9f9acabca588bcbc12813e3e1303925da5287463b5df8",
+      "git_blob_sha1": "63b687460184dfcc82c4d0c792b7010b6ff41906"
+    },
+    "lecture/week1/session4.html": {
+      "sha256": "7d2cb5aab7cf95eb223b143a82ade80ce7a0980fa55571a3458f914e1cbfb648",
+      "git_blob_sha1": "b0489a7ca0627d7ffe175fc10d9dba5887741912"
+    },
+    "lecture/week1/session5.html": {
+      "sha256": "9f64b41b28528cda58349111ea8e74b083418682a3bf61eb86d8756e75d76f0a",
+      "git_blob_sha1": "265f63e10dc04c31accf96f86a96bdf11b33499e"
+    },
+    "lecture/week2/index.html": {
+      "sha256": "da8291328c86ee0a90c84311f10c8eae1d68736a49df983c4f0dfa670828ed0a",
+      "git_blob_sha1": "e91d9e14c1770022b57b4c569b3d41077c9addca"
+    },
+    "lecture/week3/index.html": {
+      "sha256": "206668b0fe02ebb9d2d37499805f5fbe7ea2d6b3ef5da94d4059ef194b21e77c",
+      "git_blob_sha1": "49b0f4e0d57160623b08adafa5f1a27f8caa75fa"
+    },
+    "lecture/week4/index.html": {
+      "sha256": "405e68e1cff40e5ff8f4483f20fe86ccad6b67d91f26425f289ed88401a0b7a4",
+      "git_blob_sha1": "f18fb55aded3bc5a9bad4343cfd87c0daa0aecd1"
+    },
+    "lecture/week5/index.html": {
+      "sha256": "0143a96329674885fa935bccb7dbd7a6ce9279f288b741a9c5b678e6b098dfd3",
+      "git_blob_sha1": "88762fcc1956977c9a48a21d4ff2959f8ed86546"
+    },
+    "lecture/week6/index.html": {
+      "sha256": "0ef24042bd0e7bfd1d58808e0cf7c4431d6a2308c0c1240ca8c835420858c109",
+      "git_blob_sha1": "c5614428be91d33250345563819a842dfb504d3c"
+    },
+    "lecture/week7/index.html": {
+      "sha256": "1add48907c4cdb7b63e4b164ce901de964c03afe30d8cabe664a5d061c9ce29c",
+      "git_blob_sha1": "9dfd21005411402c58172421fc64d94a15a4ae0b"
+    },
+    "lecture/week8/index.html": {
+      "sha256": "e365999e8130eef4d91897fd80341a0e76b4a59bd175e438263bb89829c9a546",
+      "git_blob_sha1": "1cb022e1c2cdb65b325f4e7cf37d068acdee849a"
+    }
+  },
+  "note": "Generated from lecture/; manifest.json is excluded from its own file map."
+}
