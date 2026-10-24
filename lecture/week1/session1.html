@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Week 1 Session 1 outline: machine learning, problem framing, and the ML lifecycle.">
-  <title>Session 1 · What machine learning does · MDC-301</title>
+  <meta name="description" content="Week 1 Topic 1: the ML lifecycle and supervised versus unsupervised learning.">
+  <title>Session 1 · ML lifecycle, supervised vs unsupervised learning · MDC-301</title>
   <link rel="stylesheet" href="../shared/css/site.css">
   <script defer src="../shared/js/site.js"></script>
   <script defer src="../shared/js/quiz-links.js"></script>
@@ -17,11 +17,21 @@
   <main id="main">
     <p class="breadcrumb"><a href="index.html">Week 1</a> / Session 1</p>
     <span class="status-pill outline">Outline · selected derivation and practice path</span>
-    <h1 class="page-heading">What machine learning does</h1>
+    <h1 class="page-heading">ML lifecycle, supervised vs unsupervised learning</h1>
     <p class="lede">Promise: turn a vague prediction request into a testable learning problem, and explain why success on unseen data matters more than a perfect training score.</p>
     <section class="panel" aria-labelledby="objectives">
       <h2 class="subheading" id="objectives">Learning objectives</h2>
       <ul class="objectives"><li>Identify the decision, input features, and target before choosing a model.</li><li>Distinguish supervised learning (known targets) from unsupervised learning (no target labels).</li><li>Place problem framing, splitting, fitting, evaluation, deployment, and monitoring in a responsible lifecycle.</li></ul>
+    </section>
+    <section class="panel" aria-labelledby="learning-settings">
+      <h2 class="subheading" id="learning-settings">First ask: do the examples have answers?</h2>
+      <p>A <strong>label</strong> is the known answer we want a model to learn from. For the staffing example, past demand can be the label and calendar/weather measurements can be features.</p>
+      <div class="grid two">
+        <article class="card"><h3>Supervised · answers are known</h3><p>Train with examples that pair features \(X\) with a target \(y\). Predict a number (regression) or a category (classification).</p></article>
+        <article class="card"><h3>Unsupervised · no answer column</h3><p>Look for useful structure in features alone, such as grouping stations with similar usage patterns. A cluster is a discovered group, not a supplied label.</p></article>
+      </div>
+      <p class="callout"><strong>Keep this distinction clear:</strong> “learns from examples” is the key idea—not “always random.” Training may use randomness, but a fixed fitted model can give the same prediction for the same input.</p>
+      <p class="small">The lifecycle is a loop: frame the decision → collect and inspect data → split it → fit and validate → evaluate once on held-out test data → deploy → monitor and revisit.</p>
     </section>
     <section aria-labelledby="outline">
       <h2 class="section-heading" id="outline">Session outline</h2>
@@ -49,7 +59,7 @@ X_train, X_test, y_train, y_test = split(X_scaled, y_all)</code></pre>
     <aside class="peer-moment"><strong>Peer-visible moment:</strong> if you opt in, share only your public Pages URL and one sentence naming your target. No names or student IDs are needed.</aside>
     <p><strong>After this session, you can:</strong> name features and target, distinguish supervised from unsupervised learning, and describe a leakage-safe evaluation step.</p>
     <section class="panel" aria-labelledby="self-check" data-session-badge="W01-S01">
-      <h2 class="subheading" id="self-check">Three-question self-check · existing bank</h2>
+      <h2 class="subheading" id="self-check">Topic 1 self-check · existing bank</h2>
       <p>These are references to the existing Week 1 bank; no new quiz questions are authored here. Open each poll question, then return and mark the check complete.</p>
       <ul class="quiz-list">
         <li><code>ch01_q01_target_feature</code><a class="button-link quiz-link" data-quiz-unavailable="true" data-quiz-id="ch01_q01_target_feature" data-topic-slug="ch01_intro_to_ml" href="#quiz-coming-soon">Checking quiz availability…</a><span class="quiz-status" data-quiz-status aria-live="polite">Checking…</span></li>

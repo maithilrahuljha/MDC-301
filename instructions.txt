@@ -68,6 +68,74 @@ Expected output includes `Serving HTTP on ... port 8000`. Open `http://localhost
 
 The Pyodide cells are optional browser code runners, not a server. First run can download tens of megabytes and take minutes; a managed network or older device may block it. Expected output stays printed. The downloadable `.py` files need Python and the listed packages to execute. If both the browser runtime and local Python are unavailable, use the printed result/derivation or ask for a lab computer or instructor demonstration.
 
+G. Run the Week 1 quiz locally in VS Code (Windows PowerShell)
+----------------------------------------------------------------
+Use the static option for private practice on one computer. Use the Flask option only if an instructor needs host-controlled questions, synchronized student devices, or a local response export. Neither option is needed for the public GitHub Pages site.
+
+### Option 1 — Static quiz practice (quickest; no quiz server setup)
+
+1. Install Python 3 if it is not already installed. Open VS Code and choose **File → Open Folder…**; select the cloned `MDC-301` repository folder (the folder containing `index.html` and `week1`).
+2. In VS Code, choose **Terminal → New Terminal**. Set the terminal profile to **PowerShell** if it did not open that way. The terminal must be at the repository root. Check both the current folder and the quiz file:
+
+       Get-Location
+       Test-Path .\week1\livequiz\pages\index.html
+
+   Expected: the path ends in `MDC-301` and the second command prints `True`. If it prints `False`, use `Set-Location "C:\path\to\MDC-301"` with the actual location of your clone, then repeat the check.
+3. Start a simple local web server from the repository root (do not change into `week1\livequiz\pages`; the quiz loads question files from sibling folders):
+
+       py -m http.server 8001 --bind 127.0.0.1
+
+   Expected: PowerShell shows that Python is serving on port `8001` and remains busy. If Windows says `py` is not recognized, try `python -m http.server 8001 --bind 127.0.0.1`. Do not close this terminal while using the quiz.
+4. On the same computer, open `http://127.0.0.1:8001/week1/livequiz/pages/` in a browser. Choose a topic and select **Practice mode**. Practice answers stay in that browser; the blank default quiz configuration does not upload answers.
+5. When finished, return to the VS Code terminal and press **Ctrl+C** to stop the server.
+
+Expected result: the topic selector loads all eight topics and the quiz runs locally. This static option has no host-controlled synchronization, saved class response export, or live class-results screen. VS Code extensions are not required. If the topic list is empty or the browser reports missing JSON, stop the server and restart it from the repository root in Step 2.
+
+### Option 2 — Instructor-operated Flask/Socket.IO quiz server
+
+This option is for a supervised local demo or trusted classroom network. It is not the static GitHub Pages site. Do not expose it to the public internet, and do not send students the host/admin token.
+
+1. In the VS Code PowerShell terminal at the repository root, check Python 3.11 or newer:
+
+       py -3.11 --version
+
+   Expected: `Python 3.11.x` or newer. If `py -3.11` is unavailable but `python --version` reports Python 3.11+, use `python` instead of `py -3.11` in the following setup commands.
+2. Create an isolated environment and install the quiz server’s requirements (this is separate from the root `requirements.txt`):
+
+       py -3.11 -m venv .venv
+       .\.venv\Scripts\python.exe -m pip install --upgrade pip
+       .\.venv\Scripts\python.exe -m pip install -r week1\livequiz\requirements.txt
+
+   Expected: pip completes without errors and installs Flask, Flask-SocketIO, gevent, and their dependencies. These commands call the virtual environment’s Python directly, so PowerShell activation-policy changes are not needed.
+3. Copy the local configuration template only if you do not already have a local configuration:
+
+       if (-not (Test-Path .\week1\livequiz\.env)) { Copy-Item .\week1\livequiz\.env.example .\week1\livequiz\.env }
+       Test-Path .\week1\livequiz\.env
+
+   Expected: `True`. In VS Code’s Explorer, open `week1/livequiz/.env`. Keep `COOKIE_SECURE=false` and `TRUST_PROXY=false` for a local HTTP run. Leave `QUIZ_TOPIC=all`; set `QUIZ_DAY=1`, `2`, `3`, `4`, or `5` for one daily quiz, or `QUIZ_DAY=all` for the full daily bank. A topic slug can be used in `QUIZ_TOPIC` instead.
+4. Generate two different secrets in PowerShell, one for the Flask session and one for host login:
+
+       $secret = & .\.venv\Scripts\python.exe -c "import secrets; print(secrets.token_urlsafe(48))"
+       $admin = & .\.venv\Scripts\python.exe -c "import secrets; print(secrets.token_urlsafe(48))"
+       Write-Output "FLASK_SECRET_KEY=$secret"
+       Write-Output "ADMIN_TOKEN=$admin"
+
+   Paste each value into the matching line in `week1/livequiz/.env`, replacing its placeholder. Keep `.env` private; do not commit it, paste it into a public chat, or show the `ADMIN_TOKEN` to students. Confirm Git ignores it with `git check-ignore .\week1\livequiz\.env` (expected output: `week1/livequiz/.env`).
+5. Start the live server from the repository root:
+
+       .\.venv\Scripts\python.exe .\week1\livequiz\app.py
+
+   Expected: the server starts on `0.0.0.0:8000` and the terminal stays busy. Open a second PowerShell terminal in VS Code and test the local health endpoint:
+
+       Invoke-RestMethod http://127.0.0.1:8000/healthz
+
+   Expected: a response with `status` set to `ok` and `session_code` set to `MDC301W1` (unless you changed the code in `.env`).
+6. On the instructor computer, open `http://127.0.0.1:8000/host` and sign in with the `ADMIN_TOKEN` you created. Open `http://127.0.0.1:8000/` for the student view. Use the existing **Host controls and result export** section below for the session steps.
+7. To let devices on the same trusted private Wi-Fi join, run `ipconfig` in PowerShell and use the instructor computer’s private **IPv4 Address** in `http://<IPv4-address>:8000/`. Do not use `localhost` or `127.0.0.1` on another device; those names refer to that other device. Only allow the Windows Firewall prompt on a trusted **Private** network. The server uses local HTTP, so do not use it over public Wi-Fi or expose it to the internet.
+8. Stop the server with **Ctrl+C** in the terminal running `app.py`. Local SQLite responses are stored under `week1/livequiz/data/`, which is ignored by Git; treat exports as private course data and follow the instructor’s retention policy.
+
+If port `8000` is already in use, stop the other server or set `PORT=8001` in `.env`, restart Flask, and use port `8001` in the browser and health-check URLs. If startup fails, verify that both secrets replaced the placeholders, the requirements installation completed, and the terminal is at the repository root. For the optional server’s full privacy and deployment notes, see `week1/livequiz/README.md`.
+
 Troubleshooting
 ---------------
 
@@ -85,7 +153,7 @@ Troubleshooting
 | Account creation or Pages is blocked by policy | Do not borrow an account. Use the public read-only course site and request the instructor-approved offline/lab submission route. |
 | Accidentally committed a secret or personal data | Treat it as exposed even if deleted. Tell the instructor; rotate/revoke any credential immediately and follow the institution’s incident process. |
 
-G. Receive a later week without overwriting your work
+H. Receive a later week without overwriting your work
 ----------------------------------------------------
 The instructor updates the canonical course repository. Students do not sync the entire repository. Add the template remote once, then fetch only the newly released lecture folder, the updated week map/hash manifest, and that week’s offline starter folder. Example for Week 2 (run inside your local student clone):
 
@@ -103,7 +171,7 @@ Quiz content is managed by a separate quiz/poll workflow. You do not need to pul
 
 Existing Week 1 quiz page (separate from lecture deployment)
 ------------------------------------------------------------
-The root URL is now the course landing page. The existing static Week 1 quiz remains at `/week1/livequiz/pages/` within the same Pages site and is also linked from the root page. It has practice and instructor-cued modes, but its static page does not synchronize devices or display live totals by itself. A separate instructor-operated response service, if used, needs its own privacy notice and setup. The lecture site never collects quiz answers. The quiz question files and answer keys are public; this is formative practice, not a secure exam or attendance system.
+The root URL is now the course landing page. The existing static Week 1 quiz remains at `/week1/livequiz/pages/` within the same Pages site and is also linked from the root page. Students do not need a GitHub account to open or use the public static quiz. It has practice and instructor-cued modes, but the static page does not synchronize devices and has no live class-results screen. A separate instructor-operated response service, if used, needs its own privacy notice and setup. The lecture site never collects quiz answers. The quiz question files and answer keys are public; this is formative practice, not a secure exam or attendance system.
 
 Optional instructor-only: Supabase response collection for the existing quiz
 ----------------------------------------------------------------------------
