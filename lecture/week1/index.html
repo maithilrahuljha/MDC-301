@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Week 1: machine-learning foundations and first regression and classification models.">
+  <meta name="description" content="Week 1 in four topics: the ML lifecycle, scikit-learn tools, linear regression, and logistic regression for classification.">
   <title>Week 1 · MDC-301</title>
   <link rel="stylesheet" href="../shared/css/site.css">
 </head>
@@ -16,23 +16,43 @@
   <main id="main">
     <p class="breadcrumb"><a href="../index.html">Lecture map</a> / Week 1</p>
     <section class="hero" aria-labelledby="week-title">
-      <p class="eyebrow">Module 1 · Week 1 · Five sessions</p>
+      <p class="eyebrow">Module 1 · Week 1 · Four topics · Five sessions</p>
       <h1 id="week-title">From a question to a first model.</h1>
-      <p>By Friday, you can frame an ML problem, distinguish learning settings, fit and inspect a regression model, add polynomial features, and explain why logistic regression is a classifier.</p>
+      <p>Follow the four topics in order: frame an ML problem, choose the right tools, build regression models, then use logistic regression to classify. The regression topic spans Sessions 3 and 4.</p>
     </section>
-    <section aria-labelledby="sessions-title">
-      <h2 class="section-heading" id="sessions-title">Session path</h2>
+    <section aria-labelledby="topics-title">
+      <h2 class="section-heading" id="topics-title">Week 1 topic sequence</h2>
       <div class="session-grid">
-        <article class="session-card"><span class="meta">Session 1 · Outline</span><h3>What machine learning does</h3><p>Problem framing, the learning lifecycle, and supervised versus unsupervised learning.</p><a href="session1.html">Open Session 1</a></article>
-        <article class="session-card"><span class="meta">Session 2 · Outline</span><h3>Tools and the estimator workflow</h3><p>Python tools, the scikit-learn API, and the train/validation/test boundary.</p><a href="session2.html">Open Session 2</a></article>
-        <article class="session-card"><span class="meta">Session 3 · Complete lesson</span><h3>Simple linear regression</h3><p>Derive OLS, read slope and intercept, inspect residuals, and run a small Python cell.</p><a href="session3.html">Open Session 3</a></article>
-        <article class="session-card"><span class="meta">Session 4 · Outline</span><h3>Multiple and polynomial regression</h3><p>Extend the feature matrix and model curvature without leaving the linear-in-parameters setup.</p><a href="session4.html">Open Session 4</a></article>
-        <article class="session-card"><span class="meta">Session 5 · Complete lesson</span><h3>Logistic regression for classification</h3><p>Connect the sigmoid, Bernoulli likelihood, log-loss, a decision threshold, and suitable metrics.</p><a href="session5.html">Open Session 5</a></article>
+        <article class="session-card">
+          <span class="meta">Topic 1 · Session 1 · Outline</span>
+          <h3>ML lifecycle, supervised vs unsupervised learning</h3>
+          <p>Frame a decision, identify features and targets, compare labelled and unlabelled data, and follow the lifecycle without leaking test information.</p>
+          <a href="session1.html">Open Session 1</a>
+        </article>
+        <article class="session-card">
+          <span class="meta">Topic 2 · Session 2 · Outline</span>
+          <h3>Tools and the scikit-learn ecosystem</h3>
+          <p>See how Python, NumPy, pandas, Matplotlib, and scikit-learn fit together; practise the estimator and pipeline workflow.</p>
+          <a href="session2.html">Open Session 2</a>
+        </article>
+        <article class="session-card">
+          <span class="meta">Topic 3 · Sessions 3–4 · Complete lesson + outline</span>
+          <h3>Simple, multiple and polynomial regression</h3>
+          <p>Start with one input and ordinary least squares, then add features and polynomial terms while keeping the model linear in its coefficients.</p>
+          <p><a href="session3.html">Session 3 · Simple regression</a><br><a href="session4.html">Session 4 · Multiple and polynomial regression</a></p>
+        </article>
+        <article class="session-card">
+          <span class="meta">Topic 4 · Session 5 · Complete lesson</span>
+          <h3>Logistic regression as a classification method</h3>
+          <p>Turn a linear score into a probability, derive log-loss, choose a decision threshold, and evaluate classification errors responsibly.</p>
+          <a href="session5.html">Open Session 5</a>
+        </article>
       </div>
+      <p class="small">Self-checks remain on the matching session pages. Topic 3 uses the existing checks from both Sessions 3 and 4; if a quiz dependency is unavailable, the page says “Quiz coming soon.”</p>
     </section>
     <section class="panel" aria-labelledby="limits-title">
       <h2 class="subheading" id="limits-title">Week 1 scope</h2>
-      <p>Use the course booklet’s Chapters 1, 2, 5–12 only where they support the fixed Week 1 topics. Chapters 3–4 are not part of this week. Rainfall (Week 4), Falcon 9 (Week 7), and careers (Week 8) are brief future hooks, not Week 1 lessons.</p>
+      <p>Use the course booklet’s Chapters 1, 2, and 5–12 only where they support these four topics. Chapters 3–4 are not part of this week. Rainfall (Week 4), Falcon 9 (Week 7), and careers (Week 8) are brief future hooks, not Week 1 lessons.</p>
       <p><a href="day0.html">New to GitHub Pages? Start with the Day 0 one-pager.</a></p>
     </section>
     <section aria-labelledby="path-title">

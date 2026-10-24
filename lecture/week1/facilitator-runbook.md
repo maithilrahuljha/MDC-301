@@ -10,7 +10,7 @@
 - Arrange table/pair groups and a low-bandwidth route: expected outputs are printed in the lesson; Pyodide is optional.
 - Keep names, student IDs, grades, contact details, and credentials out of the projected gallery and public repository.
 
-## Session 1 · Problem framing and the ML lifecycle
+## Session 1 · ML lifecycle, supervised vs unsupervised learning
 
 | Time | Instructor and student activity |
 |---|---|
@@ -36,7 +36,7 @@
 - **06:00–07:00 — Name the terms.** On the board, write `features X → model → target y` and label “decision” separately from the model. Ask one pair to point out which field would be the target.
 - **07:00–10:00 — Low-risk check.** Launch existing ID `ch01_q01_target_feature` once from the lesson page. Explain that a broken/missing link becomes “Quiz coming soon”; use a hand signal or verbal response instead. Do not ask 200 students to troubleshoot sign-in or install Python in this window.
 
-## Session 2 · Tools, scikit-learn, and data leakage
+## Session 2 · Tools and the scikit-learn ecosystem
 
 | Time | Instructor and student activity |
 |---|---|
@@ -54,7 +54,7 @@
 | 84–88 | Share two common errors and fixes. |
 | 88–90 | Unlock Workflow Guard after the three linked checks; one-sentence exit: “A pipeline helps prevent ___.” |
 
-## Session 3 · Simple linear regression and OLS
+## Session 3 · Simple, multiple and polynomial regression · Part 1: simple OLS
 
 | Time | Instructor and student activity |
 |---|---|
@@ -71,7 +71,7 @@
 | 83–88 | Volunteers explain one coefficient and one limitation. |
 | 88–90 | Badge self-attestation; exit ticket: one pattern that would make a straight line inadequate. |
 
-## Session 4 · Multiple and polynomial regression
+## Session 4 · Simple, multiple and polynomial regression · Part 2: multiple and polynomial features
 
 | Time | Instructor and student activity |
 |---|---|
@@ -88,7 +88,7 @@
 | 77–86 | Pairs sketch a degree-1 and a degree-3 fit; annotate which set is allowed to choose degree. |
 | 86–90 | Feature Shaper badge; exit ticket: “linear in which quantities?” |
 
-## Session 5 · Logistic regression and classification
+## Session 5 · Logistic regression as a classification method
 
 | Time | Instructor and student activity |
 |---|---|

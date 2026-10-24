@@ -28,6 +28,7 @@
       <p>Simple linear regression uses one input feature to estimate a numeric target. The model is \(Y=\beta_0+\beta_1X+\epsilon\): \(\beta_1\) describes the fitted change in the mean of \(Y\) for a one-unit increase in \(X\), and \(\beta_0\) is the fitted value when \(X=0\). Do not give the intercept a real-world meaning unless zero lies in the observed range. The fit is not chosen by eye: ordinary least squares (OLS) chooses the intercept and slope that minimize the sum of squared residuals. Setting the first derivatives to zero makes residuals sum to zero and makes them orthogonal to \(X\). Solving those equations gives the sample covariance of \(X,Y\) divided by the sample sum of squared deviations of \(X\) for the slope; the intercept follows from the sample means. With \(X=[1,2,3,4,5]\) and \(Y=[2.1,4.0,6.2,7.9,10.1]\), the supplied worked data yield slope \(1.99\), intercept \(0.09\), and a prediction of \(12.03\) at \(x=6\). The line summarizes observed data; it is not a promise outside its range. Check a residual-versus-fitted plot for structure: curvature points to a missed nonlinear pattern, a funnel to changing error variance, clusters to unmodelled groups, and extreme residuals to possible outliers. In scikit-learn, keep \(X\) two-dimensional, fit only on training rows, and inspect coefficients, residuals, and an evaluation metric together.</p>
       <p class="source-note">Course recap based on the custom booklet, Chapter 8, and the existing Day 3 worksheet. The derivation below preserves the booklet’s notation.</p>
     </section>
+    <aside class="callout"><strong>Connection to the supplied scratch notebook:</strong> its engine-size-to-price example is a one-feature story. Linear regression can use one feature or many; Session 4 extends the feature table. Treat an \(R^2\) computed on the same rows used to fit the line as a training description, not proof that it will work on new data. This lesson uses a tiny fixed dataset so no external download is needed.</aside>
 
     <section class="math-box" aria-labelledby="ols-title">
       <h2 class="subheading" id="ols-title">OLS estimators via first-order conditions</h2>
@@ -49,7 +50,7 @@
         <p>\[\hat\beta_1=\frac{\sum_i(X_i-\bar X)(Y_i-\bar Y)}{\sum_i(X_i-\bar X)^2},\qquad \hat\beta_0=\bar Y-\hat\beta_1\bar X.\]</p>
         <p>The second-order conditions confirm a minimum: the Hessian of \(S\) is \(\begin{bmatrix}2n&2\sum_iX_i\\2\sum_iX_i&2\sum_iX_i^2\end{bmatrix}\), which is positive definite when \(\sum_i(X_i-\bar X)^2&gt;0\), i.e., when \(X\) is not constant.</p>
       </div>
-      <p class="source-note">Transcribed and checked against the supplied custom booklet PDF, Chapter 8.3, printed page 26. Equation numbers and notation are retained; typography is rendered with MathJax.</p>
+      <p class="source-note">Transcribed and checked against the supplied custom booklet PDF, Chapter 8.3, printed page 26. For the library’s model definition and least-squares objective, see the official scikit-learn <a href="https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/linear_model.rst">linear-model documentation</a>. Equation numbers and notation are retained; typography is rendered with MathJax.</p>
     </section>
 
     <section class="widget" aria-labelledby="predict-title">
@@ -110,7 +111,7 @@ if r2 == 0:
     <p><strong>After this session, you can:</strong> derive the OLS slope and intercept, fit them with scikit-learn, and explain what a residual pattern says about the model.</p>
 
     <section class="panel" aria-labelledby="self-check" data-session-badge="W01-S03">
-      <h2 class="subheading" id="self-check">Three-question self-check · existing bank</h2>
+      <h2 class="subheading" id="self-check">Topic 3 self-check · simple regression</h2>
       <p>Launch the three existing Week 1 checks by ID. This page contains no copied quiz stems or answer keys.</p>
       <ul class="quiz-list">
         <li><code>ch08_q01_slope_intercept</code><a class="button-link quiz-link" data-quiz-unavailable="true" data-quiz-id="ch08_q01_slope_intercept" data-topic-slug="ch08_simple_linear_regression" href="#quiz-coming-soon">Checking quiz availability…</a><span class="quiz-status" data-quiz-status aria-live="polite">Checking…</span></li>

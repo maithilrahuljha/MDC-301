@@ -23,6 +23,25 @@
       <h2 class="subheading" id="objectives">Learning objectives</h2>
       <ul class="objectives"><li>Write multiple regression as a feature matrix multiplied by a coefficient vector.</li><li>Explain the normal equations and when the inverse formula is not safe to compute directly.</li><li>Build polynomial features and describe the overfitting risk of unnecessarily high degree.</li></ul>
     </section>
+    <section class="panel" aria-labelledby="model-forms">
+      <h2 class="subheading" id="model-forms">Three ways to build the feature table</h2>
+      <div class="grid two">
+        <article class="card"><h3>Simple regression · one feature</h3><p>\(\hat y=\beta_0+\beta_1x\). One input column predicts a numeric target.</p></article>
+        <article class="card"><h3>Multiple regression · several features</h3><p>\(\hat y=\beta_0+\beta_1x_1+\beta_2x_2\). Add a coefficient for each included input, such as engine size and vehicle age when predicting price.</p></article>
+        <article class="card"><h3>Polynomial regression · transformed feature</h3><p>\(\hat y=\beta_0+\beta_1x+\beta_2x^2\). Add powers such as \(x^2\) to let the fitted curve bend.</p></article>
+        <article class="card"><h3>Why all three are still linear models</h3><p>The curve may not be straight in the original input, but the prediction is still a linear combination of the coefficients \(\beta\). “Linear” here describes the parameters, not necessarily the plotted curve.</p></article>
+      </div>
+      <pre class="code-sample"><code>from sklearn.linear_model import LinearRegression
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import PolynomialFeatures
+
+model = make_pipeline(
+    PolynomialFeatures(degree=2, include_bias=False),
+    LinearRegression()
+)
+model.fit(X_train, y_train)  # X_train contains training rows only</code></pre>
+      <p class="small">With one input column, degree 2 produces \(x\) and \(x^2\). With several columns, polynomial expansion can also create interaction terms. Keep the degree modest and compare candidates on validation data, not the test set.</p>
+    </section>
     <section aria-labelledby="outline">
       <h2 class="section-heading" id="outline">Session outline</h2>
       <div class="grid two">
@@ -36,7 +55,7 @@
       <h2 class="subheading" id="derivation">Selected derivation · normal equations</h2>
       <p>For the augmented design matrix \(\tilde X=[\mathbf 1\mid X]\), minimize squared residuals. The first-order condition is:</p>
       <div class="math-text"><p>\[S(\beta)=(y-\tilde X\beta)^T(y-\tilde X\beta),\qquad \nabla_\beta S=-2\tilde X^T(y-\tilde X\beta).\]</p><p>Setting the gradient to zero gives \(\tilde X^T\tilde X\hat\beta=\tilde X^Ty\). If the matrix is invertible, \(\hat\beta=(\tilde X^T\tilde X)^{-1}\tilde X^Ty\); in code, prefer a stable least-squares solver rather than forming the inverse.</p></div>
-      <p class="source-note">Scope: custom booklet, Chapters 9–10. This page is an outline; the normal-equation proof and polynomial-feature demonstration are selected for the full release.</p>
+      <p class="source-note">Scope: custom booklet, Chapters 9–10, and the supplied linear-regression worksheets. For optional reference, see scikit-learn’s <a href="https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/preprocessing.rst">preprocessing guide</a> for polynomial features and its <a href="https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/cross_validation.rst">cross-validation guide</a> for evaluation with pipelines.</p>
     </section>
     <section class="bug-challenge" aria-labelledby="bug-title">
       <h2 class="subheading" id="bug-title">Break it / fix it · unnecessary polynomial complexity</h2>
@@ -50,7 +69,7 @@ print("train score only:", model.score(X_poly, y_train))</code></pre>
     <aside class="peer-moment"><strong>Peer-visible moment:</strong> sketch the transformed columns \(x\) and \(x^2\) for one observation and explain why the coefficients remain linear parameters.</aside>
     <p><strong>After this session, you can:</strong> write the matrix normal equations and explain how polynomial features add curve flexibility and overfitting risk.</p>
     <section class="panel" aria-labelledby="self-check" data-session-badge="W01-S04">
-      <h2 class="subheading" id="self-check">Three-question self-check · existing bank</h2>
+      <h2 class="subheading" id="self-check">Topic 3 self-check · multiple and polynomial regression</h2>
       <p>These links point to the current question IDs; question wording and keys remain in the existing bank.</p>
       <ul class="quiz-list">
         <li><code>ch09_q01_multiple_features</code><a class="button-link quiz-link" data-quiz-unavailable="true" data-quiz-id="ch09_q01_multiple_features" data-topic-slug="ch09_multiple_linear_regression" href="#quiz-coming-soon">Checking quiz availability…</a><span class="quiz-status" data-quiz-status aria-live="polite">Checking…</span></li>

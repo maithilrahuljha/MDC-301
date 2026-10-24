@@ -9,7 +9,7 @@ Use this after edits and before sharing. Each row is a one-line pass condition f
 | `index.html` | The root Pages URL redirects to the quiz in `week1/livequiz/pages/`. |
 | `.gitignore` | Virtual environments, Python caches, `.env`, quiz databases/exports, and notebook outputs are not tracked. |
 | `requirements.txt` | A clean Python 3.11+ virtual environment installs the shared data-science and pytest packages. |
-| `docs/week1-framework.md` | The five sessions, platform decision, runbook, capstone, slide delta, scale plan, and notation bridge are internally consistent with the files. |
+| `docs/week1-framework.md` | The exact four-topic Week 1 order maps consistently to the existing five sessions; platform, runbook, capstone, scale plan, and notation notes match the files. |
 | `docs/week1-acceptance-checklist.md` | Every tracked deliverable has an explicit one-line verification condition. |
 | `.github/classroom/README.md` | It warns that GitHub Classroom is retired and points instructors to the current Classroom 50 setup. |
 | `.github/classroom/autograding.json` | The surrounding README/framework explicitly labels it legacy-only and never presents it as the current Classroom 50 grader. |

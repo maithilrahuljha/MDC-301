@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Week 1 Session 5: a complete logistic regression lesson with the maximum-likelihood derivation and a runnable browser Python cell.">
-  <title>Session 5 · Logistic regression · MDC-301</title>
+  <meta name="description" content="Week 1 Topic 4: logistic regression as a classification method, with a likelihood derivation and optional browser Python cell.">
+  <title>Session 5 · Logistic regression as a classification method · MDC-301</title>
   <link rel="stylesheet" href="../shared/css/site.css">
   <script defer src="../shared/js/site.js"></script>
   <script defer src="../shared/js/quiz-links.js"></script>
@@ -19,7 +19,7 @@
   <main id="main">
     <p class="breadcrumb"><a href="index.html">Week 1</a> / Session 5</p>
     <span class="tag">Complete lesson · Chapters 11–12</span>
-    <h1 class="page-heading">Logistic regression: probability to decision</h1>
+    <h1 class="page-heading">Logistic regression as a classification method</h1>
     <p class="lede">Promise: explain why logistic regression is a classifier, derive its log-loss from a Bernoulli likelihood, and choose evaluation measures that match the cost of mistakes.</p>
     <p class="small"><strong>Badge:</strong> W01-S05 · Probability Auditor</p>
 
@@ -51,6 +51,18 @@
         <p>Therefore \(\beta^{(1)}=\beta^{(0)}-0.1(0,-0.5)^T=(0,0.05)^T\). The positive slope makes the model assign a larger probability to the example with \(x=2\).</p>
       </div>
       <p class="source-note">The update is transcribed from the supplied booklet, Chapter 12. The two-row numerical demonstration is a teaching example, not a quiz-bank item.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="notebook-bridge">
+      <h2 class="subheading" id="notebook-bridge">From the supplied notebook to scikit-learn</h2>
+      <p>The scratch notebook’s steps have a simple map: calculate a score \(z=X\beta\), turn it into a probability with the sigmoid, measure prediction error with binary cross-entropy, and update the coefficients. In scikit-learn, the fitted weights are available as <code>coef_</code> and <code>intercept_</code>; use <code>predict_proba</code> to inspect probabilities and <code>predict</code> to get class labels.</p>
+      <p class="callout warning"><strong>Important correction when checking predictions:</strong> a probability such as <code>0.83</code> is not exactly equal to the label <code>1</code>. Convert probabilities into labels with a threshold, then compare labels. For a teaching example with threshold 0.5:</p>
+      <pre class="code-sample"><code># For binary labels 0 and 1; assume model is already fitted.
+probabilities = model.predict_proba(X_valid)[:, 1]
+predicted_labels = (probabilities >= 0.5).astype(int)
+accuracy = (predicted_labels == y_valid).mean()</code></pre>
+      <p class="small">Use validation rows while developing; after choices are fixed, evaluate once on untouched test rows. Choose a non-default threshold on validation data when mistake costs call for it.</p>
+      <p class="source-note">Optional reference: scikit-learn’s <a href="https://github.com/scikit-learn/scikit-learn/blob/main/doc/modules/linear_model.rst">linear-model guide</a> describes logistic regression and its classifier role; the <a href="https://github.com/scikit-learn/scikit-learn/blob/main/doc/common_pitfalls.rst">common pitfalls guide</a> covers leakage-safe preprocessing.</p>
     </section>
 
     <section class="widget" aria-labelledby="predict-title">
@@ -122,7 +134,7 @@ model.fit(X_train_unscaled, y_train)  # May raise a ConvergenceWarning</code></p
     <p><strong>After this session, you can:</strong> derive log-loss from Bernoulli likelihood, explain a probability threshold, and select classification metrics based on the decision being made.</p>
 
     <section class="panel" aria-labelledby="self-check" data-session-badge="W01-S05">
-      <h2 class="subheading" id="self-check">Three-question self-check · existing bank</h2>
+      <h2 class="subheading" id="self-check">Topic 4 self-check · existing bank</h2>
       <p>These existing question IDs cover probability interpretation and classification evaluation. No quiz text or answer key is copied into the lecture site.</p>
       <ul class="quiz-list">
         <li><code>ch11_q01_sigmoid_range</code><a class="button-link quiz-link" data-quiz-unavailable="true" data-quiz-id="ch11_q01_sigmoid_range" data-topic-slug="ch12_logistic_regression" href="#quiz-coming-soon">Checking quiz availability…</a><span class="quiz-status" data-quiz-status aria-live="polite">Checking…</span></li>

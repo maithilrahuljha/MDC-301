@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Week 1 Session 2 outline: Python tools, scikit-learn estimators, and leakage-safe workflow.">
-  <title>Session 2 · Tools and the estimator workflow · MDC-301</title>
+  <meta name="description" content="Week 1 Topic 2: the Python tools and scikit-learn ecosystem, including the estimator workflow.">
+  <title>Session 2 · Tools and the scikit-learn ecosystem · MDC-301</title>
   <link rel="stylesheet" href="../shared/css/site.css">
   <script defer src="../shared/js/site.js"></script>
   <script defer src="../shared/js/quiz-links.js"></script>
@@ -17,11 +17,22 @@
   <main id="main">
     <p class="breadcrumb"><a href="index.html">Week 1</a> / Session 2</p>
     <span class="status-pill outline">Outline · selected derivation and practice path</span>
-    <h1 class="page-heading">Tools and the estimator workflow</h1>
+    <h1 class="page-heading">Tools and the scikit-learn ecosystem</h1>
     <p class="lede">Promise: read a small scikit-learn workflow, explain what <code>fit</code>, <code>transform</code>, and <code>predict</code> do, and keep held-out data from influencing fitted preprocessing.</p>
     <section class="panel" aria-labelledby="objectives">
       <h2 class="subheading" id="objectives">Learning objectives</h2>
       <ul class="objectives"><li>Name the roles of Python, NumPy, pandas, Matplotlib, and scikit-learn in a small modelling task.</li><li>Distinguish an estimator’s learned attributes (often ending in an underscore) from constructor parameters.</li><li>Explain why preprocessing is fitted on training data only and why a pipeline makes that rule easier to follow.</li></ul>
+    </section>
+    <section class="panel" aria-labelledby="tool-map">
+      <h2 class="subheading" id="tool-map">A small, practical tool map</h2>
+      <div class="grid two">
+        <article class="card"><h3>Python and the data tools</h3><p><strong>Python</strong> is the language; <strong>NumPy</strong> stores numerical arrays; <strong>pandas</strong> helps inspect labelled tables; <strong>Matplotlib</strong> makes plots for checking data and model behaviour.</p></article>
+        <article class="card"><h3>scikit-learn</h3><p>Provides estimators, preprocessing, train/test splitting, cross-validation, and metrics through a consistent fit/transform/predict style.</p></article>
+      </div>
+      <p>Read <code>X</code> as a table: each row is one example and each column is one feature, so its shape is usually <code>(n_samples, n_features)</code>. The one-dimensional target <code>y</code> contains one known answer per row for supervised learning.</p>
+      <pre class="code-sample"><code>model.fit(X_train, y_train)       # learn from training examples
+predictions = model.predict(X_test) # predict for held-out examples</code></pre>
+      <p class="small"><code>fit</code> learns model parameters; a transformer’s <code>transform</code> changes the feature table; <code>predict</code> returns model outputs. Constructor settings such as <code>max_iter</code> are chosen before fitting, while learned attributes such as <code>coef_</code> appear after fitting.</p>
     </section>
     <section aria-labelledby="outline">
       <h2 class="section-heading" id="outline">Session outline</h2>
@@ -36,7 +47,7 @@
       <h2 class="subheading" id="derivation">Selected derivation · mean squared error</h2>
       <p>For observed targets \(y_i\) and predictions \(\hat y_i\), square each residual, sum across examples, and divide by the number of examples:</p>
       <div class="math-text"><p>\[\operatorname{MSE}(y,\hat y)=\frac{1}{n}\sum_{i=1}^{n}(y_i-\hat y_i)^2.\]</p><p>For a fixed model, this is the loss used to compare predictions on a chosen split. It is not permission to select a model repeatedly on the held-out test set.</p></div>
-      <p class="source-note">Scope: custom booklet, Chapters 6–7. The lesson is outlined here; a later course edit should include the full worked workflow.</p>
+      <p class="source-note">Scope: custom booklet, Chapters 5–7. Further reading: scikit-learn’s <a href="https://github.com/scikit-learn/scikit-learn/blob/main/doc/getting_started.rst">Getting Started guide</a> explains the estimator API and pipelines; its <a href="https://github.com/scikit-learn/scikit-learn/blob/main/doc/common_pitfalls.rst">common pitfalls guide</a> explains how pipelines reduce leakage risk.</p>
     </section>
     <section class="bug-challenge" aria-labelledby="bug-title">
       <h2 class="subheading" id="bug-title">Break it / fix it · one-dimensional feature input</h2>
@@ -48,7 +59,7 @@ model.fit(X, y)  # Deliberately wrong: X has shape (n_samples,)</code></pre>
     <aside class="peer-moment"><strong>Peer-visible moment:</strong> pair-check one line of code: point to the first line that learns parameters from data and name which rows it sees.</aside>
     <p><strong>After this session, you can:</strong> trace fit/transform/predict, state the shape of X, and identify which rows each fitted step can see.</p>
     <section class="panel" aria-labelledby="self-check" data-session-badge="W01-S02">
-      <h2 class="subheading" id="self-check">Three-question self-check · existing bank</h2>
+      <h2 class="subheading" id="self-check">Topic 2 self-check · existing bank</h2>
       <p>Open these existing checks from the Week 1 bank; the lecture page stores only IDs and links.</p>
       <ul class="quiz-list">
         <li><code>ch05_q01_python_tools</code><a class="button-link quiz-link" data-quiz-unavailable="true" data-quiz-id="ch05_q01_python_tools" data-topic-slug="ch05_tools_and_sklearn" href="#quiz-coming-soon">Checking quiz availability…</a><span class="quiz-status" data-quiz-status aria-live="polite">Checking…</span></li>

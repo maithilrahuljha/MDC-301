@@ -1,40 +1,43 @@
-# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
-
-name: Python package
+# GitHub Pages serves the static site directly; this workflow only runs checks.
+name: Python tests and lint
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
+  workflow_dispatch:
 
 jobs:
-  build:
-
+  checks:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.10", "3.11"]
+        # The supported project runtime is Python 3.11+.
+        python-version: ["3.11", "3.12", "3.13"]
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install flake8 pytest
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Lint with flake8
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
-      run: |
-        pytest
+      - uses: actions/checkout@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install project and quiz-server dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install flake8 -r requirements.txt -r week1/livequiz/requirements.txt
+      - name: Check static lecture site and manifest
+        run: |
+          python scripts/check_lecture_site.py
+          python scripts/build_lecture_manifest.py --check
+      - name: Lint Python files
+        run: |
+          # Fail for syntax errors and undefined names; report other style issues as warnings.
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Run instructor-repository tests
+        run: |
+          # Student starter tests intentionally fail until students implement the TODOs.
+          # Classroom 50 copies of those tests also share basenames with tests/ and are run separately.
+          python -m pytest -q tests/test_livequiz.py tests/test_result_join.py tests/test_topic_banks.py tests/test_static_quiz.py

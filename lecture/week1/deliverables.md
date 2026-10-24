@@ -6,7 +6,7 @@ Submit or point the instructor to your public course-repository URL. The grader 
 
 - [ ] Your Pages URL opens the repository root and links to `lecture/index.html`.
 - [ ] `Settings → Pages` is configured for branch `main` and folder `/(root)`.
-- [ ] `lecture/index.html` opens; Week 1 has five session links; Week 2–8 each show the correct “Coming in Week N” placeholder.
+- [ ] `lecture/index.html` opens; Week 1 shows the four exact topic headings in order and links through all five session pages; Week 2–8 each show the correct “Coming in Week N” placeholder.
 - [ ] The canonical `lecture/` files are unchanged for the release, except for an explicitly approved update.
 - [ ] `exercises/week1/session1.py` through `session5.py` are present. Add your own solution/output notes only if they contain no private data.
 - [ ] `progress.md` contains all five checked Week 1 lines using the exact IDs `W01-S01` through `W01-S05`.
