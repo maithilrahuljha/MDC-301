@@ -8,7 +8,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PAGES = ROOT / "week1" / "livequiz" / "pages"
-BANKS = ROOT / "week1" / "livequiz" / "topic_banks"
+LIVEQUIZ = ROOT / "week1" / "livequiz"
+QUIZ_FILES = {"before_lab1_questions.json", "between_lab1_and_lab2_questions.json"}
 
 
 class _Ids(HTMLParser):
@@ -22,23 +23,26 @@ class _Ids(HTMLParser):
                 self.ids.append(value)
 
 
-def test_root_pages_redirect_and_nested_app_path() -> None:
+def test_root_pages_redirect_and_static_app_loads_phase_files() -> None:
     root = (ROOT / "index.html").read_text(encoding="utf-8")
     app = (PAGES / "app.js").read_text(encoding="utf-8")
     assert "./week1/livequiz/pages/" in root
-    assert 'fetch(`../topic_banks/${encodeURIComponent(slug)}.json`' in app
+    assert 'fetch(`../${encodeURIComponent(quizDefinition.file)}`' in app
+    assert {path.name for path in LIVEQUIZ.glob("*questions.json")} == QUIZ_FILES
 
 
-def test_selector_matches_all_eight_valid_topic_banks() -> None:
+def test_selector_matches_both_replacement_quizzes() -> None:
     app = (PAGES / "app.js").read_text(encoding="utf-8")
-    slugs = set(re.findall(r'\{ slug: "([a-z0-9_]+)"', app))
-    files = {path.stem for path in BANKS.glob("*.json")}
-    assert len(slugs) == 8
-    assert slugs == files
-    for slug in slugs:
-        quiz = json.loads((BANKS / f"{slug}.json").read_text(encoding="utf-8"))["quiz"]
-        assert quiz["topic_slug"] == slug
-        assert len(quiz["questions"]) == 10
+    files = set(re.findall(r'file: "([a-z0-9_]+\.json)"', app))
+    slugs = set(re.findall(r'slug: "(quiz[12])"', app))
+    assert files == QUIZ_FILES
+    assert slugs == {"quiz1", "quiz2"}
+    for filename, first, last in (
+        ("before_lab1_questions.json", 1, 8),
+        ("between_lab1_and_lab2_questions.json", 9, 20),
+    ):
+        quiz = json.loads((LIVEQUIZ / filename).read_text(encoding="utf-8"))
+        assert [item["id"] for item in quiz["questions"]] == [f"Q{number}" for number in range(first, last + 1)]
 
 
 def test_page_contains_every_dom_id_used_by_app() -> None:
@@ -61,8 +65,11 @@ def test_config_is_blank_and_practice_never_posts_answers() -> None:
     assert "practice answers are never uploaded" in app.lower()
 
 
-def test_supabase_sql_is_insert_only_for_anonymous_visitors() -> None:
+def test_supabase_sql_accepts_new_quiz_slugs_and_keeps_insert_only_policy() -> None:
     sql = (PAGES / "supabase_setup.sql").read_text(encoding="utf-8").lower()
+    assert "add constraint week1_quiz_responses_topic_slug_check check (topic_slug in (" in sql
+    assert "'quiz1', 'quiz2'" in sql
+    assert "^q([1-9]|1[0-9]|20)$" in sql
     assert "enable row level security" in sql
     assert re.search(r"for\s+insert\s+to\s+anon\s+with check\s*\(\s*true\s*\)", sql)
     assert "grant insert on table public.week1_quiz_responses to anon" in sql
@@ -70,11 +77,10 @@ def test_supabase_sql_is_insert_only_for_anonymous_visitors() -> None:
     assert not re.search(r"for\s+(select|update|delete)\s+to\s+anon", sql)
 
 
-def test_instructions_cover_public_access_and_static_limitations() -> None:
-    instructions = (ROOT / "instructions.txt").read_text(encoding="utf-8").lower()
-    assert "deploy from a branch" in instructions
-    assert "do not need a github account" in instructions
-    assert "does not synchronize" in instructions
-    assert "no live class-results screen" in instructions
-    assert "service_role" in instructions
-    assert "not a secure exam" in instructions
+def test_local_launch_instructions_cover_vs_code_and_private_server() -> None:
+    instructions = (ROOT / "live_quiz.txt").read_text(encoding="utf-8").lower()
+    assert "vs code" in instructions
+    assert "quiz_id=quiz1" in instructions
+    assert "quiz_id=quiz2" in instructions
+    assert "127.0.0.1" in instructions
+    assert "do not expose" in instructions

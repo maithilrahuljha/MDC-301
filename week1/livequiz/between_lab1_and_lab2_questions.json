@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "file": "between_lab1_and_lab2_questions.json",
+  "course": "MDC-301",
+  "week": 1,
+  "quiz_id": "quiz2",
+  "title": "BETWEEN LAB 1 AND LAB 2 — HOUR 2 QUICK CHECKS",
+  "phase": "BETWEEN LAB 1 AND LAB 2 — HOUR 2",
+  "instructions": "Poll first, reveal answer second, ask a student to justify third.",
+  "slides": [21, 23, 25, 26, 28, 29, 30, 33, 34, 35, 36, 37],
+  "questions": [
+    {
+      "id": "Q9",
+      "phase": "BETWEEN LAB 1 AND LAB 2 — HOUR 2",
+      "slide": 21,
+      "type": "multiple_choice",
+      "question": "Which of these is a REGRESSION problem?",
+      "options": {
+        "A": "Detecting spam emails",
+        "B": "Predicting tomorrow's temperature",
+        "C": "Recognizing handwritten digits",
+        "D": "Grouping news by topic"
+      },
+      "correct_option": "B",
+      "correct_answer": "Predicting tomorrow's temperature",
+      "explanation": "Temperature is continuous. Spam and digits are classification; grouping news is unsupervised."
+    },
+    {
+      "id": "Q10",
+      "phase": "BETWEEN LAB 1 AND LAB 2 — HOUR 2",
+      "slide": 23,
+      "type": "multiple_choice",
+      "question": "In ŷ = β₀ + β₁x, the coefficient β₁ represents…",
+      "options": {
+        "A": "The predicted value when x = 0",
+        "B": "The change in ŷ per one-unit change in x",
+        "C": "The average prediction error",
+        "D": "The proportion of variance explained"
+      },
+      "correct_option": "B",
+      "correct_answer": "The change in ŷ per one-unit change in x",
+      "explanation": "β₁ is the slope — the change in predicted outcome for a one-unit increase in x."
+    },
+    {
+      "id": "Q11",
+      "phase": "BETWEEN LAB 1 AND LAB 2 — HOUR 2",
+      "slide": 25,
+      "type": "multiple_choice",
+      "question": "In a multiple regression model, what is the best interpretation of coefficient β₁ = 2.0?",
+      "options": {
+        "A": "Increasing x₁ causes the outcome to rise by exactly 2.0",
+        "B": "Holding other included features fixed, a one-unit increase in x₁ is associated with a 2.0-unit increase in predicted outcome",
+        "C": "x₁ explains exactly 2% of the target variance",
+        "D": "x₁ is twice as important as every other feature"
+      },
+      "correct_option": "B",
+      "correct_answer": "Holding other included features fixed, a one-unit increase in x₁ is associated with a 2.0-unit increase in predicted outcome",
+      "explanation": "Multiple-regression coefficients are conditional on the other included features. It is an association, not automatically causal."
+    },
+    {
+      "id": "Q12",
+      "phase": "BETWEEN LAB 1 AND LAB 2 — HOUR 2",
+      "slide": 26,
+      "type": "multiple_choice",
+      "question": "Multiple linear regression differs from simple linear regression in that it:",
+      "options": {
+        "A": "Uses exactly one input feature",
+        "B": "Uses two or more input features",
+        "C": "Can only predict categories",
+        "D": "Does not require training data"
+      },
+      "correct_option": "B",
+      "correct_answer": "Uses two or more input features",
+      "explanation": "Simple linear regression uses one feature; multiple linear regression uses two or more."
+    },
+    {
+      "id": "Q13",
+      "phase": "BETWEEN LAB 1 AND LAB 2 — HOUR 2",
+      "slide": 28,
+      "type": "multiple_choice",
+      "question": "Polynomial regression is still considered a 'linear' model because:",
+      "options": {
+        "A": "It always draws a straight line",
+        "B": "It is linear in its coefficients (parameters)",
+        "C": "It only works on straight-line data",
+        "D": "It uses no parameters"
+      },
+      "correct_option": "B",
+      "correct_answer": "It is linear in its coefficients (parameters)",
+      "explanation": "'Linear' refers to the parameters, not the shape of the curve. The β coefficients appear to the first power."
+    },
+    {
+      "id": "Q14",
+      "phase": "BETWEEN LAB 1 AND LAB 2 — HOUR 2",
+      "slide": 29,
+      "type": "multiple_choice",
+      "question": "How should polynomial degree be selected?",
+      "options": {
+        "A": "Choose the degree with the lowest training error",
+        "B": "Always use the highest degree available",
+        "C": "Compare degrees using validation performance or cross-validation",
+        "D": "Choose the degree that produces the smoothest-looking graph"
+      },
+      "correct_option": "C",
+      "correct_answer": "Compare degrees using validation performance or cross-validation",
+      "explanation": "Training error almost always improves with more flexibility. Generalization is judged on validation/CV data."
+    },
+    {
+      "id": "Q15",
+      "phase": "BETWEEN LAB 1 AND LAB 2 — HOUR 2",
+      "slide": 30,
+      "type": "multiple_choice",
+      "question": "Why does MSE penalize large errors more strongly than small errors?",
+      "options": {
+        "A": "Every residual receives the same penalty",
+        "B": "Residuals are squared before being averaged",
+        "C": "MSE measures only classification errors",
+        "D": "MSE ignores unusually large errors"
+      },
+      "correct_option": "B",
+      "correct_answer": "Residuals are squared before being averaged",
+      "explanation": "Squaring gives large residuals disproportionately larger penalties, which is why MSE and RMSE are sensitive to outliers."
+    },
+    {
+      "id": "Q16",
+      "phase": "BETWEEN LAB 1 AND LAB 2 — HOUR 2",
+      "slide": 33,
+      "type": "multiple_choice",
+      "question": "Logistic regression outputs probabilities via which function?",
+      "options": {
+        "A": "ReLU",
+        "B": "Sigmoid",
+        "C": "Step function",
+        "D": "Absolute value"
+      },
+      "correct_option": "B",
+      "correct_answer": "Sigmoid",
+      "explanation": "The sigmoid maps any real-valued score to a probability between 0 and 1."
+    },
+    {
+      "id": "Q17",
+      "phase": "BETWEEN LAB 1 AND LAB 2 — HOUR 2",
+      "slide": 34,
+      "type": "multiple_choice",
+      "question": "A logistic-regression model outputs P(y=1|x) = 0.72. Using a threshold of 0.50, what is the predicted class?",
+      "options": {
+        "A": "Class 0, because logistic regression cannot output probabilities",
+        "B": "Class 1, because 0.72 is greater than 0.50",
+        "C": "A continuous regression value of 0.72",
+        "D": "Both classes equally likely"
+      },
+      "correct_option": "B",
+      "correct_answer": "Class 1, because 0.72 is greater than 0.50",
+      "explanation": "0.72 exceeds the threshold, so the predicted class is 1."
+    },
+    {
+      "id": "Q18",
+      "phase": "BETWEEN LAB 1 AND LAB 2 — HOUR 2",
+      "slide": 35,
+      "type": "multiple_choice",
+      "question": "What often happens when a binary-classification threshold is lowered from 0.50 to 0.30?",
+      "options": {
+        "A": "The model predicts fewer positive cases",
+        "B": "Recall often increases, while precision may decrease",
+        "C": "The model automatically becomes calibrated",
+        "D": "The model must be retrained before predictions can be made"
+      },
+      "correct_option": "B",
+      "correct_answer": "Recall often increases, while precision may decrease",
+      "explanation": "Lower thresholds flag more cases as positive — catching more true positives but also more false positives."
+    },
+    {
+      "id": "Q19",
+      "phase": "BETWEEN LAB 1 AND LAB 2 — HOUR 2",
+      "slide": 36,
+      "type": "multiple_choice",
+      "question": "With 98% negative samples, the most MISLEADING metric is…",
+      "options": {
+        "A": "Precision",
+        "B": "Recall",
+        "C": "Accuracy",
+        "D": "F1-score"
+      },
+      "correct_option": "C",
+      "correct_answer": "Accuracy",
+      "explanation": "A model that predicts 'negative' for everyone scores 98% accuracy while finding zero positives."
+    },
+    {
+      "id": "Q20",
+      "phase": "BETWEEN LAB 1 AND LAB 2 — HOUR 2",
+      "slide": 37,
+      "type": "multiple_choice",
+      "question": "Which formula defines precision?",
+      "options": {
+        "A": "TP/(TP+FP)",
+        "B": "TP/(TP+FN)",
+        "C": "TN/(TN+FP)",
+        "D": "(TP+TN)/N"
+      },
+      "correct_option": "A",
+      "correct_answer": "TP/(TP+FP)",
+      "explanation": "Precision = true positives divided by all predicted positives (TP + FP)."
+    }
+  ]
+}

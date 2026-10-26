@@ -32,14 +32,19 @@
       return;
     }
 
-    let bank;
-    try {
-      const bankUrl = new URL(config.source, document.baseURI);
-      const bankResponse = await fetch(bankUrl, { cache: "no-cache" });
-      if (!bankResponse.ok) throw new Error("Quiz bank not found.");
-      bank = await bankResponse.json();
-    } catch (_error) {
-      links.forEach((link) => unavailable(link, "Quiz coming soon. The linked quiz bank is not available here."));
+    const sourcePaths = Array.isArray(config.sources)
+      ? config.sources
+      : (config.source ? [config.source] : []);
+    const banks = [];
+    for (const source of sourcePaths) {
+      try {
+        const bankUrl = new URL(source, document.baseURI);
+        const bankResponse = await fetch(bankUrl, { cache: "no-cache" });
+        if (bankResponse.ok) banks.push(await bankResponse.json());
+      } catch (_error) { /* A missing phase bank leaves only its own links unavailable. */ }
+    }
+    if (!banks.length) {
+      links.forEach((link) => unavailable(link, "Quiz coming soon. The linked quiz banks are not available here."));
       return;
     }
 
@@ -58,13 +63,13 @@
 
     for (const link of links) {
       const id = link.dataset.quizId || "";
-      if (!Array.isArray(config.ids) || !config.ids.includes(id) || !hasId(bank, id)) {
+      if (!Array.isArray(config.ids) || !config.ids.includes(id) || !banks.some((bank) => hasId(bank, id))) {
         unavailable(link, "Quiz coming soon. This ID is not present in the configured bank.");
         continue;
       }
       const target = new URL(config.poll, document.baseURI);
       target.searchParams.set("question_id", id);
-      if (link.dataset.topicSlug) target.searchParams.set("topic", link.dataset.topicSlug);
+      if (link.dataset.quizSlug) target.searchParams.set("quiz", link.dataset.quizSlug);
       link.href = target.href;
       link.textContent = "Open this poll question";
       link.removeAttribute("aria-disabled");
@@ -83,7 +88,7 @@
         } catch (_error) { /* Badge completion remains a student self-attestation if storage is blocked. */ }
       });
       const status = link.closest("li")?.querySelector("[data-quiz-status]");
-      if (status) status.textContent = "ID found in the existing question bank; opens the existing poll page.";
+      if (status) status.textContent = "ID found in a provided Week 1 quiz; opens that question.";
     }
   }
 

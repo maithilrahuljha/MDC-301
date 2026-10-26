@@ -19,16 +19,16 @@
       "git_blob_sha1": "69f2f8f4e016188dd1211a4f9130837503a145c3"
     },
     "lecture/shared/js/quiz-links.js": {
-      "sha256": "0e0efdaa17a4b4fd073029cad556d37d91a70c55439145fe1066590f117e44b7",
-      "git_blob_sha1": "83cbe257b52a698d29bb9c1d60f91f3909edb741"
+      "sha256": "3f2c07d1350e78a4c05505f363c85eddcbc930f085158201c7b1f8e2413c026c",
+      "git_blob_sha1": "cea7ac8420f6df446302e207faf2fa6412bc5219"
     },
     "lecture/shared/js/site.js": {
-      "sha256": "b743968684fb484f7728143a467ad92232e9c1ba530a537a6532205b85c4af80",
-      "git_blob_sha1": "934d0c1c74fe255f7022be35019a09cd777cfb84"
+      "sha256": "f835790d941c421c90ce13af8c42a0e83feb54a6b1bab12bd550951b177efcf8",
+      "git_blob_sha1": "afaa32b72eca8208fb521c85aa51baf1c823ae05"
     },
     "lecture/week1/README.md": {
-      "sha256": "70b67d8fc6e6291547e974d6dc49d038c84f32f20cb45250f819ec1081f94219",
-      "git_blob_sha1": "f36a1c9e1e1726e4d54ff476837d6eeada1978a7"
+      "sha256": "0186685ef103b02445867460885889eb1e3a870f25bfaf6a6b5a557d20ee7918",
+      "git_blob_sha1": "93de9743c9344a9956b8b66384e423b86cac4e79"
     },
     "lecture/week1/badges/badges.json": {
       "sha256": "984dfabeb2710617112d889425f0105a4108be0c3bc8fbce3a95046ec0b67990",
@@ -39,40 +39,40 @@
       "git_blob_sha1": "c4e985ec4d71fb65ac877244fd056ed55432e5c9"
     },
     "lecture/week1/deliverables.md": {
-      "sha256": "8f7b4f57db3ebe05eed971c6171824d8a5fa1ab36a2a740c11b3d1de9ec21760",
-      "git_blob_sha1": "53f685f3372872a1ce68a0d7bae530d9d5293484"
+      "sha256": "565c347c5f2b90fa66921bd746cd56f175320790840f53551c40a6c4e055dc93",
+      "git_blob_sha1": "487c5cfb5c811c68e2cc5786f328a903cd983322"
     },
     "lecture/week1/facilitator-runbook.md": {
-      "sha256": "2d32cb04995f088781fc91b736d878e94fdb2793f801bfd71d2a6df28752729d",
-      "git_blob_sha1": "fcf0f997d75fda813e9411cc703084cadb15f047"
+      "sha256": "837f1d4fba4c3a31bd76a6c5b4ba319ecf9bb84d562b03185443b0f1bee54c72",
+      "git_blob_sha1": "b3d569a7961e329a879fad2b8c1590aca9532be7"
     },
     "lecture/week1/index.html": {
-      "sha256": "c9cdf022fcfc8d59a226a933ccd9d97d208b1ffa9a2e3903f877121dcc04845f",
-      "git_blob_sha1": "20af964c49cf25f38fc68c57323e0a2918ca911c"
+      "sha256": "8079a8eb8eb03e609991a2362bb98caa24df615cd62a4bfd07507ab44e7d530d",
+      "git_blob_sha1": "d610380e00ece43165a78d86073d6f3e398488d9"
     },
     "lecture/week1/quiz-links.json": {
-      "sha256": "16dc34131b07209113a7df2b60841257ad5024cfafc4c42614d8aca31bc50a1e",
-      "git_blob_sha1": "a41f97a118019f2cbdf98f9d35a1d9e33393c835"
+      "sha256": "925c2d545ca54546b3f8e7e09dd0b04c6f526b905879b1131ed917b346964219",
+      "git_blob_sha1": "62ddda0d01e8a23afb0f1075eea79848b06a988f"
     },
     "lecture/week1/session1.html": {
-      "sha256": "c6ab627aaf4be0d6e8cc2b3c7afc84c1f6c1dc33469fb76c6fce6d614616425d",
-      "git_blob_sha1": "f25016c5a610320c09133881ef1d8dd83aca9d1f"
+      "sha256": "b411ade1c421e8670090543dfba45ad5a95e55ca28b4c264d756293cab999519",
+      "git_blob_sha1": "aad575450945b73d0f9c6bba7ad8a83cdee12959"
     },
     "lecture/week1/session2.html": {
-      "sha256": "98fa23cf89edbdb6150866ceedf0b926f6e9eae8ab3713f3c472679414221d27",
-      "git_blob_sha1": "e0b27f375d6195d7a685ea30ea08b27193d8ff72"
+      "sha256": "187f162a7e4d0737694d2bb4ee002072189911071133dd2e7dcebffa19d46f44",
+      "git_blob_sha1": "5b7a56edc1391b935e30ea48dedce6202fc6214d"
     },
     "lecture/week1/session3.html": {
-      "sha256": "a95f2fc4f365a23ce7d591bf5b728e272fb4df3fd50157a1cd6c79e4b3e6e913",
-      "git_blob_sha1": "8231535e6d557d980a358d795a6203fbb68f0022"
+      "sha256": "93ae9a5fe6601668eecf4feeef6b3f88e71d3c23b6256a75eb13505253115b82",
+      "git_blob_sha1": "7c7c6307a736416f597f429dba35c697f7c2eda3"
     },
     "lecture/week1/session4.html": {
-      "sha256": "08ff125ea83afc64799c9ae6ab31a3b71ffe50de4431e82b4cb56e37657cff85",
-      "git_blob_sha1": "ade4c2b2407922a969c6d73b047337e84ff84bb3"
+      "sha256": "76250354f81ba357b28fd496d0f11751b778bf4bf0e5f57c5503b42eec0e6b64",
+      "git_blob_sha1": "ace63f793eb1993db4f7d8bb651dc746eca9a42d"
     },
     "lecture/week1/session5.html": {
-      "sha256": "f54180a3b9171c3a304cdc6f2af82bd43aa71215bd4e8136485b3dea1b6403ac",
-      "git_blob_sha1": "2cefdf34208955ca4e86e074aa27550a40112cc5"
+      "sha256": "4d2e94250f23e30b0ee0df8f5ba3c34d5bcd39489164bce3996907be8269811c",
+      "git_blob_sha1": "74669b3d3b32055c6b289163a682107b6725ea90"
     },
     "lecture/week2/index.html": {
       "sha256": "da8291328c86ee0a90c84311f10c8eae1d68736a49df983c4f0dfa670828ed0a",

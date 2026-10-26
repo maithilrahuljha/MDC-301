@@ -105,7 +105,7 @@ precision=1.000 recall=1.000
 
 These values are stable for the fixed data/split with the listed dependency range. If a compatible scikit-learn release produces a different final decimal, record it with `import sklearn; print(sklearn.__version__)` and confirm the confusion counts explain the difference.
 
-## Predict the output — live-quiz question `ch11_q02_probability_label`
+## Predict the output — worksheet self-check
 
 ```python
 probability = 0.63

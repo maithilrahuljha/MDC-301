@@ -12,7 +12,7 @@ Submit or point the instructor to your public course-repository URL. The grader 
 - [ ] `progress.md` contains all five checked Week 1 lines using the exact IDs `W01-S01` through `W01-S05`.
 - [ ] Add a short reflection in `progress.md`: one idea learned, one limitation you will check, and one next step.
 - [ ] Add one short bug-fix note for each of the five sessions in `progress.md` (what fails, the fix, and one limitation).
-- [ ] Complete the three existing poll checks linked from each session page; participation is recorded by the instructor’s separate polling tool, not by this static site.
+- [ ] Open the Week 1 quick-check links on each session page; participation is recorded by the instructor’s separate polling tool, not by this static site.
 
 ## Optional
 

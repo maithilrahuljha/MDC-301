@@ -27,7 +27,8 @@
 <body>
 <main>
   <h1>MDC-301 · Week 1 live check host</h1>
-  <p class="muted">Selected test: <strong>{{ quiz_name }}</strong> · {{ quiz_question_count }} questions</p>
+  <p class="muted">Selected quiz: <strong>{{ quiz_name }}</strong> · {{ quiz_question_count }} questions</p>
+  <p class="muted">{{ quiz_phase }} · {{ quiz_instructions }}</p>
   {% if not authenticated %}
   <section class="card">
     <p>Enter the instructor key from the private `.env` file on the server. Do not share it with students.</p>

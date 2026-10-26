@@ -90,7 +90,7 @@ pipeline_steps=['standardscaler', 'linearregression']
 predictions=2
 ```
 
-## Predict the output — live-quiz question `ch06_q02_estimator_api`
+## Predict the output — worksheet self-check
 
 After fitting `X_train = [[1], [2], [3]]` and `y_train = [2, 4, 6]` with `LinearRegression`, what does this line print?
 

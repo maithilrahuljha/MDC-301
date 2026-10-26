@@ -5,14 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#10233f">
   <meta name="description" content="MDC-301 Week 1 quizzes: follow along in class, then practise again.">
-  <title>MDC-301 · Week 1 Quiz</title>
+  <title>MDC-301 · Week 1 Quizzes</title>
   <link rel="stylesheet" href="./styles.css">
   <script src="./config.js"></script>
   <script src="./app.js" defer></script>
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="./" aria-label="MDC-301 Week 1 Quiz home">
+    <a class="brand" href="./" aria-label="MDC-301 Week 1 Quizzes home">
       <span class="brand-mark">M</span>
       <span><strong>MDC-301</strong><small>Module 1 · Week 1</small></span>
     </a>
@@ -24,8 +24,8 @@
       <div class="hero-copy">
         <p class="eyebrow">LECTURE CHECKS · SELF-PACED REVIEW</p>
         <h1>Learn it together.<br><span>Practise it again.</span></h1>
-        <p class="hero-text">Choose a Week 1 topic, answer along with your instructor, or repeat the quiz on your own after class.</p>
-        <div class="hero-pills"><span>8 topics</span><span>10 questions each</span><span>Phone friendly</span></div>
+        <p class="hero-text">Choose one of the two Week 1 quick checks, answer along with your instructor, or practise the same quiz at your own pace.</p>
+        <div class="hero-pills"><span>2 quizzes</span><span>Q1–Q20</span><span>Phone friendly</span></div>
       </div>
       <div class="hero-art" aria-hidden="true">
         <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
@@ -46,10 +46,10 @@
             <option value="lecture">Lecture mode — follow your instructor's pace</option>
             <option value="practice">Practice mode — go at your own pace</option>
           </select>
-          <small>Practice gives feedback after each answer. Retake a topic whenever you like.</small>
+          <small>Practice gives feedback after each answer. Retake either quiz whenever you like.</small>
         </label>
         <label class="field">
-          <span>Week 1 topic</span>
+          <span>Week 1 quiz</span>
           <select id="topic-select"></select>
           <small id="topic-source-note"></small>
         </label>
@@ -73,8 +73,8 @@
 
     <section class="panel quiz-panel" id="quiz-panel" hidden>
       <div class="quiz-topline">
-        <div><p class="eyebrow" id="quiz-mode-label">LECTURE MODE</p><h2 id="quiz-topic-title">Topic</h2></div>
-        <span class="step-chip" id="question-counter">Question 1 of 10</span>
+        <div><p class="eyebrow" id="quiz-mode-label">LECTURE MODE</p><h2 id="quiz-topic-title">Week 1 quiz</h2></div>
+        <span class="step-chip" id="question-counter">Question 1</span>
       </div>
       <div class="progress-track" aria-hidden="true"><span id="progress-bar"></span></div>
       <div class="question-card">
@@ -100,22 +100,22 @@
 
     <section class="panel completion-panel" id="completion-panel" hidden>
       <div class="completion-icon" aria-hidden="true">✓</div>
-      <p class="eyebrow">TOPIC COMPLETE</p>
+      <p class="eyebrow">QUIZ COMPLETE</p>
       <h2 id="completion-title">Nice work.</h2>
       <p id="completion-summary" class="completion-summary"></p>
       <div class="completion-actions">
-        <button id="again-button" class="button button-primary" type="button">Try this topic again</button>
-        <button id="change-topic-button" class="button button-quiet" type="button">Choose another topic</button>
+        <button id="again-button" class="button button-primary" type="button">Try this quiz again</button>
+        <button id="change-topic-button" class="button button-quiet" type="button">Choose the other quiz</button>
       </div>
     </section>
 
     <section class="how-it-works">
-      <div><span class="number-badge">01</span><h3>During the lecture</h3><p>Choose Lecture mode. Your instructor announces the topic and when to move on. Devices do not sync, and there is no live class-results screen.</p></div>
-      <div><span class="number-badge">02</span><h3>After the lecture</h3><p>Choose Practice mode to retry questions at your own speed. Practice uses this device for feedback and never uploads answers.</p></div>
+      <div><span class="number-badge">01</span><h3>During the lecture</h3><p>Choose Lecture mode. Your instructor announces the quiz and when to move on. This static page does not synchronize devices or show live class results.</p></div>
+      <div><span class="number-badge">02</span><h3>After the lecture</h3><p>Choose Practice mode to retry either quiz at your own speed. Practice uses this device for feedback and never uploads answers.</p></div>
       <div><span class="number-badge">03</span><h3>Response data</h3><p>Lecture answers upload only when the instructor has connected Supabase. The public page never asks for a password.</p></div>
     </section>
 
-    <aside class="scope-note"><strong>Course chapter note:</strong> Supervised vs Unsupervised is a Week 1 topic from source Chapter 1. It is not source Chapter 3, which is outside this week's scope.</aside>
+    <aside class="scope-note"><strong>Quiz sequence:</strong> Quiz 1 covers the checks before Lab 1 (slides 5–17). Quiz 2 covers the checks between Lab 1 and Lab 2 (slides 21–37).</aside>
   </main>
   <footer class="site-footer"><span>MDC-301 · Week 1</span><span>Formative learning check · not an exam</span></footer>
 </body>

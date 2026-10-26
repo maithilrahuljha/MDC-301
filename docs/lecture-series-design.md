@@ -4,17 +4,17 @@
 
 **Narrative frame:** a service-monitoring team needs to make one better decision from data: plan staffing from demand and recognize a station risk before service degrades. Each meeting moves that decision one step through the model lifecycle. The story makes features, targets, model choice, residuals, class thresholds, and evaluation feel connected rather than like a list of algorithms. It does not introduce the later rainfall, Falcon 9, or careers units; those are only foreshadowed in the week map.
 
-Without the recurring service-monitoring decision, students can experience lifecycle, regression, polynomial features, and logistic classification as unrelated formulas and APIs; there is no reason to ask when a prediction is useful or which error matters. The story supplies that through-line and a low-stakes peer explanation without pretending that all weeks share one dataset. The loop for each meeting is deliberately small and repeatable: (1) state a decision and a visible promise; (2) teach one concept or derivation in a short block; (3) use an existing question-bank ID for a quick check; (4) predict or repair a result; (5) compare reasoning with a partner; (6) record a badge and a one-line explanation. Three existing checks are linked from each session page; the lecture does not duplicate stems, options, or keys. Poll participation is a separate service/export, not a data collection feature of this lecture site.
+Without the recurring service-monitoring decision, students can experience lifecycle, regression, polynomial features, and logistic classification as unrelated formulas and APIs; there is no reason to ask when a prediction is useful or which error matters. The story supplies that through-line and a low-stakes peer explanation without pretending that all weeks share one dataset. The loop for each meeting is deliberately small and repeatable: (1) state a decision and a visible promise; (2) teach one concept or derivation in a short block; (3) use a Week 1 quick-check question by ID; (4) predict or repair a result; (5) compare reasoning with a partner; (6) record a badge and a one-line explanation. The two new phase-specific quizzes are linked from the session pages using their stable Q1–Q20 IDs; the lecture does not duplicate stems, options, or keys. Poll participation is a separate service/export, not a data collection feature of this lecture site.
 
-| Top-level topic (exact order and wording) | Session page | Selected derivation / practice | Existing check IDs |
+| Top-level topic (exact order and wording) | Session page | Selected derivation / practice | Week 1 quick-check IDs |
 |---|---|---|---|
-| 1. ML lifecycle, supervised vs unsupervised learning | 1 | Empirical-risk objective; frame a service decision; separate labelled targets from discovered groups | `ch01_q01_target_feature`, `ch01_q02_supervised_unsupervised`, `ch02_q01_lifecycle_order` |
-| 2. Tools and the scikit-learn ecosystem | 2 | MSE; fit/transform/predict; training-only preprocessing and pipelines | `ch05_q01_python_tools`, `ch06_q02_estimator_api`, `ch06_q03_transform_train_only` |
-| 3. Simple, multiple and polynomial regression | 3 (simple OLS) | OLS first-order conditions (full derivation), a one-feature fit, and residual diagnostics | `ch08_q01_slope_intercept`, `ch08_q02_predict_output`, `ch08_q03_residual_plot` |
-| 3. Simple, multiple and polynomial regression | 4 (multiple + polynomial) | Matrix normal equations; feature expansion; degree/overfitting check (outline) | `ch09_q01_multiple_features`, `ch10_q02_polynomial_basis`, `ch10_q04_ridge` |
-| 4. Logistic regression as a classification method | 5 | Log-loss from Bernoulli maximum likelihood; one gradient step; threshold and evaluation | `ch11_q01_sigmoid_range`, `ch11_q02_probability_label`, `ch12_q03_precision_recall_imbalanced` |
+| 1. ML lifecycle, supervised vs unsupervised learning | 1 | Empirical-risk objective; frame a service decision; separate labelled targets from discovered groups | Q1–Q4 |
+| 2. Tools and the scikit-learn ecosystem | 2 | MSE; fit/transform/predict; training-only preprocessing and pipelines | Q5–Q8 |
+| 3. Simple, multiple and polynomial regression | 3 (simple OLS) | OLS first-order conditions (full derivation), a one-feature fit, and squared-error interpretation | Q9, Q10, Q15 |
+| 3. Simple, multiple and polynomial regression | 4 (multiple + polynomial) | Matrix normal equations; feature expansion; degree/overfitting check (outline) | Q11–Q14 |
+| 4. Logistic regression as a classification method | 5 | Log-loss from Bernoulli maximum likelihood; one gradient step; threshold and evaluation | Q16–Q20 |
 
-The top-level order has **four topics across the existing five session pages**; Sessions 3 and 4 are two parts of Topic 3, not separate topics. Their self-check links are grouped under that shared topic. Existing question IDs and stems are unchanged; the lecture only references existing IDs. Sessions 1, 2, and 4 are explicitly marked **outline** pages with objectives and selected derivations. Sessions 3 and 5 are the complete worked HTML lessons. Each session has one “Break it / fix it” challenge: data leakage (S1), the scikit-learn 2-D reshape rule (S2), the R² baseline interpretation (S3), unnecessary polynomial degree (S4), and a logistic convergence warning (S5). Session 5 also explains that probability scores must be thresholded to compare with class labels, that the supplied notebook’s training score is not a generalization estimate, and that thresholds are chosen without peeking at test labels. Week 1 uses only the requested scope and excludes booklet Chapters 3–4.
+The top-level order has **four topics across the existing five session pages**; Sessions 3 and 4 are two parts of Topic 3, not separate topics. Their self-check links are grouped under that shared topic. The 20 supplied quick checks are linked by stable IDs, while question text and answer keys remain in the two Week 1 JSON files. Sessions 1, 2, and 4 are explicitly marked **outline** pages with objectives and selected derivations. Sessions 3 and 5 are the complete worked HTML lessons. Each session has one “Break it / fix it” challenge: data leakage (S1), the scikit-learn 2-D reshape rule (S2), the R² baseline interpretation (S3), unnecessary polynomial degree (S4), and a logistic convergence warning (S5). Session 5 also explains that probability scores must be thresholded to compare with class labels, that the supplied notebook’s training score is not a generalization estimate, and that thresholds are chosen without peeking at test labels. Week 1 uses only the requested scope and excludes booklet Chapters 3–4.
 
 **Source and assumptions.** The user-provided *Machine Learning: A Beginner-Friendly Guide* PDF was extracted and checked for the OLS derivation (Chapter 8.3, printed p. 26) and log-loss/gradient derivation (Chapter 12, printed pp. 45–47); those equations and local notation are transcribed in the session pages. The supplied ML-vs-conventional, labelled-vs-unlabelled, train/test/cross-validation, linear-regression, and Day 3/Day 5 worksheets informed the plain-language explanations. The user-pasted linear and logistic regression notebooks supply the worked-example context; their data downloads are not required, and misleading training-only/exact-probability accuracy checks are corrected in the lesson. Some slide PDFs yielded little or no selectable text, so no verbatim claim is attributed to them. Géron is supplementary, not the scope authority. Optional official scikit-learn references on estimators, linear models, preprocessing, cross-validation, and common pitfalls are linked from the Week 1 pages and were checked on 2026-10-24. No official timetable, device inventory, or module-breakdown PDF was available in this checkout. The runbook assumes five 90-minute meetings for planning only; the instructor must fill in the actual schedule and device/network plan before class.
 
@@ -29,7 +29,7 @@ Why this option rather than the named alternatives:
 - **Quarto/Marp:** useful authoring systems, but require a render/build workflow and generated outputs; that is unnecessary for this no-build static teaching surface.
 - **Plain HTML:** direct editing in GitHub’s browser UI, stable relative paths, simple diffs, keyboard-visible controls, and one deployment path. The trade-off is fewer generator conveniences; the shared shell and checker scripts supply consistency.
 
-MathJax and Pyodide are the only optional browser CDNs. If either is blocked, surrounding explanations and expected outputs remain available. The site does not autoplay, request an account, or send lesson-cell data to a server. The optional existing quiz application is a separate dependency.
+MathJax and Pyodide are the only optional browser CDNs. If either is blocked, surrounding explanations and expected outputs remain available. The site does not autoplay, request an account, or send lesson-cell data to a server. The optional Week 1 static quiz application is a separate dependency.
 
 ### Annotated tree
 
@@ -49,13 +49,13 @@ lecture/
   week1/
     index.html                     Exact four-topic order mapped to five session pages
     day0.html                      Student one-page setup guide
-    session1.html                  Outline, objectives, selected derivation and three existing IDs
-    session2.html                  Outline, objectives, selected derivation and three existing IDs
-    session3.html                  Complete OLS lesson, checked derivation, Pyodide cell, fix-it, IDs
-    session4.html                  Outline, objectives, normal equations and three existing IDs
-    session5.html                  Complete logistic lesson, MLE derivation, gradient step, cell, IDs
+    session1.html                  Outline, objectives, selected derivation and Q1–Q4
+    session2.html                  Outline, objectives, selected derivation and Q5–Q8
+    session3.html                  Complete OLS lesson, checked derivation, Pyodide cell, fix-it, Q9/Q10/Q15
+    session4.html                  Outline, objectives, normal equations and Q11–Q14
+    session5.html                  Complete logistic lesson, MLE derivation, gradient step, cell, Q16–Q20
     facilitator-runbook.md         Five 90-minute schedules; Session 1 first ten minutes scripted
-    README.md                      Scope/source and current quiz-path discrepancy
+    README.md                      Week 1 scope, source notes, and quiz paths
     quiz-links.json                Link-only mapping; stores no quiz question content
     badges/badges.json             Five stable Week 1 badge definitions
   week2/index.html                 Styled “Coming in Week 2” placeholder
@@ -74,7 +74,7 @@ scripts/
   build_student_hub.py              Optional opt-in, local gallery generator
 ```
 
-No `quizzes/week1/` directory exists in the current checkout. The current legacy bank with the linked IDs is `week1/livequiz/questions.json`; eight topic JSONs are under `week1/livequiz/topic_banks/`, and their IDs use a different scheme. The lecture links use IDs confirmed in the existing daily bank and do not copy, move, re-key, or edit quiz content. `week1/livequiz/pages/app.js` has only a URL adapter for `?question_id=` so a link opens that existing item; question stems and answer keys remain unchanged. The Pages app is not a real-time aggregate by itself. If a future bank/tool is supplied, change only that week’s link map and verify that IDs exist; never invent a replacement ID.
+The Week 1 quiz sources are `week1/livequiz/before_lab1_questions.json` (Q1–Q8) and `week1/livequiz/between_lab1_and_lab2_questions.json` (Q9–Q20). The lecture link map verifies IDs across both files; each link opens one question in the static quiz app, while the full quiz files remain selectable there. The Pages app is not a real-time aggregate by itself. If a future week receives a quiz bank, update only that week’s link map and verify IDs without copying stems or keys into lecture pages.
 
 ## 3. Pyodide decision and graceful fallback
 
@@ -99,7 +99,7 @@ The shared runner uses `loadPyodide({indexURL: "https://cdn.jsdelivr.net/pyodide
 
 Week 1 has five badges, one per session: `W01-S01 Problem Framer`, `W01-S02 Workflow Guard`, `W01-S03 Line Fitter`, `W01-S04 Feature Shaper`, `W01-S05 Probability Auditor`. Stable ID format is `WNN-SNN`; each lecture week adds five definitions in `lecture/weekN/badges/badges.json`. Names can reflect that week’s content, but IDs and storage format do not change. The site records local completion in browser key `mdc301.lecture.badges.v1`; it then supplies a copyable Markdown line for `progress.md`. When poll links are available, it records only which existing IDs were opened in `mdc301.selfcheck.opened.v1` before enabling the badge; it never records answers. If links are missing or browser storage is blocked, use the instructor’s verbal/paper fallback and honest self-attestation. There is no server or answer telemetry. The script checks all five Week 1 lines in the student’s tracked file.
 
-Each Week 1 page links three question IDs already present in the current bank. `lecture/shared/js/quiz-links.js` fetches only the configured source JSON and checks for an exact `id`; it does not inspect or validate quiz wording, choices, correct answers, difficulty, or quality. The existing poll page receives `question_id` and `topic` query parameters. If the bank, ID, poll page, or network is unavailable, the link becomes keyboard-readable **Quiz coming soon**. A lecture-only copy therefore renders without quiz files. Students do not need to pull quiz files weekly; the separate quiz/poll workflow remains separate.
+The Week 1 session pages link all 20 supplied Q IDs across the five sessions. `lecture/shared/js/quiz-links.js` fetches the configured phase JSON files and checks for exact `id` values; it does not inspect or validate quiz wording, choices, correct answers, difficulty, or quality. The poll page receives `question_id` and `quiz` query parameters. If a bank, ID, poll page, or network is unavailable, the link becomes keyboard-readable **Quiz coming soon**. A lecture-only copy therefore renders without quiz files. Later weeks can use their own confirmed quiz source and IDs without copying question text or keys into lecture pages.
 
 ## 5. Weekly maintenance contract
 
@@ -130,11 +130,11 @@ After review, merge that student branch into their own `main`. Pages publishes f
 ### Backward-compatibility contract
 
 - Keep stable public URLs `lecture/weekN/` and `lecture/weekN/sessionM.html` after a week is released; do not rename or move a released week.
-- Keep `lecture/shared/css/site.css` class names used by pages, the localStorage key, the `WNN-SNN` ID format, badge line grammar, `quiz-links.json` fields (`schema_version`, `week`, `source`, `poll`, `ids`), and the graceful missing-quiz state.
+- Keep `lecture/shared/css/site.css` class names used by pages, the localStorage key, the `WNN-SNN` ID format, badge line grammar, `quiz-links.json` fields (`schema_version`, `week`, `sources`, `poll`, `ids`, `missing_label`), and the graceful missing-quiz state.
 - Keep paths relative; do not introduce a root-absolute `/lecture/...` link that breaks a project Pages URL under `/MDC-301/`.
 - A breaking shared CSS/JS or badge schema change needs a versioned migration note and a regression run over every released week.
 - Check that `git diff --name-only main -- lecture/week1/ ... lecture/weekN-1/` is empty before release. Do not rewrite older week files to make the new week easier.
-- Quiz content arrives via its separate workflow; students do not sync question files as part of the weekly lecture copy. Only confirmed IDs and link metadata belong in a week’s lecture folder.
+- Week 1 uses the two supplied phase files under `week1/livequiz/`; the lecture folder stores only confirmed Q IDs and source/poll link metadata. Future weeks may add their own question files without copying stems or answer keys into lecture pages.
 
 ## 6. Accessibility, privacy, and integrity
 
@@ -184,7 +184,7 @@ The automated status script covers URLs, lecture hashes, all eight week indexes/
 - [ ] Confirm Week 1 scope and official timetable/device details; fill instructor-only placeholders.
 - [ ] Confirm all eight week index links return a page; Week 2–8 say “Coming in Week N.”
 - [ ] Review the checked booklet derivations and the two complete session recaps.
-- [ ] Confirm all 15 session-page question IDs resolve against the current bank; do not edit quiz files.
+- [ ] Confirm all 20 session-page question IDs resolve across the two Week 1 quiz files; preserve the supplied quiz text and keys.
 - [ ] Test that a lecture-only copy renders and missing quiz files say “Quiz coming soon.”
 - [ ] Keyboard-test, narrow-screen test, reduced-motion test, and inspect high contrast.
 - [ ] Run local checker, regenerate manifest, test Pages preview, and compare the old-week diff.
@@ -221,4 +221,4 @@ No Beamer source deck was present in this checkout, so no slide file is changed.
 - Remove Chapter 4 from Week 1; it is out of scope and may be reserved for the later career unit.
 - Keep Chapter 1 and Chapter 2, then insert the tools/scikit-learn/API content from Chapters 5–6, regression framing from Chapter 7, simple OLS from Chapter 8, multiple regression from Chapter 9, polynomial regression from Chapter 10, and logistic regression/training from Chapters 11–12.
 - Reorder as S1: 1–2; S2: 5–7 and estimator workflow; S3: 8; S4: 9–10; S5: 11–12. Do not bring Chapters 3–4 into Week 1.
-- Add one slide per session for the decision story, one source-aligned derivation, one “Where students get stuck” repair, and one existing question ID. Preserve the exact four-topic Week 1 order across the five session pages (Sessions 3–4 share Topic 3) and use the booklet’s notation as the authority.
+- Add one slide per session for the decision story, one source-aligned derivation, one “Where students get stuck” repair, and one quick-check question ID. Preserve the exact four-topic Week 1 order across the five session pages (Sessions 3–4 share Topic 3) and use the booklet’s notation as the authority.
