@@ -1,0 +1,106 @@
+MDC-301 WEEK 1 LIVE QUIZ — VS CODE / LOCAL SERVER
+=================================================
+
+Use the Flask/Socket.IO quiz server for a host-controlled in-class poll. It runs on the instructor's laptop and serves the student page to devices on the same trusted classroom Wi-Fi. This is not the static GitHub Pages practice page.
+
+THE TWO WEEK 1 QUIZZES
+----------------------
+Quiz 1: BEFORE LAB 1 — HOUR 1 QUICK CHECKS
+  File: week1/livequiz/before_lab1_questions.json
+  Questions: Q1–Q8
+  Set QUIZ_ID=quiz1
+
+Quiz 2: BETWEEN LAB 1 AND LAB 2 — HOUR 2 QUICK CHECKS
+  File: week1/livequiz/between_lab1_and_lab2_questions.json
+  Questions: Q9–Q20
+  Set QUIZ_ID=quiz2
+
+For each question, follow the provided sequence: poll first, reveal the answer second, then ask a student to justify the answer.
+
+BEFORE CLASS — WINDOWS / POWERSHELL
+-----------------------------------
+1. Install Python 3.11 or newer. Open the MDC-301 repository folder in VS Code (the folder containing README.md, index.html, and week1/).
+
+2. Choose Terminal → New Terminal. Confirm that the terminal is at the repository root:
+
+     Get-Location
+     Test-Path .\week1\livequiz\app.py
+
+   The second command should return True. If it returns False, use Set-Location with the actual path to your MDC-301 folder.
+
+3. Create a virtual environment and install the local quiz-server requirements:
+
+     py -m venv .venv
+     .\.venv\Scripts\python.exe -m pip install --disable-pip-version-check -r .\week1\livequiz\requirements.txt
+
+   Keep this terminal open. If the py command is unavailable, use python in its place.
+
+4. Create the private settings file from the example:
+
+     Copy-Item .\week1\livequiz\.env.example .\week1\livequiz\.env
+
+   Generate two different secrets in the VS Code terminal by running this command twice:
+
+     py -c "import secrets; print(secrets.token_urlsafe(32))"
+
+   In week1/livequiz/.env, replace FLASK_SECRET_KEY and ADMIN_TOKEN with the two different generated values. Do not paste either value into chat, a lecture slide, a student message, or Git. The .env file is ignored by Git; do not change that.
+
+5. In the same .env file, choose the quiz and a unique session code for this class. For example, before Lab 1:
+
+     QUIZ_ID=quiz1
+     SESSION_CODE=MDC301W1H1
+     PORT=8000
+     COOKIE_SECURE=false
+     TRUST_PROXY=false
+
+   For Quiz 2, use QUIZ_ID=quiz2 and give that quiz a distinct SESSION_CODE. Save the file. Keep COOKIE_SECURE=false and TRUST_PROXY=false only for this trusted local HTTP session.
+
+START THE LOCAL SERVER
+----------------------
+From the repository root, run:
+
+     .\.venv\Scripts\python.exe .\week1\livequiz\app.py
+
+The terminal should remain running and report that the server is listening on port 8000. Do not close the terminal during class.
+
+INSTRUCTOR AND STUDENT PAGES
+----------------------------
+On the instructor laptop, open:
+
+     http://127.0.0.1:8000/host
+
+Enter the private ADMIN_TOKEN from .env. The host page shows the quiz title, question controls, session code, join address, response totals, and a CSV download link. Use the host controls to reveal/close each question and advance to the next one.
+
+If students will use phones or other computers on the same Wi-Fi, find the instructor laptop's private Wi-Fi IPv4 address with `ipconfig` in PowerShell. Use the IPv4 address under the Wi-Fi adapter (not 127.0.0.1 and not an address beginning 169.254). On the instructor laptop, open the host page using that private address, for example:
+
+     http://192.168.1.25:8000/host
+
+The exact address will differ. The host page will then display a student join address using that same LAN address. Students open that displayed address (ending in /), enter the session code, and join in their browser. They do not need to install an app or provide a password. A GitHub username is optional; students can use an approved alias instead.
+
+If Windows Firewall asks, allow Python only on the trusted Private network used for class. Do not enable a Public-network rule. The school Wi-Fi must allow devices to communicate with the instructor laptop; guest Wi-Fi/client isolation may block the quiz. Test with one student device before class and prepare a paper/offline fallback.
+
+SWITCH BETWEEN QUIZ 1 AND QUIZ 2
+--------------------------------
+1. In the VS Code terminal, press Ctrl+C to stop the server.
+2. Edit week1/livequiz/.env: set QUIZ_ID to quiz1 or quiz2, and set a fresh SESSION_CODE for the new class/quiz.
+3. Save the file and start the server again with the launch command above.
+
+The selected quiz is loaded when the server starts. Changing .env while it is running does not switch the active question set. Existing saved responses remain in the local SQLite database; download the CSV before changing sessions if you need to retain a class copy.
+
+AFTER CLASS AND SECURITY
+------------------------
+Use Download CSV on the authenticated host page if you need the responses. Store the file in an approved private location, not in the Git repository, and follow your institution's retention policy. Press Ctrl+C in the VS Code terminal to stop the server.
+
+This recipe is for a private classroom LAN only. Do not expose this local server publicly; do not use a public tunnel, port forwarding, public IP, or hosting service to reach it from the Internet. Never share ADMIN_TOKEN or FLASK_SECRET_KEY. Do not ask students for passwords, phone numbers, or sensitive personal information. The static GitHub Pages quiz is formative practice; its answer keys are public in the JSON files and it is not a secure exam.
+
+OPTIONAL: macOS / LINUX
+-----------------------
+From the repository root, create and install into a virtual environment, copy the .env example, edit it with two fresh secrets and QUIZ_ID/session settings, then launch:
+
+     python3 -m venv .venv
+     . .venv/bin/activate
+     python -m pip install --disable-pip-version-check -r week1/livequiz/requirements.txt
+     cp week1/livequiz/.env.example week1/livequiz/.env
+     python week1/livequiz/app.py
+
+Open http://127.0.0.1:8000/host on the instructor computer, or use the instructor laptop's private Wi-Fi IP in the URL when serving student devices on the same trusted LAN. Apply the same no-public-exposure and secret-handling rules above.

@@ -85,7 +85,7 @@ print(task_types)
 {'predict_tomorrow_temperature': 'regression', 'approve_or_decline_a_loan': 'classification', 'group_customers_without_labels': 'unsupervised clustering', 'robot_learns_from_rewards': 'reinforcement learning'}
 ```
 
-## Predict the output — live-quiz question `ch01_q02_supervised_unsupervised`
+## Predict the output — worksheet self-check
 
 ```python
 labeled_examples = True

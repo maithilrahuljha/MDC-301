@@ -89,8 +89,7 @@
   function renderQuestion(question) {
     currentQuestion = question;
     questionArea.hidden = false;
-    const topicLabel = question.topic_name ? `${question.topic_name} · ` : "";
-    document.getElementById("question-tag").textContent = `${topicLabel}${question.chapter} · Day ${question.day} · ${question.type}`;
+    document.getElementById("question-tag").textContent = `Slide ${question.slide} · ${question.type}`;
     document.getElementById("question-number").textContent = `Question ${question.index} of ${question.total}`;
     document.getElementById("question-prompt").textContent = question.prompt;
     answerArea.replaceChildren();

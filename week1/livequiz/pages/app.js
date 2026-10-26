@@ -1,15 +1,23 @@
 (() => {
   "use strict";
 
-  const TOPICS = [
-    { slug: "ch01_intro_to_ml", name: "Introduction to Machine Learning", chapter: "ch01", source: "ch01" },
-    { slug: "ch02_ml_lifecycle", name: "Machine Learning Model Lifecycle", chapter: "ch02", source: "ch02" },
-    { slug: "topic03_supervised_vs_unsupervised", name: "Supervised vs Unsupervised Learning", chapter: "ch01", source: "ch01" },
-    { slug: "ch05_tools_and_sklearn", name: "Tools and the Scikit-learn Ecosystem", chapter: "ch05-ch06", source: "ch05, ch06" },
-    { slug: "ch08_simple_linear_regression", name: "Simple Linear Regression", chapter: "ch08", source: "ch08" },
-    { slug: "ch09_multiple_linear_regression", name: "Multiple Linear Regression", chapter: "ch09", source: "ch09" },
-    { slug: "ch10_polynomial_and_regularisation", name: "Polynomial and Regularised Regression", chapter: "ch10", source: "ch10" },
-    { slug: "ch12_logistic_regression", name: "Logistic Regression", chapter: "ch11-ch12", source: "ch11, ch12" }
+  const QUIZZES = [
+    {
+      slug: "quiz1",
+      name: "Quiz 1 · Before Lab 1 — Hour 1 Quick Checks",
+      file: "before_lab1_questions.json",
+      phase: "BEFORE LAB 1 — HOUR 1",
+      slides: "5, 6, 9–12, 16–17",
+      ids: Array.from({ length: 8 }, (_, index) => `Q${index + 1}`)
+    },
+    {
+      slug: "quiz2",
+      name: "Quiz 2 · Between Lab 1 and Lab 2 — Hour 2 Quick Checks",
+      file: "between_lab1_and_lab2_questions.json",
+      phase: "BETWEEN LAB 1 AND LAB 2 — HOUR 2",
+      slides: "21, 23, 25–30, 33–37",
+      ids: Array.from({ length: 12 }, (_, index) => `Q${index + 9}`)
+    }
   ];
   const $ = (id) => document.getElementById(id);
   const ui = {
@@ -47,15 +55,15 @@
   }
   function text(element, value) { element.textContent = value; }
   function currentQuestion() { return state.quiz.questions[state.index]; }
-  function selectedTopic() { return TOPICS.find((topic) => topic.slug === ui.topic.value) || TOPICS[0]; }
+  function selectedQuiz() { return QUIZZES.find((quiz) => quiz.slug === ui.topic.value) || QUIZZES[0]; }
 
   function updateSetup() {
-    const topic = selectedTopic();
-    text(ui.sourceNote, `Course chapter ${topic.chapter} · Source guide chapter${topic.source.includes(",") ? "s" : ""} ${topic.source}`);
+    const quiz = selectedQuiz();
+    text(ui.sourceNote, `${quiz.phase} · lecture slides ${quiz.slides}`);
     const lecture = ui.mode.value === "lecture";
     ui.sessionField.hidden = !lecture;
     ui.aliasField.hidden = !lecture;
-    if (!lecture) text(ui.collectionNote, "Practice answers are never uploaded. Try the same topic as often as you like.");
+    if (!lecture) text(ui.collectionNote, "Practice answers are never uploaded. Try either Week 1 quiz as often as you like.");
     else if (supabaseSettings()) text(ui.collectionNote, "Lecture responses go to the configured Supabase table. Enter the instructor's session label; alias is optional.");
     else if (attemptedSupabaseSetup()) text(ui.collectionNote, "Supabase settings look incomplete or invalid. Lecture answers will not be collected; check config.js or clear both settings.");
     else text(ui.collectionNote, "Response collection is off. The quiz works without it; lecture answers are not saved or uploaded.");
@@ -93,7 +101,7 @@
     text(ui.modeLabel, state.mode === "lecture" ? "LECTURE MODE · FOLLOW YOUR INSTRUCTOR" : "PRACTICE MODE · YOUR OWN PACE");
     text(ui.counter, `Question ${state.index + 1} of ${state.quiz.questions.length}`);
     ui.progress.style.width = `${((state.index + 1) / state.quiz.questions.length) * 100}%`;
-    text(ui.chapter, `Course ${state.quiz.chapter} · Source ${state.quiz.source_chapters.join(", ")}`);
+    text(ui.chapter, `${question.phase} · Slide ${question.slide}`);
     text(ui.type, cloud ? "One-word response" : question.type === "true_false" ? "True or false" : "Multiple choice");
     text(ui.prompt, question.question);
     text(ui.message, ""); ui.message.className = "answer-message";
@@ -109,51 +117,68 @@
     ui.prompt.focus({ preventScroll: true });
   }
 
-  async function loadQuiz(slug) {
-    // A question_id deep link adapts an existing Week 1 daily-bank item to this UI;
-    // it does not change the question bank. Topic mode remains the default.
-    const requestedQuestion = new URLSearchParams(window.location.search).get("question_id");
-    if (requestedQuestion) {
-      const response = await fetch("../questions.json", { cache: "no-cache" });
-      if (!response.ok) throw new Error(`Could not load the Week 1 question bank (HTTP ${response.status}).`);
-      const payload = await response.json();
-      const item = Array.isArray(payload.questions) ? payload.questions.find((question) => question.id === requestedQuestion) : null;
-      if (!item) throw new Error(`Question ${requestedQuestion} is not in the existing Week 1 bank.`);
-      const topic = TOPICS.find((candidate) => candidate.slug === slug) || TOPICS[0];
-      let question;
-      if (item.type === "word_cloud") {
-        question = { id: item.id, type: "word_cloud", question: item.prompt, max_length: item.max_length, explanation: item.explanation };
-      } else {
-        const options = Array.isArray(item.choices) ? item.choices : [];
-        question = {
-          id: item.id, type: "multiple_choice", question: item.prompt,
-          options: options.map((choice) => choice.text),
-          correct: options.findIndex((choice) => choice.key === item.correct),
-          explanation: item.explanation
-        };
+  async function fetchQuiz(quizDefinition) {
+    const response = await fetch(`../${encodeURIComponent(quizDefinition.file)}`, { cache: "no-cache" });
+    if (!response.ok) throw new Error(`Could not load ${quizDefinition.name} (HTTP ${response.status}).`);
+    const payload = await response.json();
+    if (!payload || payload.quiz_id !== quizDefinition.slug || !Array.isArray(payload.questions)) {
+      throw new Error("This Week 1 quiz file is incomplete or does not match the selected quiz.");
+    }
+    const expectedCount = quizDefinition.ids.length;
+    if (payload.questions.length !== expectedCount) throw new Error(`${quizDefinition.name} should contain ${expectedCount} questions.`);
+    const questions = payload.questions.map((item, index) => {
+      const expectedId = quizDefinition.ids[index];
+      const keys = item && item.options && typeof item.options === "object" ? Object.keys(item.options) : [];
+      const answerIndex = keys.indexOf(item.correct_option);
+      if (!item || item.id !== expectedId || item.type !== "multiple_choice" ||
+          typeof item.question !== "string" || !item.question.trim() ||
+          keys.join(",") !== "A,B,C,D" || keys.some((key) => typeof item.options[key] !== "string") ||
+          answerIndex < 0 || typeof item.explanation !== "string") {
+        throw new Error(`Question ${expectedId} in ${quizDefinition.file} is invalid.`);
       }
       return {
-        topic_slug: topic.slug,
-        topic_name: `${topic.name} · one linked check`,
-        chapter: item.chapter || topic.chapter,
-        source_chapters: [item.chapter || topic.source],
-        questions: [question]
+        id: item.id,
+        type: "multiple_choice",
+        question: item.question,
+        options: keys.map((key) => item.options[key]),
+        correct: answerIndex,
+        explanation: item.explanation,
+        phase: item.phase,
+        slide: item.slide
       };
-    }
+    });
+    return {
+      topic_slug: quizDefinition.slug,
+      topic_name: payload.title,
+      chapter: "Week 1",
+      source_chapters: [quizDefinition.phase],
+      phase: payload.phase,
+      instructions: payload.instructions,
+      questions
+    };
+  }
 
-    // Pages serves the app at /week1/livequiz/pages/ and the existing banks one folder above.
-    const response = await fetch(`../topic_banks/${encodeURIComponent(slug)}.json`, { cache: "no-cache" });
-    if (!response.ok) throw new Error(`Could not load this topic (HTTP ${response.status}).`);
-    const payload = await response.json();
-    const quiz = payload && payload.quiz;
-    if (!quiz || quiz.topic_slug !== slug || !Array.isArray(quiz.questions) || quiz.questions.length !== 10) throw new Error("This topic file is incomplete or does not match the selected topic.");
-    for (const question of quiz.questions) {
-      if (!question || typeof question.question !== "string") throw new Error("This topic has an invalid question.");
-      if (question.type === "word_cloud") {
-        if ("options" in question || "correct" in question) throw new Error("This word-cloud question has an invalid answer key.");
-      } else if (!["multiple_choice", "true_false"].includes(question.type) || !Array.isArray(question.options) || !Number.isInteger(question.correct) || question.correct < 0 || question.correct >= question.options.length) throw new Error("This topic has an invalid multiple-choice question.");
+  async function loadQuiz(slug) {
+    const requestedQuestion = new URLSearchParams(window.location.search).get("question_id");
+    if (requestedQuestion) {
+      const preferred = QUIZZES.find((quiz) => quiz.slug === slug && quiz.ids.includes(requestedQuestion));
+      const candidates = preferred ? [preferred, ...QUIZZES.filter((quiz) => quiz !== preferred)] : QUIZZES;
+      for (const quizDefinition of candidates) {
+        if (!quizDefinition.ids.includes(requestedQuestion)) continue;
+        const quiz = await fetchQuiz(quizDefinition);
+        const item = quiz.questions.find((question) => question.id === requestedQuestion);
+        if (item) {
+          return {
+            ...quiz,
+            topic_name: `${quiz.topic_name} · linked check`,
+            questions: [item]
+          };
+        }
+      }
+      throw new Error(`Question ${requestedQuestion} is not in either Week 1 quiz.`);
     }
-    return quiz;
+    const quizDefinition = QUIZZES.find((quiz) => quiz.slug === slug) || QUIZZES[0];
+    return fetchQuiz(quizDefinition);
   }
 
   async function startQuiz() {
@@ -166,14 +191,14 @@
     if (session.length > 40 || alias.length > 32) { setupError("The session label must be 40 characters or fewer and the optional alias 32 characters or fewer."); return; }
     if (settings && mode === "lecture" && !/^[A-Za-z0-9 _.-]{1,40}$/.test(session)) { setupError("Use only letters, numbers, spaces, hyphens, underscores, and periods in the session label."); ui.session.focus(); return; }
     if (/[\u0000-\u001f\u007f]/.test(alias)) { setupError("The optional alias cannot contain control characters."); ui.alias.focus(); return; }
-    ui.start.disabled = true; ui.start.textContent = "Loading topic…";
+    ui.start.disabled = true; ui.start.textContent = "Loading quiz…";
     try {
       const quiz = await loadQuiz(ui.topic.value);
       state.mode = mode; state.quiz = quiz; state.index = 0; state.correct = 0; state.scored = 0; state.session = session; state.alias = alias;
       ui.setupPanel.hidden = true; ui.completionPanel.hidden = true; ui.quizPanel.hidden = false;
       renderQuestion(); ui.quizPanel.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (error) {
-      setupError(`${error.message} Check that the Pages site includes the configured Week 1 bank, then try again.`);
+      setupError(`${error.message} Check that the Pages site includes both Week 1 quiz files, then try again.`);
     } finally { ui.start.disabled = false; ui.start.innerHTML = 'Start quiz <span aria-hidden="true">→</span>'; }
   }
 
@@ -267,11 +292,11 @@
   function completeQuiz() {
     ui.quizPanel.hidden = true; ui.completionPanel.hidden = false;
     if (state.mode === "practice") {
-      ui.again.textContent = "Try this topic again"; text(ui.completionTitle, "Nice work.");
+      ui.again.textContent = "Try this quiz again"; text(ui.completionTitle, "Nice work.");
       const note = state.quiz.questions.some((question) => question.type === "word_cloud") ? " Word-cloud responses are not scored." : "";
-      text(ui.summary, `${state.quiz.topic_name}: ${state.correct} of ${state.scored} scored questions correct.${note} Retake this topic or choose another.`);
+      text(ui.summary, `${state.quiz.topic_name}: ${state.correct} of ${state.scored} scored questions correct.${note} Retake this quiz or choose the other one.`);
     } else {
-      ui.again.textContent = "Practise this topic now"; text(ui.completionTitle, "Topic complete.");
+      ui.again.textContent = "Practise this quiz now"; text(ui.completionTitle, "Quiz complete.");
       text(ui.summary, `${state.quiz.topic_name} is finished. Start practice mode to retry on your own. Lecture responses ${supabaseSettings() ? "were sent when the connection worked" : "were not collected"}.`);
     }
     ui.completionPanel.scrollIntoView({ behavior: "smooth", block: "center" }); ui.again.focus();
@@ -289,12 +314,12 @@
     updateSetup(); ui.completionPanel.hidden = true; ui.setupPanel.hidden = false; ui.start.focus(); startQuiz();
   }
 
-  for (const topic of TOPICS) {
-    const option = document.createElement("option"); option.value = topic.slug; option.textContent = topic.name; ui.topic.append(option);
+  for (const quiz of QUIZZES) {
+    const option = document.createElement("option"); option.value = quiz.slug; option.textContent = quiz.name; ui.topic.append(option);
   }
-  ui.topic.value = TOPICS[0].slug;
-  const linkedTopic = new URLSearchParams(window.location.search).get("topic");
-  if (TOPICS.some((topic) => topic.slug === linkedTopic)) ui.topic.value = linkedTopic;
+  ui.topic.value = QUIZZES[0].slug;
+  const linkedQuiz = new URLSearchParams(window.location.search).get("quiz") || new URLSearchParams(window.location.search).get("topic");
+  if (QUIZZES.some((quiz) => quiz.slug === linkedQuiz)) ui.topic.value = linkedQuiz;
   ui.mode.addEventListener("change", updateSetup); ui.topic.addEventListener("change", updateSetup);
   ui.start.addEventListener("click", startQuiz); ui.submit.addEventListener("click", submitAnswer);
   ui.retry.addEventListener("click", retryUpload); ui.reveal.addEventListener("click", revealOrContinue);

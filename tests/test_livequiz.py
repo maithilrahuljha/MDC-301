@@ -8,21 +8,22 @@ import pytest
 import week1.livequiz.app as livequiz_app
 from week1.livequiz.app import create_app, socketio
 
+ROOT = Path(__file__).parents[1]
+LIVEQUIZ = ROOT / "week1" / "livequiz"
+
 
 @pytest.fixture
 def live_app(tmp_path):
-    app = create_app({
+    return create_app({
         "TESTING": True,
         "SECRET_KEY": "test-only-secret-key",
         "ADMIN_TOKEN": "test-only-admin-key",
         "SESSION_CODE": "TESTW1",
         "DATABASE_PATH": str(tmp_path / "responses.sqlite3"),
-        "QUESTION_BANK": str(Path(__file__).parents[1] / "week1" / "livequiz" / "questions.json"),
-        "QUIZ_DAY": "1",
+        "QUIZ_ID": "quiz1",
         "COOKIE_SECURE": False,
         "TRUST_PROXY": False,
     })
-    return app
 
 
 def test_relative_database_path_resolves_under_app_directory(monkeypatch):
@@ -62,18 +63,37 @@ def event_data(events, name):
     return [event["args"][0] for event in events if event["name"] == name]
 
 
-def test_bank_is_valid_and_has_five_questions_for_each_day(live_app):
-    with live_app.app_context():
-        questions = live_app.extensions["week1_questions"]
-    assert len(questions) == 5
-    assert {question["day"] for question in questions} == {1}
-    assert any(question["type"] == "word_cloud" for question in questions)
-    assert any(question["id"] == "ch08_q03_residual_plot" for question in json.loads(
-        Path(live_app.config["QUESTION_BANK"]).read_text(encoding="utf-8")
-    )["questions"])
-    all_bank = json.loads(Path(live_app.config["QUESTION_BANK"]).read_text(encoding="utf-8"))["questions"]
-    assert len(all_bank) == 25
-    assert {day: sum(q["day"] == day for q in all_bank) for day in range(1, 6)} == {day: 5 for day in range(1, 6)}
+def test_quiz1_loads_q1_to_q8_and_withholds_the_answer(live_app):
+    questions = live_app.extensions["week1_questions"]
+    assert [question["id"] for question in questions] == [f"Q{number}" for number in range(1, 9)]
+    assert {question["phase"] for question in questions} == {"BEFORE LAB 1 — HOUR 1"}
+    assert live_app.extensions["week1_quiz_metadata"]["question_count"] == 8
+    assert questions[0]["correct"] == "B"
+
+    student, events = join_student(live_app)
+    state = event_data(events, "question_state")[0]
+    assert state["id"] == "Q1"
+    assert state["slide"] == 5
+    assert "correct" not in state and "explanation" not in state
+    student.disconnect()
+
+
+def test_quiz2_loads_q9_to_q20(tmp_path):
+    app = create_app({
+        "TESTING": True,
+        "SECRET_KEY": "quiz2-test-secret",
+        "ADMIN_TOKEN": "quiz2-test-admin",
+        "SESSION_CODE": "TESTQ2",
+        "DATABASE_PATH": str(tmp_path / "quiz2.sqlite3"),
+        "QUIZ_ID": "quiz2",
+        "COOKIE_SECURE": False,
+        "TRUST_PROXY": False,
+    })
+    questions = app.extensions["week1_questions"]
+    assert [question["id"] for question in questions] == [f"Q{number}" for number in range(9, 21)]
+    assert {question["phase"] for question in questions} == {"BETWEEN LAB 1 AND LAB 2 — HOUR 2"}
+    assert app.extensions["week1_quiz_metadata"]["question_count"] == 12
+    assert [question["slide"] for question in questions] == [21, 23, 25, 26, 28, 29, 30, 33, 34, 35, 36, 37]
 
 
 def test_student_page_health_and_host_gate(live_app):
@@ -83,6 +103,7 @@ def test_student_page_health_and_host_gate(live_app):
     assert health.json == {"status": "ok", "session_code": "TESTW1"}
     student_page = browser.get("/")
     assert student_page.status_code == 200
+    assert b"BEFORE LAB 1" in student_page.data
     assert b"GitHub password" not in student_page.data
     assert b"phone number" in student_page.data
     assert b"Clear saved identity" in student_page.data
@@ -97,13 +118,13 @@ def test_join_answer_reveal_and_formula_safe_csv(live_app):
     host_browser, host = host_client(live_app)
     student, events = join_student(live_app, display_name="=formula", github_username="learner-gh")
     state = event_data(events, "question_state")[0]
-    assert state["id"] == "ch01_q01_target_feature"
+    assert state["id"] == "Q1"
     assert "correct" not in state and "explanation" not in state
 
     student.emit("submit_answer", {
         "participant_id": "student_001",
         "question_id": state["id"],
-        "answer": "C",
+        "answer": "B",
     })
     ack = event_data(student.get_received(), "answer_ack")
     assert ack and ack[0]["already_submitted"] is False
@@ -113,18 +134,19 @@ def test_join_answer_reveal_and_formula_safe_csv(live_app):
         "answer": "A",
     })
     duplicate_ack = event_data(student.get_received(), "answer_ack")
-    assert duplicate_ack == [{"already_submitted": True, "answer": {"key": "C"}}]
+    assert duplicate_ack == [{"already_submitted": True, "answer": {"key": "B"}}]
 
     host.emit("host_reveal")
     revealed = event_data(student.get_received(), "question_state")
     assert revealed[-1]["revealed"] is True
-    assert revealed[-1]["correct"] == "C"
-    assert "explanation" in revealed[-1]
+    assert revealed[-1]["correct"] == "B"
+    assert "ML learns from data" in revealed[-1]["explanation"]
 
     export = host_browser.get("/export.csv")
     assert export.status_code == 200
     rows = list(csv.DictReader(io.StringIO(export.data.decode("utf-8"))))
     assert len(rows) == 1
+    assert rows[0]["question_id"] == "Q1"
     assert rows[0]["github_username"] == "learner-gh"
     assert rows[0]["display_name"] == "'=formula"
     assert rows[0]["is_correct"] == "True"
@@ -132,7 +154,7 @@ def test_join_answer_reveal_and_formula_safe_csv(live_app):
     student.disconnect()
 
 
-def test_bad_session_and_bad_word_cloud_are_rejected(live_app):
+def test_bad_session_and_bad_multiple_choice_key_are_rejected(live_app):
     browser = live_app.test_client()
     bad_client = socketio.test_client(live_app, flask_test_client=browser)
     bad_client.emit("join_session", {
@@ -143,29 +165,24 @@ def test_bad_session_and_bad_word_cloud_are_rejected(live_app):
     })
     assert event_data(bad_client.get_received(), "join_error")
 
-    host_browser, host = host_client(live_app)
     student, events = join_student(live_app, participant_id="student_003", github_username="")
-    for _ in range(4):
-        host.emit("host_advance")
-        host.get_received()
-        student_events = student.get_received()
-    word_state = event_data(student_events, "question_state")[-1]
-    assert word_state["type"] == "word_cloud"
-
+    state = event_data(events, "question_state")[0]
     student.emit("submit_answer", {
         "participant_id": "student_003",
-        "question_id": word_state["id"],
-        "answer": "too many words",
+        "question_id": state["id"],
+        "answer": "not-an-option",
     })
     assert event_data(student.get_received(), "answer_error")
-    student.emit("submit_answer", {
-        "participant_id": "student_003",
-        "question_id": word_state["id"],
-        "answer": "Monitor",
-    })
-    assert event_data(student.get_received(), "answer_ack")
-    summaries = event_data(host.get_received(), "live_summary")
-    summary = [item for item in summaries if item.get("question_id") == word_state["id"]][-1]
-    assert summary["word_cloud"] == {"monitor": 1}
-    host.disconnect()
     student.disconnect()
+    bad_client.disconnect()
+
+
+def test_bank_source_files_contain_only_the_two_replacement_quizzes():
+    quiz1 = json.loads((LIVEQUIZ / "before_lab1_questions.json").read_text(encoding="utf-8"))
+    quiz2 = json.loads((LIVEQUIZ / "between_lab1_and_lab2_questions.json").read_text(encoding="utf-8"))
+    assert [question["id"] for question in quiz1["questions"]] == [f"Q{n}" for n in range(1, 9)]
+    assert [question["id"] for question in quiz2["questions"]] == [f"Q{n}" for n in range(9, 21)]
+    assert {path.name for path in LIVEQUIZ.glob("*questions.json")} == {
+        "before_lab1_questions.json",
+        "between_lab1_and_lab2_questions.json",
+    }

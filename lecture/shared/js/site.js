@@ -48,19 +48,20 @@
     }
 
     button.addEventListener("click", () => {
+      const sessionPanel = button.closest("[data-session-badge]");
+      const totalChecks = sessionPanel ? sessionPanel.querySelectorAll("[data-quiz-id]").length : 0;
       if (consent && !consent.checked) {
-        if (message) message.textContent = "Complete all three linked checks, then tick the confirmation box.";
+        if (message) message.textContent = `Complete all ${totalChecks} linked checks, then tick the confirmation box.`;
         consent.focus();
         return;
       }
-      const sessionPanel = button.closest("[data-session-badge]");
       const requiredIds = sessionPanel ? [...sessionPanel.querySelectorAll("[data-quiz-id]")].filter((link) => link.dataset.quizUnavailable === "false").map((link) => link.dataset.quizId) : [];
       const checkState = openedChecks();
       if (checkState.available && requiredIds.length) {
         const opened = new Set(Array.isArray(checkState.value[badgeId]) ? checkState.value[badgeId] : []);
         const remaining = requiredIds.filter((id) => !opened.has(id));
         if (remaining.length) {
-          if (message) message.textContent = `Open each available existing poll link once, then return. Still to open: ${remaining.join(", ")}.`;
+          if (message) message.textContent = `Open each available quiz link once, then return. Still to open: ${remaining.join(", ")}.`;
           return;
         }
       }

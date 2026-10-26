@@ -136,29 +136,41 @@ def check_quiz_links() -> None:
     if not poll_path.is_file():
         WARNINGS.append(f"Poll page is absent ({mapping.get('poll')}); runtime links should say ‘Quiz coming soon’.")
 
-    bank_path = (mapping_path.parent / mapping.get("source", "")).resolve()
-    try:
-        bank_path.relative_to(ROOT.resolve())
-    except ValueError:
-        error("Week 1 quiz source must be a relative path inside the repository")
+    sources = mapping.get("sources")
+    if sources is None:
+        sources = [mapping.get("source", "")]
+    if not isinstance(sources, list) or any(not isinstance(source, str) or not source for source in sources):
+        error("Week 1 quiz sources must be a list of relative paths")
         return
-    if not bank_path.is_file():
-        WARNINGS.append(f"Quiz source is absent ({mapping.get('source')}); runtime links should say ‘Quiz coming soon’.")
+
+    bank_ids: set[str] = set()
+    loaded_sources = 0
+    for source in sources:
+        bank_path = (mapping_path.parent / source).resolve()
+        try:
+            bank_path.relative_to(ROOT.resolve())
+        except ValueError:
+            error(f"Week 1 quiz source must be a relative path inside the repository: {source}")
+            continue
+        if not bank_path.is_file():
+            WARNINGS.append(f"Quiz source is absent ({source}); its runtime links should say ‘Quiz coming soon’.")
+            continue
+        try:
+            payload = json.loads(bank_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            error(f"Quiz source {source} is not readable JSON: {exc}")
+            continue
+        collect_ids(payload, bank_ids)
+        loaded_sources += 1
+
+    if not loaded_sources:
         helper = (LECTURE / "shared" / "js" / "quiz-links.js").read_text(encoding="utf-8")
         if "Quiz coming soon" not in helper:
             error("quiz-links.js is missing the graceful fallback label")
         return
-
-    try:
-        payload = json.loads(bank_path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError as exc:
-        error(f"Quiz source is not parseable JSON: {exc}")
-        return
-    bank_ids: set[str] = set()
-    collect_ids(payload, bank_ids)
     missing = sorted(set(expected_ids) - bank_ids)
     if missing:
-        error("Question ID references absent from the existing bank: " + ", ".join(missing))
+        error("Question ID references absent from the configured quiz files: " + ", ".join(missing))
     # No question text, choices, answer keys, explanations, counts, or quality are checked.
 
 
@@ -217,14 +229,15 @@ def main() -> int:
     except (OSError, json.JSONDecodeError, KeyError, TypeError) as exc:
         error(f"Could not check Week 1 badge lines: {exc}")
 
+    expected_quiz_links = {1: 4, 2: 4, 3: 3, 4: 4, 5: 5}
     for session in range(1, 6):
         path = LECTURE / "week1" / f"session{session}.html"
         if not path.exists():
             continue
         body = path.read_text(encoding="utf-8")
         badge_id = f"W01-S0{session}"
-        if body.count("data-quiz-id=") != 3:
-            error(f"{path.relative_to(ROOT)} must reference exactly three existing quiz IDs")
+        if body.count("data-quiz-id=") != expected_quiz_links[session]:
+            error(f"{path.relative_to(ROOT)} must reference {expected_quiz_links[session]} quiz IDs")
         if body.count('class="bug-challenge"') != 1:
             error(f"{path.relative_to(ROOT)} must have exactly one Break it / fix it challenge")
         if f'data-session-badge="{badge_id}"' not in body or f'data-unlock-badge="{badge_id}"' not in body:

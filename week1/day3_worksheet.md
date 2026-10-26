@@ -84,7 +84,7 @@ rmse=0.101
 r2=0.999
 ```
 
-## Predict the output — live-quiz question `ch08_q02_predict_output`
+## Predict the output — worksheet self-check
 
 For the fitted line `Ŷ = 0.09 + 1.99X`, what does the model predict when `X=6`?
 

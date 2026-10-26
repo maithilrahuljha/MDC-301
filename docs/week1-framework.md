@@ -127,16 +127,13 @@ Supabase collection is optional. If configured, the browser sends lecture respon
 
 Sources checked 23 October 2026: [ClassQuiz question types](https://classquiz.de/docs/quiz/question-types), [ClassQuiz self-hosting](https://classquiz.de/docs/self-host), [open.mentimeter repository](https://github.com/Rishi-ZAiFi/open.mentimeter), [Livequiz repository](https://github.com/ineiti/livequiz), and [Flask-SocketIO deployment guidance](https://flask-socketio.readthedocs.io/en/latest/deployment.html). Flask-SocketIO's multi-worker production guidance requires sticky sessions and a shared message queue such as Redis; this kit deliberately uses one worker.
 
-### 4.3 Included daily bank and topic-wise tests
+### 4.3 Week 1 quick-check quizzes
 
-`week1/livequiz/questions.json` remains the daily source bank: 25 stable IDs, five questions per day, MCQ keys/explanations, and one one-word cloud each day. The eight standalone JSON files in `week1/livequiz/topic_banks/` each contain 10 questions and are the sources for independently selectable topic tests. Their interchange schema uses `multiple_choice`, `true_false`, and `word_cloud`; `correct` is a zero-based option index, while word-cloud items omit `options` and `correct`. `topic_bank.py` validates these objects and adapts answer indexes to the app's letter-key format without changing the source files. The bank README lists file slugs, chapter mappings, and selection steps.
+The Week 1 live-quiz source now consists of two phase files: `week1/livequiz/before_lab1_questions.json` contains Q1–Q8 for the checks before Lab 1 (slides 5, 6, 9–12, 16–17), and `week1/livequiz/between_lab1_and_lab2_questions.json` contains Q9–Q20 for the checks between Lab 1 and Lab 2 (slides 21, 23, 25, 26, 28–30, 33–37). The files retain the supplied question text, A–D options, correct-option letters, explanations, phases, and slide references. The classroom cue is: poll first, reveal the answer second, ask a student to justify third.
 
-Set `QUIZ_TOPIC=all` to use the daily bank; `QUIZ_DAY=1`…`5` selects one day's five-question set and `all` serves all 25. To run a topic test, set `QUIZ_TOPIC` to a slug printed by `check_question_bank.py --list-topics`; the app loads that file's 10 questions and ignores `QUIZ_DAY`. In particular, the supervised/unsupervised topic is mapped to supplied-guide Chapter 1. It is sequence item 3 in the topic bank, not source Chapter 3 (the guide's career chapter). Run `check_question_bank.py` to validate the daily and all topic banks. These files are generic JSON interchange sources; third-party quiz products may require their own native import template or conversion.
+Set `QUIZ_ID=quiz1` or `QUIZ_ID=quiz2` in `week1/livequiz/.env` to select the local Flask/Socket.IO quiz; restart the server when switching phases. The static Pages app also lets students choose either file for lecture-cued use or private practice. Its JSON answer keys are public, so this is formative practice, not a secure exam. The lecture session pages link to the questions by stable Q IDs without copying stems or keys. Run `python week1/livequiz/scripts/check_question_bank.py` to check IDs and JSON structure. These files are generic JSON interchange sources; third-party quiz products may require their own import template or conversion.
 
-In the Flask/Socket.IO option, the instructor restarts the server when changing day or topic; saved responses persist, but current question position is process memory and returns to the first selected question after restart. The static Pages quiz requires no server restart.
-
-For the separate Flask/Socket.IO option, the instructor-facing page shows host controls and students join by browser with a session code and display alias; its existing UI also offers an optional GitHub username. This is not required for the public Pages quiz. Do not ask for a GitHub password, phone, or sensitive personal information. Protect and delete the Flask CSV under institutional policy. The laptop recipe uses unencrypted HTTP and is only for a trusted network; use HTTPS for an untrusted/public network. The no-login Pages/Supabase steps are in root `instructions.txt`; Flask operations are documented in `week1/livequiz/README.md` and its deployment files.
-
+The local in-class server stores responses in SQLite and lets the authenticated host reveal/advance; the static Pages version does not synchronize devices or show live totals. For the VS Code local-server procedure and its private-LAN-only guidance, see root `live_quiz.txt`. Rehearse on the actual network and keep an offline fallback.
 ### 4.4 Ninety-minute runbook: Day 3 simple regression
 
 This sample is 90 minutes and can be re-timed; it alternates instruction, low-stakes quiz, and worksheet practice. Do not grade speed or attendance from quiz clicks.
@@ -145,13 +142,13 @@ This sample is 90 minutes and can be re-timed; it alternates instruction, low-st
 |---:|---|---|---|
 | 00–04 | State the learning objective; ask for a one-sentence prediction of a line fit. | Teach / orient | Makes the goal observable before formulas. |
 | 04–15 | Explain `ŷ=b₀+b₁x`, slope/intercept, feature/target, and train/test boundary. | Teach | Establishes common language. |
-| 15–19 | Ask `ch08_q01_slope_intercept`. | Live quiz / MCQ | Surfaces whether slope and intercept are swapped. |
+| 15–19 | Ask Q10 about the slope coefficient. | Live quiz / MCQ | Surfaces whether slope and intercept are swapped. |
 | 19–31 | Worksheet Task 1: fit the five-row example; print coefficients/prediction. | Individual/pair practice | Moves from concept to estimator API. |
 | 31–43 | Derive OLS normal equations on board and map symbols to code. | Teach / derivation | Connects the estimator to its objective. |
-| 43–48 | Ask `ch08_q02_predict_output`. | Live quiz / predict output | Checks mental execution. |
+| 43–48 | Ask Q9 to distinguish regression from classification. | Live quiz / predict output | Checks mental execution. |
 | 48–62 | Worksheet Task 2: residuals, RMSE, R²; compare values with a partner. | Practice | Makes error direction/scale concrete. |
 | 62–72 | Show residual-vs-fitted examples: random scatter vs curve/funnel; explain what they cannot prove. | Teach / diagnostic | Treats a plot as evidence to investigate, not a verdict or causal proof. |
-| 72–77 | Ask `ch08_q03_residual_plot`. | Live quiz / diagnostic MCQ | Directly checks interpretation of a systematic curve. |
+| 72–77 | Ask Q15 why large errors receive larger squared-error penalties. | Live quiz / diagnostic MCQ | Directly checks interpretation of a systematic curve. |
 | 77–86 | Answer “Where Students Get Stuck”; annotate a residual and write a model-check sentence. | Reflection | Rewards interpretation over code copying. |
 | 86–90 | Verbal exit: name a next model check; preview Day 4 in one sentence. | Teach / exit | Ends with transfer, not speed scoring. |
 

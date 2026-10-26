@@ -28,7 +28,8 @@
 <body>
 <main data-session-code="{{ session_code }}">
   <h1>MDC-301 · Week 1 live check</h1>
-  <p class="muted">Current test: <strong>{{ quiz_name }}</strong> · {{ quiz_question_count }} questions</p>
+  <p class="muted">Current quiz: <strong>{{ quiz_name }}</strong> · {{ quiz_question_count }} questions</p>
+  <p class="muted">{{ quiz_phase }} · {{ quiz_instructions }}</p>
   <p class="muted">Join from this browser. No app, phone number, or student password is needed. Use your course GitHub handle if you want your responses matched to your assignment; otherwise enter a nickname and ask the instructor for the alias process.</p>
   <section class="card" id="join-card">
     <form id="join-form">

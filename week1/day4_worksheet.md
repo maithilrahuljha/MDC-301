@@ -104,7 +104,7 @@ features_at_3=[[3.0, 9.0]]
 predictions=2
 ```
 
-## Predict the output — live-quiz question `ch10_q02_polynomial_basis`
+## Predict the output — worksheet self-check
 
 For one input `x=3` and degree 2, what feature row does `PolynomialFeatures(include_bias=True)` produce?
 

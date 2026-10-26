@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "file": "before_lab1_questions.json",
+  "course": "MDC-301",
+  "week": 1,
+  "quiz_id": "quiz1",
+  "title": "BEFORE LAB 1 — HOUR 1 QUICK CHECKS",
+  "phase": "BEFORE LAB 1 — HOUR 1",
+  "instructions": "Poll first, reveal answer second, ask a student to justify third.",
+  "slides": [5, 6, 9, 10, 11, 12, 16, 17],
+  "questions": [
+    {
+      "id": "Q1",
+      "phase": "BEFORE LAB 1 — HOUR 1",
+      "slide": 5,
+      "type": "multiple_choice",
+      "question": "Which statement best describes machine learning?",
+      "options": {
+        "A": "Writing explicit if/else rules for every input",
+        "B": "Systems improving at a task by learning patterns from data",
+        "C": "Storing and querying very large databases",
+        "D": "A technique that removes the need for data"
+      },
+      "correct_option": "B",
+      "correct_answer": "Systems improving at a task by learning patterns from data",
+      "explanation": "ML learns from data rather than hand-coded rules. Choice A is traditional programming."
+    },
+    {
+      "id": "Q2",
+      "phase": "BEFORE LAB 1 — HOUR 1",
+      "slide": 6,
+      "type": "multiple_choice",
+      "question": "Grouping customers by behavior with NO predefined categories is…",
+      "options": {
+        "A": "Supervised classification",
+        "B": "Supervised regression",
+        "C": "Unsupervised clustering",
+        "D": "Reinforcement learning"
+      },
+      "correct_option": "C",
+      "correct_answer": "Unsupervised clustering",
+      "explanation": "No labels means unsupervised. Clustering discovers structure without a known target."
+    },
+    {
+      "id": "Q3",
+      "phase": "BEFORE LAB 1 — HOUR 1",
+      "slide": 9,
+      "type": "multiple_choice",
+      "question": "Which stage consumes the MOST time in real ML projects?",
+      "options": {
+        "A": "Model training",
+        "B": "Data preparation & cleaning",
+        "C": "Deployment",
+        "D": "Choosing the algorithm"
+      },
+      "correct_option": "B",
+      "correct_answer": "Data preparation & cleaning",
+      "explanation": "Data preparation typically takes 60–80% of project time."
+    },
+    {
+      "id": "Q4",
+      "phase": "BEFORE LAB 1 — HOUR 1",
+      "slide": 10,
+      "type": "multiple_choice",
+      "question": "Which workflow best protects the integrity of final evaluation?",
+      "options": {
+        "A": "Scale the full dataset, then split into train and test",
+        "B": "Split raw data first; fit preprocessing on training data; tune with validation/CV; evaluate on test once",
+        "C": "Use the test set repeatedly while selecting hyperparameters",
+        "D": "Train on validation and test data after every failed experiment"
+      },
+      "correct_option": "B",
+      "correct_answer": "Split raw data first; fit preprocessing on training data; tune with validation/CV; evaluate on test once",
+      "explanation": "Split first, fit preprocessing only on training data, tune with validation/CV, and touch the test set once."
+    },
+    {
+      "id": "Q5",
+      "phase": "BEFORE LAB 1 — HOUR 1",
+      "slide": 11,
+      "type": "multiple_choice",
+      "question": "Why is fitting StandardScaler on the entire dataset before train/test splitting a problem?",
+      "options": {
+        "A": "It makes training non-reproducible",
+        "B": "The training transformation uses information from the test set",
+        "C": "It prevents model convergence",
+        "D": "It removes all outliers"
+      },
+      "correct_option": "B",
+      "correct_answer": "The training transformation uses information from the test set",
+      "explanation": "The scaler learns means and standard deviations from test data — that is leakage."
+    },
+    {
+      "id": "Q6",
+      "phase": "BEFORE LAB 1 — HOUR 1",
+      "slide": 12,
+      "type": "multiple_choice",
+      "question": "Why is `stratify=y` often useful in binary classification splits?",
+      "options": {
+        "A": "It guarantees identical feature means in both splits",
+        "B": "It removes class imbalance",
+        "C": "It preserves approximately the same class proportions in each split",
+        "D": "It guarantees there is no data leakage"
+      },
+      "correct_option": "C",
+      "correct_answer": "It preserves approximately the same class proportions in each split",
+      "explanation": "Stratification keeps the positive/negative ratio approximately equal across splits."
+    },
+    {
+      "id": "Q7",
+      "phase": "BEFORE LAB 1 — HOUR 1",
+      "slide": 16,
+      "type": "multiple_choice",
+      "question": "In scikit-learn, which method trains an estimator?",
+      "options": {
+        "A": "predict()",
+        "B": "transform()",
+        "C": "fit()",
+        "D": "evaluate()"
+      },
+      "correct_option": "C",
+      "correct_answer": "fit()",
+      "explanation": ".fit() learns model parameters from training data."
+    },
+    {
+      "id": "Q8",
+      "phase": "BEFORE LAB 1 — HOUR 1",
+      "slide": 17,
+      "type": "multiple_choice",
+      "question": "What is the most important benefit of using a scikit-learn Pipeline?",
+      "options": {
+        "A": "It guarantees the highest possible model accuracy",
+        "B": "It fits preprocessing using training data within each training/CV fold and applies it consistently to held-out data",
+        "C": "It eliminates the need for train/test splits",
+        "D": "It automatically chooses the best algorithm"
+      },
+      "correct_option": "B",
+      "correct_answer": "It fits preprocessing using training data within each training/CV fold and applies it consistently to held-out data",
+      "explanation": "Pipelines prevent leakage by fitting preprocessing only on the training portion."
+    }
+  ]
+}

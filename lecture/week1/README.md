@@ -22,8 +22,8 @@ This keeps the existing five-session architecture while grouping Sessions 3 and 
 
 ## Existing question links
 
-The three existing question IDs remain linked from each session page and now sit under the matching four-topic sequence: Session 1 IDs for Topic 1; Session 2 IDs for Topic 2; Session 3 and 4 IDs together for Topic 3; and Session 5 IDs for Topic 4. The public quiz bank is unchanged: no question wording, options, keys, or explanations were edited or copied. Only existing IDs/source paths are used; no replacement ID is invented.
+The supplied Q1–Q20 checks are linked from the five session pages under the matching four-topic sequence: Q1–Q4 in Session 1, Q5–Q8 in Session 2, Q9, Q10, and Q15 in Session 3, Q11–Q14 in Session 4, and Q16–Q20 in Session 5. The lecture pages contain links only; question text and answer keys live in the two quiz JSON files.
 
-The expected `quizzes/week1/` directory is not present in this checkout. The current repository has `week1/livequiz/questions.json` (daily IDs) and eight topic files under `week1/livequiz/topic_banks/` (a different ID scheme). The linked IDs in `quiz-links.json` were checked against the current daily bank. `week1/livequiz/pages/app.js` has query-string routing so an existing daily-bank ID can open its question in that app; the routing does not change quiz content.
+`week1/livequiz/before_lab1_questions.json` contains Quiz 1 (Q1–Q8) and `week1/livequiz/between_lab1_and_lab2_questions.json` contains Quiz 2 (Q9–Q20). `quiz-links.json` checks IDs across both files, and `week1/livequiz/pages/app.js` opens the requested Q ID from the matching phase quiz. The same files feed the optional local Flask/Socket.IO server.
 
 If the separate quiz workflow later supplies `quizzes/weekN/`, update that week’s `quiz-links.json` to its exact relative source and poll URL and run the ID-reference checker. If the path or any ID is missing, keep the visible “Quiz coming soon” fallback; never invent an ID.

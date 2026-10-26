@@ -1,0 +1,93 @@
+MDC-301 WEEK 1 QUIZ — RUN LOCALLY FROM VS CODE
+================================================
+
+Use this guide after you have synced/updated the MDC-301 repository in VS Code. It runs the optional Flask/Socket.IO quiz on the instructor's computer for a class on the same trusted Wi-Fi. This is separate from the static GitHub Pages practice page.
+
+QUIZ CHOICE
+-----------
+- Quiz 1: before Lab 1, Q1–Q8. Use QUIZ_ID=quiz1.
+- Quiz 2: between Lab 1 and Lab 2, Q9–Q20. Use QUIZ_ID=quiz2.
+
+WINDOWS / POWERSHELL IN VS CODE
+-------------------------------
+
+1. Open the updated MDC-301 repository folder in VS Code. It should be the folder containing README.md, index.html, and week1/.
+
+2. Choose Terminal → New Terminal. Check that the terminal is at the repository root:
+
+     Get-Location
+     Test-Path .\week1\livequiz\app.py
+
+   The second command should return True. If it returns False, use Set-Location to move to your MDC-301 folder. Before class, sync the branch you normally use and resolve any Git conflicts. Do not overwrite your private .env file when updating the repository.
+
+3. Create a virtual environment if this is the first run, then install or refresh the quiz-server requirements after the repository update:
+
+     if (-not (Test-Path .\.venv\Scripts\python.exe)) { py -m venv .venv }
+     .\.venv\Scripts\python.exe -m pip install --disable-pip-version-check -r .\week1\livequiz\requirements.txt
+
+   If the `py` command is unavailable, use `python` in its place. Keep this VS Code terminal open for the server.
+
+4. Create the local settings file only if you do not already have one:
+
+     if (-not (Test-Path .\week1\livequiz\.env)) { Copy-Item .\week1\livequiz\.env.example .\week1\livequiz\.env }
+
+   Open `week1/livequiz/.env` in VS Code. Generate two different secrets by running this command twice:
+
+     py -c "import secrets; print(secrets.token_urlsafe(32))"
+
+   Replace `FLASK_SECRET_KEY` and `ADMIN_TOKEN` with the two different generated values. Never share either value or commit `.env`; it is ignored by Git. Leave the other local defaults in place, and set a session code and the quiz, for example:
+
+     SESSION_CODE=MDC301W1H1
+     QUIZ_ID=quiz1
+     PORT=8000
+     COOKIE_SECURE=false
+     TRUST_PROXY=false
+
+   Use `QUIZ_ID=quiz2` for the between-labs quiz. Choose a fresh `SESSION_CODE` for each class/quiz if you want to keep their exported results separate. Save the file.
+
+5. Start the server from the repository root:
+
+     .\.venv\Scripts\python.exe .\week1\livequiz\app.py
+
+   Keep the terminal running during class. In a second VS Code terminal, check that it is ready:
+
+     Invoke-RestMethod http://127.0.0.1:8000/healthz
+
+   Expect `status` to be `ok` and `session_code` to match your `.env` setting.
+
+6. On the instructor computer, open `http://127.0.0.1:8000/host` and enter the private `ADMIN_TOKEN`. The student page on that same computer is `http://127.0.0.1:8000/`.
+
+   To let students join from devices on the same trusted classroom Wi-Fi, run `ipconfig` and find the instructor computer's private IPv4 address under its Wi-Fi adapter. On the instructor computer, open the host page using that address, for example `http://192.168.1.25:8000/host` (your address will differ). The host page will display a student join URL using that LAN address. Students open that displayed URL and enter the session code. They must be on a network that permits device-to-device connections; guest Wi-Fi or client isolation may block access. If Windows Firewall prompts, allow Python only on the trusted **Private** network.
+
+7. During class, use the host controls to reveal each answer and advance when ready. Have students poll first, reveal second, then ask someone to justify the answer. Prepare a paper/offline fallback and test with one student device before class.
+
+SWITCH QUIZZES OR STOP THE SERVER
+---------------------------------
+
+To switch from Quiz 1 to Quiz 2 (or back), press Ctrl+C in the server terminal, edit `QUIZ_ID` and `SESSION_CODE` in `week1/livequiz/.env`, save, and start the server again using Step 5. The selected question set is loaded at startup. Existing SQLite responses remain on the instructor computer; download any needed CSV from the authenticated host page and store it privately. Press Ctrl+C in the server terminal after class to stop the server.
+
+IF SOMETHING GOES WRONG
+-----------------------
+
+- If startup asks for secrets, check that both `FLASK_SECRET_KEY` and `ADMIN_TOKEN` were replaced with distinct values in `week1/livequiz/.env`.
+- If port 8000 is already in use, stop the other process or set `PORT=8001` in `.env`; restart and use port 8001 in the health-check and browser URLs.
+- If another device cannot connect, verify the instructor's private Wi-Fi IP, the Windows Private-network firewall rule, and whether the Wi-Fi blocks device-to-device traffic. Do not ask students to use `127.0.0.1`; that address points to their own device.
+- For a `py` command error, use `python` for the environment/secret commands. If packages changed in the repo update, rerun the requirements installation in Step 3.
+
+SECURITY AND PRIVACY
+--------------------
+
+This server is for a trusted classroom LAN only. **Do not expose the local server publicly.** Do not use a public tunnel, port forwarding, a public IP address, or public hosting to reach it from the Internet. Never share `ADMIN_TOKEN`, `FLASK_SECRET_KEY`, the `.env` file, response database, or CSV exports. Do not collect passwords, phone numbers, or sensitive personal information. Follow the institution's privacy and data-retention rules for any responses. The static GitHub Pages quiz contains public answer keys and is formative practice, not a secure exam.
+
+OPTIONAL MACOS / LINUX COMMANDS
+------------------------------
+
+From the repository root, create the virtual environment and `.env` only if they do not already exist. Edit `.env` with two fresh secrets and the selected quiz/session settings as described above, then start the server:
+
+     if [ ! -x .venv/bin/python ]; then python3 -m venv .venv; fi
+     . .venv/bin/activate
+     python -m pip install --disable-pip-version-check -r week1/livequiz/requirements.txt
+     if [ ! -f week1/livequiz/.env ]; then cp week1/livequiz/.env.example week1/livequiz/.env; fi
+     python week1/livequiz/app.py
+
+Open `http://127.0.0.1:8000/host` on the instructor computer, or use its private Wi-Fi IP when students join on the same trusted LAN. Follow the same no-public-exposure and secret-handling rules above.
